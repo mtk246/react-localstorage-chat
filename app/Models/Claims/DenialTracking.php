@@ -9,6 +9,7 @@ use App\Models\PrivateNote;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -77,6 +78,7 @@ final class DenialTracking extends Model implements Auditable
 {
     use HasFactory;
     use AuditableTrait;
+    use Searchable;
 
     protected $table = 'denial_tracking';
 
@@ -181,5 +183,30 @@ final class DenialTracking extends Model implements Auditable
     public function insurancePolicy(): BelongsTo
     {
         return $this->belongsTo(InsurancePolicy::class, 'policy_id');
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'interface_type' => $this->interface_type,
+            'is_reprocess_claim' => $this->is_reprocess_claim,
+            'is_contact_to_patient' => $this->is_contact_to_patient,
+            'contact_through' => $this->contact_through,
+            'claim_number' => $this->claim_number,
+            'rep_name' => $this->rep_name,
+            'ref_number' => $this->ref_number,
+            'claim_status' => $this->claim_status,
+            'claim_sub_status' => $this->claim_sub_status,
+            'tracking_date' => $this->tracking_date,
+            'resolution_time' => $this->resolution_time,
+            'past_due_date' => $this->past_due_date,
+            'follow_up' => $this->follow_up,
+            'department_responsible' => $this->department_responsible,
+            'policy_responsible' => $this->policy_responsible,
+            'response_details' => $this->response_details,
+            'private_note_id' => $this->private_note_id,
+            'claim_id' => $this->claim_id,
+            'policy_id' => $this->policy_id,
+        ];
     }
 }

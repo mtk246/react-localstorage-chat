@@ -10,6 +10,7 @@ use App\Models\RefileReason;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -55,8 +56,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  */
 final class DenialRefile extends Model implements Auditable
 {
-    use HasFactory;
     use AuditableTrait;
+    use HasFactory;
+    use Searchable;
 
     protected $table = 'denial_refile';
 
@@ -90,5 +92,25 @@ final class DenialRefile extends Model implements Auditable
     public function claim(): BelongsTo
     {
         return $this->belongsTo(Claim::class, 'claim_id');
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'refile_type' => $this->refile_type,
+            'policy_id' => $this->policy_id,
+            'is_cross_over' => $this->is_cross_over,
+            'cross_over_date' => $this->cross_over_date,
+            'note' => $this->note,
+            'original_claim_id' => $this->original_claim_id,
+            'refile_reason' => $this->refile_reason,
+            'claim_id' => $this->claim_id,
+            'private_note_id' => $this->private_note_id,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'claim.code' => $this->claim->code,
+            'claim.status' => $this->claim->status->last()?->status,
+            'claim.sub_status' => $this->claim->subStatus->last()?->status,
+        ];
     }
 }
