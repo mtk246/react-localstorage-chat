@@ -16,7 +16,7 @@ final class GetClaimAction
 {
     public function single(Claim $claim): ClaimBodyResource
     {
-        return ClaimBodyResource::make($claim);
+        return ClaimBodyResource::make($claim); //test
     }
 
     public function all(Request $request)
