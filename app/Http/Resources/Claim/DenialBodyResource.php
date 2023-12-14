@@ -77,7 +77,6 @@ final class DenialBodyResource extends JsonResource
             'status' => $data,
             'sub_status' => $subStatus,
             'sub_statuses' => $subStatuses,
-            'status' => $this->getStatus(),
             'status_map' => $this->getStatusMap(),
             'status_history' => $this->getStatusHistory(),
             'notes_history' => $this->getNotesHistory(),
@@ -109,7 +108,7 @@ final class DenialBodyResource extends JsonResource
         ];
     }
 
-    private function getStatus(): ClaimStatus|array
+    public function getStatus(): ClaimStatus|array
     {
         $data = $this->resource->status()
             ->orderBy('claim_status_claim.id', 'desc')

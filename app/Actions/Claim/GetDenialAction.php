@@ -72,7 +72,13 @@ final class GetDenialAction
         $claimsQuery = $query->paginate(Pagination::itemsPerPage());
 
         $data = [
-            'data' => DenialBodyResource::collection($claimsQuery->items()),
+            'data' => DenialBodyResource::collection(
+                collect($claimsQuery->items())->reject(function ($item) {
+                    $status = (new DenialBodyResource($item))->getStatus();
+
+                    return 1 === $status->id || 2 === $status->id || 7 === $status->id;
+                })
+            ),
             'numberOfPages' => $claimsQuery->lastPage(),
             'count' => $claimsQuery->total(),
         ];
