@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\InsurancePlan;
 
+use App\Rules\InsurancePlan\NameUniqueRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
@@ -30,7 +31,7 @@ class UpdateRequest extends FormRequest
         return [
             'billing_company_id' => [Rule::requiredIf(Gate::check('is-admin')), 'integer', 'nullable'],
             'payer_id' => ['required', 'string', 'max:20'],
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', new NameUniqueRule($this->input('payer_id'), $this->input('billing_company_id'), (int) $this->route('id'))],
             'nickname' => ['nullable', 'string'],
             'abbreviation' => ['nullable', 'string'],
             'insurance_company_id' => ['required', 'integer'],
