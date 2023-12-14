@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Rules\InsuranceCompany\NameUniqueRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -30,7 +31,7 @@ class CreateInsuranceRequest extends FormRequest
             'billing_company_id' => [Rule::requiredIf(auth()->user()->hasRole('superuser')), 'integer', 'nullable'],
             'insurance' => ['required', 'array'],
             'insurance.payer_id' => ['required', 'string', 'max:20'],
-            'insurance.name' => ['required', 'string'],
+            'insurance.name' => ['required', 'string', new NameUniqueRule($this->input('insurance.payer_id'))],
             'insurance.abbreviation' => ['nullable', 'string', 'max:20'],
             'insurance.naic' => ['nullable', 'string'],
             'insurance.file_method_id' => ['nullable', 'integer'],
