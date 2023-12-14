@@ -23,7 +23,7 @@ final class PaymentResource extends JsonResource
             'id' => $this->resource->id,
             'source' => $this->resource->source,
             'payment_date' => $this->resource->payment_date,
-            'total_amount' => $this->resource->total_amount->getAmount(),
+            'total_amount' => $this->resource->total_amount->formatByDecimal(),
             'payment_method' => $this->resource->payment_method,
             'reference' => $this->resource->reference,
             'card_number' => $this->resource->card?->card_number,
