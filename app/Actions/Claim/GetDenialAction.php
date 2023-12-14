@@ -8,6 +8,8 @@ use App\Facades\Pagination;
 use App\Http\Casts\Claims\DenialTrackingWrapper;
 use App\Http\Resources\Claim\DenialBodyResource;
 use App\Models\Claims\Claim;
+use App\Models\Claims\ClaimStatus;
+use App\Models\Claims\ClaimSubStatus;
 use App\Models\Claims\DenialTracking;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,25 +28,37 @@ final class GetDenialAction
     {
         $query = $claim->query();
 
-        if ($status || $subStatus) {
-            if ($status) {
-                $query->whereHas('status', function ($statusQuery) use ($status) {
-                    $statusQuery->whereIn('claim_statuses.id', $status);
-                });
-            }
+        if (count($status) > 0) {
+            $query->whereHas('claimStatusClaims', function ($query) use ($status) {
+                $query
+                    ->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                    ->whereIn('claim_status_claim.claim_status_id', $status)
+                    ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+            });
+        }
 
-            if ($subStatus) {
-                $query->orWhereHas('subStatus', function ($subStatusQuery) use ($subStatus) {
-                    $subStatusQuery->whereIn('claim_sub_statuses.id', $subStatus);
-                });
-            }
+        if (count($subStatus) > 0) {
+            $query->orWhereHas('claimStatusClaims', function ($query) use ($subStatus) {
+                $query
+                    ->where('claim_status_claim.claim_status_type', ClaimSubStatus::class)
+                    ->whereIn('claim_status_claim.claim_status_id', $subStatus)
+                    ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+            });
         }
 
         if ($request->user()->isAdmin()) {
             $query->where('billing_company_id', $request->user()->billing_company_id);
         }
 
-        $query->with([
+        $query->when(
+            !empty($request->query('query')) && '{}' !== $request->query('query'),
+            fn ($query) => $query->search($request->query('query'))
+        )->when(
+            !empty($request->patient_id),
+            fn ($query) => $query->whereHas('demographicInformation', function ($query) use ($request) {
+                $query->where('patient_id', $request->patient_id);
+            })
+        )->with([
             'demographicInformation',
             'service',
             'insurancePolicies',

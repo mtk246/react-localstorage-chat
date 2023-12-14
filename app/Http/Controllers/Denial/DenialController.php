@@ -26,11 +26,13 @@ final class DenialController extends Controller
         Claim $claim,
         GetDenialAction $getDenial
     ): JsonResponse {
-        $status = ($request->has('status') && $request->status !== null) ?
-        json_decode($request->status, true) : [];
+        $status = ((is_array($request->status))
+            ? $request->status
+            : json_decode($request->status ?? '[]'));
 
-        $subStatus = ($request->has('subStatus') && $request->subStatus !== null) ?
-        json_decode($request->subStatus, true) : [];
+        $subStatus = ((is_array($request->subStatus))
+            ? $request->subStatus
+            : json_decode($request->subStatus ?? '[]'));
 
         return response()->json($getDenial->all($claim, $request, $status, $subStatus));
     }
