@@ -67,14 +67,27 @@ final class GetDenialAction
             'claimStatusClaims' => function ($query) {
                 $query->whereNotIn('claim_status_id', [1, 2, 7]);
             },
-        ])->orderBy(Pagination::sortBy(), Pagination::sortDesc());
+        ]);
+
+        if ($request->sortBy === 'insurance_plan') {
+            $query->join('claim_insurance_policy', 'claim_insurance_policy.claim_id', '=', 'claims.id')
+                ->join('insurance_policies', 'insurance_policies.id', '=', 'claim_insurance_policy.insurance_policy_id')
+                ->orderBy('insurance_policies.id', $request->sortDesc ? 'desc' : 'asc')
+                ->select('claims.*');
+        }
 
         $claimsQuery = $query->paginate(Pagination::itemsPerPage());
 
         $data = [
             'data' => DenialBodyResource::collection(
-                collect($claimsQuery->items())->reject(function ($item) {
+                collect($claimsQuery->items())->reject(function ($item) use ($request) {
                     $status = (new DenialBodyResource($item))->getStatus();
+
+                    $query = $request->query('query');
+                    if (!empty($query)) {
+                        $patientFirstName = $item->demographicInformation->patient->profile->first_name ?? '';
+                        return 1 === $status->id || 2 === $status->id || 7 === $status->id || !str_contains(strtolower($patientFirstName), strtolower($query));
+                    }
 
                     return 1 === $status->id || 2 === $status->id || 7 === $status->id;
                 })

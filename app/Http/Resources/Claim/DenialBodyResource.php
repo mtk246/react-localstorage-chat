@@ -45,9 +45,9 @@ final class DenialBodyResource extends JsonResource
             'facility_information' => new FacilityResource(
                 $this->resource->demographicInformation->facility
             ),
-            'health_professional_information' => HealthProfessionalResource::collection(
-                $this->resource->demographicInformation->healthProfessionals
-            ),
+            // 'health_professional_information' => HealthProfessionalResource::collection(
+            //     $this->resource->demographicInformation->healthProfessionals
+            // ),
             'code' => $this->resource->code,
             'type' => $this->resource->type->value,
             'claim_type' => upperCaseWords($this->resource->type->getName()),
