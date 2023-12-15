@@ -23,11 +23,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed $filter
  * @property string|null $report_id
  * @property int|null $user_id
- * @property int $billing_company_id
+ * @property int|null $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property BillingCompany|null $billingCompanies
  * @property \App\Models\Reports\Report|null $reports
+ * @property User|null $users
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Preset newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Preset newQuery()

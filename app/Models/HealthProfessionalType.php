@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Casts\Enum\TypeCast;
 use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -50,7 +48,7 @@ class HealthProfessionalType extends Model implements Auditable
     ];
 
     protected $casts = [
-        'type' => TypeCast::class.':'.HealthProfessionalTypeEnum::class,
+        'type' => HealthProfessionalTypeEnum::class,
     ];
 
     /**
@@ -66,16 +64,5 @@ class HealthProfessionalType extends Model implements Auditable
     public function billingCompany()
     {
         return $this->belongsTo(BillingCompany::class);
-    }
-
-    /**
-     * Interact with the healthProfessionalType's type.
-     */
-    protected function type(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => ucfirst(strtolower($value)),
-            set: fn ($value) => ucfirst(strtolower($value)),
-        );
     }
 }

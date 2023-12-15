@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Models\InsurancePolicy;
 use App\Models\PrivateNote;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -34,9 +37,13 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property object|null $response_details
  * @property int $claim_id
  * @property int $private_note_id
+ * @property int|null $policy_id
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  * @property \App\Models\Claims\Claim $claim
  * @property \App\Models\Claims\ClaimStatus|null $claimStatus
  * @property \App\Models\Claims\ClaimSubStatus|null $claimSubStatus
+ * @property InsurancePolicy|null $insurancePolicy
  * @property PrivateNote $privateNote
  *
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking newModelQuery()
@@ -55,6 +62,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereIsContactToPatient($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereIsReprocessClaim($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking wherePastDueDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking wherePolicyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking wherePolicyResponsible($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking wherePrivateNoteId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DenialTracking whereRefNumber($value)
@@ -70,6 +78,7 @@ final class DenialTracking extends Model implements Auditable
 {
     use HasFactory;
     use AuditableTrait;
+    use Searchable;
 
     protected $table = 'denial_tracking';
 
@@ -92,6 +101,7 @@ final class DenialTracking extends Model implements Auditable
         'response_details',
         'private_note_id',
         'claim_id',
+        'policy_id',
     ];
 
     protected $casts = [
@@ -145,13 +155,9 @@ final class DenialTracking extends Model implements Auditable
      */
     public static function createDenialTracking(array $data)
     {
-        try {
-            $denial = DenialTracking::create($data);
+        $denial = DenialTracking::create($data);
 
-            return $denial;
-        } catch (\Exception $e) {
-            return null;
-        }
+        return $denial;
     }
 
     /**
@@ -172,5 +178,35 @@ final class DenialTracking extends Model implements Auditable
         }
 
         return null;
+    }
+
+    public function insurancePolicy(): BelongsTo
+    {
+        return $this->belongsTo(InsurancePolicy::class, 'policy_id');
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'interface_type' => $this->interface_type,
+            'is_reprocess_claim' => $this->is_reprocess_claim,
+            'is_contact_to_patient' => $this->is_contact_to_patient,
+            'contact_through' => $this->contact_through,
+            'claim_number' => $this->claim_number,
+            'rep_name' => $this->rep_name,
+            'ref_number' => $this->ref_number,
+            'claim_status' => $this->claim_status,
+            'claim_sub_status' => $this->claim_sub_status,
+            'tracking_date' => $this->tracking_date,
+            'resolution_time' => $this->resolution_time,
+            'past_due_date' => $this->past_due_date,
+            'follow_up' => $this->follow_up,
+            'department_responsible' => $this->department_responsible,
+            'policy_responsible' => $this->policy_responsible,
+            'response_details' => $this->response_details,
+            'private_note_id' => $this->private_note_id,
+            'claim_id' => $this->claim_id,
+            'policy_id' => $this->policy_id,
+        ];
     }
 }
