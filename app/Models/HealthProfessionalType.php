@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Casts\Enum\TypeCast;
 use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -49,7 +48,7 @@ class HealthProfessionalType extends Model implements Auditable
     ];
 
     protected $casts = [
-        'type' => TypeCast::class.':'.HealthProfessionalTypeEnum::class,
+        'type' => HealthProfessionalTypeEnum::class,
     ];
 
     /**
