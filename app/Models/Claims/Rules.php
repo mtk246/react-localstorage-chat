@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Scout\Searchable;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\Claims\Rules.
@@ -54,9 +56,10 @@ use Laravel\Scout\Searchable;
  *
  * @mixin \Eloquent
  */
-final class Rules extends Model
+final class Rules extends Model implements Auditable
 {
     use HasFactory;
+    use AuditableTrait;
     use HasUlids;
     use Searchable;
 

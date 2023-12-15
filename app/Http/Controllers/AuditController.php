@@ -192,10 +192,14 @@ class AuditController extends Controller
     public function getAuditAllByEntity(Request $request, $entity, $id)
     {
         $model = toModel($entity);
-        $record = $model::find($id);
-        if ('claim-batch' == $entity) {
-            $entity = 'claim/batch';
+        if ('claim-batch' === $entity) {
+            $entity = 'claim-batch';
+            $model = '\App\Models\Claims\ClaimBatch';
+        } else if ('claim-rules' === $entity) {
+            $entity = 'claim-rules';
+            $model = '\App\Models\Claims\Rules';
         }
+        $record = $model::find($id);
 
         if (isset($record)) {
             $auditables = Audit::query()
