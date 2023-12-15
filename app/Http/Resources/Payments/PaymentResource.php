@@ -23,7 +23,7 @@ final class PaymentResource extends JsonResource
             'id' => $this->resource->id,
             'source' => $this->resource->source,
             'payment_date' => $this->resource->payment_date,
-            'total_amount' => $this->resource->total_amount->getAmount(),
+            'total_amount' => $this->resource->total_amount->formatByDecimal(),
             'payment_method' => $this->resource->payment_method,
             'reference' => $this->resource->reference,
             'card_number' => $this->resource->card?->card_number,
@@ -31,7 +31,8 @@ final class PaymentResource extends JsonResource
             'statement' => $this->resource->statement,
             'note' => $this->resource->note,
             'eobs' => new EobResource($this->resource->eobs),
-            'insurance_company' => $this->resource->insuranceCompany,
+            'insurance_plan' => $this->resource->insurancePlan,
+            'insurance_company' => $this->resource->insurancePlan->insuranceCompany,
             'claims' => ClaimResource::collection($this->resource->claims),
         ];
     }
