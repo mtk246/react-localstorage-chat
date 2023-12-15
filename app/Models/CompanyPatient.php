@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $billing_company_id
  * @property \App\Models\BillingCompany|null $billingCompany
  * @property \App\Models\Company $company
+ * @property \App\Models\Contact $contact
  * @property \App\Models\Patient $patient
  *
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyPatient newModelQuery()
