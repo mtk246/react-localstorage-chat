@@ -7,7 +7,7 @@ namespace App\Models\Payments;
 use App\Enums\Payments\MethodType;
 use App\Enums\Payments\SourceType;
 use App\Models\Claims\Claim;
-use App\Models\InsuranceCompany;
+use App\Models\InsurancePlan;
 use Cknow\Money\Casts\MoneyDecimalCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $payment_method
  * @property string|null $reference
  * @property bool $statement
- * @property string $note
+ * @property string|null $note
  * @property int $payment_batch_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -37,7 +37,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property \Illuminate\Database\Eloquent\Collection<int, Claim> $claims
  * @property int|null $claims_count
  * @property \App\Models\Payments\Eob|null $eobs
- * @property InsuranceCompany $insuranceCompany
+ * @property InsurancePlan|null $insurancePlan
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Payment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Payment newQuery()
@@ -73,7 +73,7 @@ final class Payment extends Model
         'statement',
         'note',
         'payment_batch_id',
-        'insurance_company_id',
+        'insurance_plan_id',
     ];
 
     /** @var array<string, string> */
@@ -90,9 +90,9 @@ final class Payment extends Model
         return $this->belongsTo(Batch::class, 'payment_batch_id');
     }
 
-    public function insuranceCompany(): BelongsTo
+    public function insurancePlan(): BelongsTo
     {
-        return $this->belongsTo(InsuranceCompany::class);
+        return $this->belongsTo(InsurancePlan::class);
     }
 
     public function card(): HasOne

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Enums\SearchFilterType;
 use App\Models\BillingCompany;
-use App\Models\Claim;
+use App\Models\Claims\Claim;
 use App\Models\Claims\DenialRefile;
 use App\Models\Claims\DenialTracking;
 use App\Models\Claims\Rules;
@@ -177,15 +177,38 @@ return [
             ],
             Claim::class => [
                 'filterableAttributes' => [
-                    'control_number',
-                    'company.code',
-                    'company.name',
-                    'company.npi',
-                    'company.ein',
-                    'company.upin',
-                    'company.clia',
+                    'id',
+                    'code',
+                    'type',
+                    'submitter_name',
+                    'submitter_contact',
+                    'submitter_phone',
+                    'billing_company.code',
+                    'billing_company.name',
+                    'billing_company.abbreviation',
+                    'last_modified',
+                    'billed_amount',
+                    'amount_paid',
+                    'past_due_date',
+                    'date_of_service',
+                    'status',
+                    'sub_status',
+                    'user_created',
                 ],
-                'sortableAttributes' => ['created_at'],
+                'sortableAttributes' => [
+                    'id',
+                    'code',
+                    'type',
+                    'submitter_name',
+                    'submitter_contact',
+                    'submitter_phone',
+                    'billing_company.code',
+                    'billing_company.name',
+                    'billing_company.abbreviation',
+                    'status',
+                    'sub_status',
+                    'user_created',
+                ],
             ],
             Rules::class => [
                 'filterableAttributes' => [

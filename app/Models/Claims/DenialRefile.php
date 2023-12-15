@@ -22,7 +22,12 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $policy_id
  * @property bool|null $is_cross_over
  * @property string|null $cross_over_date
+ * @property string|null $policy_id
+ * @property bool|null $is_cross_over
+ * @property string|null $cross_over_date
  * @property string $note
+ * @property string|null $original_claim_id
+ * @property int|null $refile_reason
  * @property string|null $original_claim_id
  * @property int|null $refile_reason
  * @property \Illuminate\Support\Carbon|null $created_at
