@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Enums\Claim\RuleType;
 
 return [
-    '0a' => [
+    '0.a' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'description' => 'Higher insurance company name',
@@ -26,7 +26,7 @@ return [
             ],
         ],
     ],
-    '0b' => [
+    '0.b' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'glue' => ' ',
@@ -46,7 +46,7 @@ return [
             ],
         ],
     ],
-    '0c' => [
+    '0.c' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'glue' => ' ',
@@ -106,7 +106,7 @@ return [
             ],
         ],
     ],
-    '3a' => [
+    '3.a' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 2,
         'description' => 'Patient year of birth',
@@ -122,7 +122,7 @@ return [
             ],
         ],
     ],
-    '3b' => [
+    '3.b' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 2,
         'description' => 'Patient month of birth',
@@ -138,7 +138,7 @@ return [
             ],
         ],
     ],
-    '3c' => [
+    '3.c' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 2,
         'description' => 'Patient day of birth',
@@ -154,7 +154,7 @@ return [
             ],
         ],
     ],
-    '3d' => [
+    '3.d' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 1,
         'description' => 'Patient sex',
@@ -189,7 +189,7 @@ return [
             ],
         ],
     ],
-    '5a' => [
+    '5.a' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'glue' => ' ',
@@ -210,7 +210,7 @@ return [
             ],
         ],
     ],
-    '5b' => [
+    '5.b' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'description' => 'Patient city',
@@ -229,7 +229,7 @@ return [
             ],
         ],
     ],
-    '5c' => [
+    '5.c' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 2,
         'description' => 'Patient state',
@@ -248,7 +248,7 @@ return [
             ],
         ],
     ],
-    '5d' => [
+    '5.d' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 10,
         'description' => 'Patient zip',
@@ -267,7 +267,7 @@ return [
             ],
         ],
     ],
-    '5e' => [
+    '5.e' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 3,
         'description' => 'Patient phone code',
@@ -286,7 +286,7 @@ return [
             ],
         ],
     ],
-    '5f' => [
+    '5.f' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 11,
         'description' => 'Patient phone number',
@@ -316,7 +316,7 @@ return [
             ],
         ],
     ],
-    '7a' => [
+    '7.a' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'glue' => ' ',
@@ -337,7 +337,7 @@ return [
             ],
         ],
     ],
-    '7b' => [
+    '7.b' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'description' => 'Subscriber city',
@@ -356,7 +356,7 @@ return [
             ],
         ],
     ],
-    '7c' => [
+    '7.c' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 2,
         'description' => 'subscriber state',
@@ -375,7 +375,7 @@ return [
             ],
         ],
     ],
-    '7d' => [
+    '7.d' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 10,
         'description' => 'Subscriber zip',
@@ -394,7 +394,7 @@ return [
             ],
         ],
     ],
-    '7e' => [
+    '7.e' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 3,
         'description' => 'Subscriber phone code',
@@ -413,7 +413,7 @@ return [
             ],
         ],
     ],
-    '7f' => [
+    '7.f' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 10,
         'description' => 'subscriber phone number',
@@ -451,7 +451,7 @@ return [
             ],
         ],
     ],
-    '9a' => [
+    '9.a' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Secondary policy number',
@@ -462,7 +462,7 @@ return [
             ],
         ],
     ],
-    '9d' => [
+    '9.d' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Secondary insurance plan',
@@ -473,7 +473,7 @@ return [
             ],
         ],
     ],
-    '10a' => [
+    '10.a' => [
         'type' => RuleType::BOOLEAN->value,
         'description' => 'Employment related condition',
         'value' => ['name' => 'Employment related condition', 'id' => 'claimDemographicInformation:employment_related_condition'],
@@ -483,7 +483,7 @@ return [
             ],
         ],
     ],
-    '10ba' => [
+    '10.b1' => [
         'type' => RuleType::BOOLEAN->value,
         'description' => 'Auto accident related condition',
         'value' => ['name' => 'Auto accident related condition', 'id' => 'claimDemographicInformation:auto_accident_related_condition'],
@@ -493,7 +493,7 @@ return [
             ],
         ],
     ],
-    '10bb' => [
+    '10.b2' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Auto accident place state',
         'length' => 10,
@@ -507,7 +507,7 @@ return [
             ],
         ],
     ],
-    '10c' => [
+    '10.c' => [
         'type' => RuleType::BOOLEAN->value,
         'description' => 'Other accident related condition',
         'value' => ['name' => 'Other accident related condition', 'id' => 'claimDemographicInformation:other_accident_related_condition'],
@@ -517,7 +517,7 @@ return [
             ],
         ],
     ],
-    '10d' => [
+    '10.d' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => [],
@@ -533,7 +533,7 @@ return [
             ],
         ],
     ],
-    '11aa' => [
+    '11.a1' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 2,
         'description' => 'Subscriber year of birth',
@@ -549,7 +549,7 @@ return [
             ],
         ],
     ],
-    '11ab' => [
+    '11.a2' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 2,
         'description' => 'Subscriber month of birth',
@@ -565,7 +565,7 @@ return [
             ],
         ],
     ],
-    '11ac' => [
+    '11.a3' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 2,
         'description' => 'Subscriber day of birth',
@@ -581,7 +581,7 @@ return [
             ],
         ],
     ],
-    '11ad' => [
+    '11.a4' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 1,
         'description' => 'Subscriber sex',
@@ -597,13 +597,13 @@ return [
             ],
         ],
     ],
-    '11b' => [
+    '11.b' => [
         'type' => RuleType::NONE->value,
         'description' => null,
         'value' => null,
         'values' => [],
     ],
-    '11c' => [
+    '11.c' => [
         'type' => RuleType::SINGLE->value,
         'length' => 30,
         'description' => 'Primary insurance plan name',
@@ -614,7 +614,7 @@ return [
             ],
         ],
     ],
-    '11d' => [
+    '11.d' => [
         'type' => RuleType::BOOLEAN->value,
         'description' => 'Exist secondary insurance plan',
         'value' => ['name' => 'Exist secondary insurance plan', 'id' => 'existLowerInsurancePlan'],
@@ -624,7 +624,7 @@ return [
             ],
         ],
     ],
-    '12a' => [
+    '12.a' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 20,
         'description' => 'Patient signature on file',
@@ -638,7 +638,7 @@ return [
             ],
         ],
     ],
-    '12b' => [
+    '12.b' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 10,
         'description' => 'Date of service',
@@ -662,7 +662,7 @@ return [
             ],
         ],
     ],
-    '14a' => [
+    '14.a' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim month of from date current',
         'length' => 2,
@@ -678,7 +678,7 @@ return [
             ],
         ],
     ],
-    '14b' => [
+    '14.b' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim day of from date current',
         'length' => 2,
@@ -694,7 +694,7 @@ return [
             ],
         ],
     ],
-    '14c' => [
+    '14.c' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim year of from date current',
         'length' => 2,
@@ -710,7 +710,7 @@ return [
             ],
         ],
     ],
-    '14d' => [
+    '14.d' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim qualifier',
         'length' => 2,
@@ -726,7 +726,7 @@ return [
             ],
         ],
     ],
-    '15a' => [
+    '15.a' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim qualifier',
         'length' => 2,
@@ -742,7 +742,7 @@ return [
             ],
         ],
     ],
-    '15b' => [
+    '15.b' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim month of from date other',
         'length' => 2,
@@ -758,7 +758,7 @@ return [
             ],
         ],
     ],
-    '15c' => [
+    '15.c' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim day of from date other',
         'length' => 2,
@@ -774,7 +774,7 @@ return [
             ],
         ],
     ],
-    '15d' => [
+    '15.d' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim year of from date other',
         'length' => 2,
@@ -790,7 +790,7 @@ return [
             ],
         ],
     ],
-    '16a' => [
+    '16.a' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim month of from date work information',
         'length' => 2,
@@ -808,7 +808,7 @@ return [
             ],
         ],
     ],
-    '16b' => [
+    '16.b' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim day of from date work information',
         'length' => 2,
@@ -826,7 +826,7 @@ return [
             ],
         ],
     ],
-    '16c' => [
+    '16.c' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim year of from date work information',
         'length' => 2,
@@ -844,7 +844,7 @@ return [
             ],
         ],
     ],
-    '16d' => [
+    '16.d' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim month of to date work information',
         'length' => 2,
@@ -862,7 +862,7 @@ return [
             ],
         ],
     ],
-    '16e' => [
+    '16.e' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim day of to date work information',
         'length' => 2,
@@ -880,7 +880,7 @@ return [
             ],
         ],
     ],
-    '16f' => [
+    '16.f' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim year of to date work information',
         'length' => 2,
@@ -898,7 +898,7 @@ return [
             ],
         ],
     ],
-    '170' => [
+    '17.0' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Referred provider role code',
         'length' => 2,
@@ -915,7 +915,7 @@ return [
             ],
         ],
     ],
-    '171' => [
+    '17.1' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Referred provider name',
         'length' => 20,
@@ -936,7 +936,7 @@ return [
             ],
         ],
     ],
-    '17a0' => [
+    '17.a0' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Referred provider qualifier',
         'length' => 2,
@@ -951,7 +951,7 @@ return [
             ],
         ],
     ],
-    '17a1' => [
+    '17.a1' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Referred provider qualifier value',
         'length' => 17,
@@ -966,7 +966,7 @@ return [
             ],
         ],
     ],
-    '17b' => [
+    '17.b' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Referred provider npi',
         'length' => 10,
@@ -981,7 +981,7 @@ return [
             ],
         ],
     ],
-    '18a' => [
+    '18.a' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim month of from date hospital information',
         'length' => 2,
@@ -999,7 +999,7 @@ return [
             ],
         ],
     ],
-    '18b' => [
+    '18.b' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim day of from date hospital information',
         'length' => 2,
@@ -1017,7 +1017,7 @@ return [
             ],
         ],
     ],
-    '18c' => [
+    '18.c' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim year of from date hospital information',
         'length' => 2,
@@ -1035,7 +1035,7 @@ return [
             ],
         ],
     ],
-    '18d' => [
+    '18.d' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim month of to date hospital information',
         'length' => 2,
@@ -1053,7 +1053,7 @@ return [
             ],
         ],
     ],
-    '18e' => [
+    '18.e' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim day of to date hospital information',
         'length' => 2,
@@ -1071,7 +1071,7 @@ return [
             ],
         ],
     ],
-    '18f' => [
+    '18.f' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Claim year of to date hospital information',
         'length' => 2,
@@ -1108,7 +1108,7 @@ return [
             ],
         ],
     ],
-    '20a' => [
+    '20.a' => [
         'type' => RuleType::BOOLEAN->value,
         'description' => 'Claim demographic outside lab',
         'value' => ['name' => 'Outside lab', 'id' => 'claimDemographicInformation:outside_lab'],
@@ -1118,7 +1118,7 @@ return [
             ],
         ],
     ],
-    '20b' => [
+    '20.b' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Claim demographic information charges',
         'value' => ['name' => 'Charges', 'id' => 'claimDemographicInformation:charges'],
@@ -1138,7 +1138,7 @@ return [
             ],
         ],
     ],
-    '21A' => [
+    '21.A' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Claim diagnosis code A',
         'value' => ['name' => 'Code A', 'id' => 'claimDiagnosesCode:A'],
@@ -1148,7 +1148,7 @@ return [
             ],
         ],
     ],
-    '21B' => [
+    '21.B' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Claim diagnosis code B',
         'value' => ['name' => 'Code B', 'id' => 'claimDiagnosesCode:B'],
@@ -1158,7 +1158,7 @@ return [
             ],
         ],
     ],
-    '21C' => [
+    '21.C' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Claim diagnosis code C',
         'value' => ['name' => 'Code C', 'id' => 'claimDiagnosesCode:C'],
@@ -1168,7 +1168,7 @@ return [
             ],
         ],
     ],
-    '21D' => [
+    '21.D' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Claim diagnosis code D',
         'value' => ['name' => 'Code D', 'id' => 'claimDiagnosesCode:D'],
@@ -1178,7 +1178,7 @@ return [
             ],
         ],
     ],
-    '21E' => [
+    '21.E' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Claim diagnosis code E',
         'value' => ['name' => 'Code E', 'id' => 'claimDiagnosesCode:E'],
@@ -1188,7 +1188,7 @@ return [
             ],
         ],
     ],
-    '21F' => [
+    '21.F' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Claim diagnosis code F',
         'value' => ['name' => 'Code F', 'id' => 'claimDiagnosesCode:F'],
@@ -1198,7 +1198,7 @@ return [
             ],
         ],
     ],
-    '21G' => [
+    '21.G' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Claim diagnosis code G',
         'value' => ['name' => 'Code G', 'id' => 'claimDiagnosesCode:G'],
@@ -1208,7 +1208,7 @@ return [
             ],
         ],
     ],
-    '21H' => [
+    '21.H' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Claim diagnosis code H',
         'value' => ['name' => 'Code H', 'id' => 'claimDiagnosesCode:H'],
@@ -1218,7 +1218,7 @@ return [
             ],
         ],
     ],
-    '21I' => [
+    '21.I' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Claim diagnosis code I',
         'value' => ['name' => 'Code I', 'id' => 'claimDiagnosesCode:I'],
@@ -1228,7 +1228,7 @@ return [
             ],
         ],
     ],
-    '21J' => [
+    '21.J' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Claim diagnosis code J',
         'value' => ['name' => 'Code J', 'id' => 'claimDiagnosesCode:J'],
@@ -1238,7 +1238,7 @@ return [
             ],
         ],
     ],
-    '21K' => [
+    '21.K' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Claim diagnosis code K',
         'value' => ['name' => 'Code K', 'id' => 'claimDiagnosesCode:K'],
@@ -1248,7 +1248,7 @@ return [
             ],
         ],
     ],
-    '21L' => [
+    '21.L' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Claim diagnosis code L',
         'value' => ['name' => 'Code L', 'id' => 'claimDiagnosesCode:L'],
@@ -1258,7 +1258,7 @@ return [
             ],
         ],
     ],
-    '22A' => [
+    '22.A' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Resubmission claim code',
         'value' => ['name' => 'Resubmission claim code', 'id' => 'demograficInformation:|'],
@@ -1268,7 +1268,7 @@ return [
             ],
         ],
     ],
-    '22B' => [
+    '22.B' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Resubmission claim original reference number',
         'value' => ['name' => 'Resubmission claim original reference number', 'id' => 'demograficInformation:|'],
@@ -1298,7 +1298,7 @@ return [
             ],
         ],
     ],
-    '25A' => [
+    '25.A' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Federal tax ID number',
         'value' => ['name' => 'Federal tax ID number', 'id' => 'company:federal_tax'],
@@ -1308,7 +1308,7 @@ return [
             ],
         ],
     ],
-    '25B' => [
+    '25.B' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Federal tax type',
         'value' => ['name' => 'Federal tax type', 'id' => 'company:federal_tax_value'],
@@ -1358,7 +1358,7 @@ return [
             ],
         ],
     ],
-    '31A' => [
+    '31.A' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Billing provider name',
         'length' => 20,
@@ -1378,7 +1378,7 @@ return [
             ],
         ],
     ],
-    '31B' => [
+    '31.B' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Billing provider signature on file',
         'value' => ['name' => 'Billing provider signature on file', 'id' => '|Signature on File'],
@@ -1388,7 +1388,7 @@ return [
             ],
         ],
     ],
-    '31C' => [
+    '31.C' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Date of service',
         'value' => ['name' => 'Date of service', 'id' => 'firstClaimService:from_service'],
@@ -1398,7 +1398,7 @@ return [
             ],
         ],
     ],
-    '32A0' => [
+    '32.A0' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Facility name',
         'length' => 20,
@@ -1417,7 +1417,7 @@ return [
             ],
         ],
     ],
-    '32A1' => [
+    '32.A1' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Facility address',
         'length' => 20,
@@ -1438,7 +1438,7 @@ return [
             ],
         ],
     ],
-    '32A2' => [
+    '32.A2' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Facility address',
         'length' => 20,
@@ -1461,7 +1461,7 @@ return [
             ],
         ],
     ],
-    '32A' => [
+    '32.A' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Facility npi',
         'length' => 20,
@@ -1480,7 +1480,7 @@ return [
             ],
         ],
     ],
-    '33A0' => [
+    '33.A0' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Billing provider name',
         'length' => 20,
@@ -1500,7 +1500,7 @@ return [
             ],
         ],
     ],
-    '33A1' => [
+    '33.A1' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Billing provider address',
         'length' => 20,
@@ -1523,7 +1523,7 @@ return [
             ],
         ],
     ],
-    '33A2' => [
+    '33.A2' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Billing provider address',
         'length' => 20,
@@ -1548,7 +1548,7 @@ return [
             ],
         ],
     ],
-    '33A3' => [
+    '33.A3' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Billing provider phone code',
         'length' => 20,
@@ -1569,7 +1569,7 @@ return [
             ],
         ],
     ],
-    '33A4' => [
+    '33.A4' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Billing provider phone number',
         'length' => 20,
@@ -1590,7 +1590,7 @@ return [
             ],
         ],
     ],
-    '33A' => [
+    '33.A' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Billing provider npi',
         'length' => 20,
