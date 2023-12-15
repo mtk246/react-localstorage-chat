@@ -193,10 +193,10 @@ class AuditController extends Controller
     {
         $model = toModel($entity);
         if ('claim-batch' === $entity) {
-            $entity = 'claim-batch';
+            $entity = 'claim/batch';
             $model = '\App\Models\Claims\ClaimBatch';
         } else if ('claim-rules' === $entity) {
-            $entity = 'claim-rules';
+            $entity = 'claim/rules';
             $model = '\App\Models\Claims\Rules';
         }
         $record = $model::find($id);
