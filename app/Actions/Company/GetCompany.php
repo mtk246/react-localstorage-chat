@@ -52,7 +52,7 @@ final class GetCompany
                         $options['sort'] = [$request->sortBy.':'.Pagination::sortDesc()];
                     }
 
-                    return $searchEngine->search('"'.$query.'"', $options);
+                    return $searchEngine->search($query, $options);
                 })
                 ->when(
                     Gate::denies('is-admin'),

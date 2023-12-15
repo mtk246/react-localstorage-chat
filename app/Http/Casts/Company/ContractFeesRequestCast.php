@@ -145,4 +145,20 @@ final class ContractFeesRequestCast extends CastsRequest
         )
             ->map(fn (array $inputs) => new ContractFeeSpecificationWrapper($inputs, $this->querys, $this->user));
     }
+
+    public function wrapperContractFeesBody(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'billing_company_id' => $this->getBillingCompanyId(),
+            'mac_locality_id' => $this->getMacLocality()?->id,
+            'contract_fee_type_id' => $this->getTypeId(),
+            'start_date' => $this->getStartDate(),
+            'end_date' => $this->getEndDate(),
+            'insurance_label_fee_d' => $this->getInsuranceLabelFeeId(),
+            'private_note' => $this->getPrivateNote(),
+            'price' => $this->getPrice(),
+            'price_percentage' => $this->getPricePercentage(),
+        ];
+    }
 }

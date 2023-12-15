@@ -24,49 +24,53 @@ final class AddContractFees
         return DB::transaction(function () use ($contractFees, $company, $user): Collection {
             $this->syncContractFee($company, $contractFees, $user->billing_company_id);
 
-            return $contractFees->map(function (ContractFeesRequestCast $contractFee) use ($company) {
-                if (!$contractFee->getId()) {
-                    $contract = ContractFee::create([
-                        'billing_company_id' => $contractFee->getBillingCompanyId(),
-                        'mac_locality_id' => $contractFee->getMacLocality()?->id,
-                        'contract_fee_type_id' => $contractFee->getTypeId(),
-                        'start_date' => $contractFee->getStartDate(),
-                        'end_date' => $contractFee->getEndDate(),
-                        'insurance_label_fee_d' => $contractFee->getInsuranceLabelFeeId(),
-                        'private_note' => $contractFee->getPrivateNote(),
-                        'price' => $contractFee->getPrice(),
-                        'price_percentage' => $contractFee->getPricePercentage(),
-                    ]);
-                } else {
-                    ContractFee::find($contractFee->getId())->update([
-                        'billing_company_id' => $contractFee->getBillingCompanyId(),
-                        'mac_locality_id' => $contractFee->getMacLocality()?->id,
-                        'contract_fee_type_id' => $contractFee->getTypeId(),
-                        'start_date' => $contractFee->getStartDate(),
-                        'end_date' => $contractFee->getEndDate(),
-                        'insurance_label_fee_id' => $contractFee->getInsuranceLabelFeeId(),
-                        'private_note' => $contractFee->getPrivateNote(),
-                        'price' => $contractFee->getPrice(),
-                        'price_percentage' => $contractFee->getPricePercentage(),
-                    ]);
+            return $contractFees->map(fn (ContractFeesRequestCast $contractFeesRequest) => tap(
+                ContractFee::query()->updateOrCreate(
+                    ['id' => $contractFeesRequest->getId()],
+                    $contractFeesRequest->wrapperContractFeesBody()
+                ),
+                function (ContractFee $contractFee) use ($contractFeesRequest, $company): void {
 
-                    $contract = ContractFee::find($contractFee->getId());
+                    if (is_null($company->contractFees()->find($contractFee->id))) {
+                        $company->contractFees()->attach($contractFee->id);
+                    }
+
+                    $contractFee->procedures()->sync($contractFeesRequest->getProceduresIds());
+
+                    $contractFee->modifiers()->sync($contractFeesRequest->getModifierIds());
+
+                    $contractFee->insurancePlans()->sync($contractFeesRequest->getInsurancePlanIds());
+
+                    $contractFee->patients()->detach();
+                    $contractFeesRequest->getPatients()->each(
+                        fn (ContractFeePatiensCast $patient) => $contractFee->patients()->attach($patient->getId(), [
+                            'start_date' => $patient->getStartDate(),
+                            'end_date' => $patient->getEndDate(),
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ])
+                    );
+
+                    $contractFeesRequest->getContractSpecifications()->each(
+                        function (ContractFeeSpecificationWrapper $contractSpecification, int $contractFeeIndex) use ($contractFee): void {
+                            $contractSpecificationRequestBody = $contractSpecification->wrapperContractFeesSpecificationBody();
+                            $contractSpecificationRequestBody['code'] = $contractFee->id.$contractFeeIndex;
+                            $contractSpecificationRequestBody['contract_fee_id'] = $contractFee->id;
+
+                            ContractFeeSpecification::updateOrCreate(
+                                ['id' => $contractSpecification->getId()],
+                                $contractSpecificationRequestBody
+                            );
+                        }
+                    );
                 }
-
-                $this->afterCreate(
-                    $contract,
-                    $company,
-                    $contractFee,
-                );
-
-                return $contract;
-            })->map(fn (ContractFee $contractFee) => $contractFee->load([
+            ))->map(fn (ContractFee $contractFee) => $contractFee->load([
                 'procedures',
                 'patients',
                 'modifiers',
                 'macLocality',
                 'insurancePlans',
-                'contractFeeSpecifications',
+                'contractFeeSpecifications'
             ]));
         });
     }

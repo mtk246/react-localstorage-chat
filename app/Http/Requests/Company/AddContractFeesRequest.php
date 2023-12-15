@@ -10,6 +10,7 @@ use App\Models\InsuranceCompany;
 use App\Models\InsurancePlan;
 use App\Models\Modifier;
 use App\Models\Procedure;
+use App\Rules\Company\CustomValidateExist;
 use App\Rules\Company\DuplicityContractValidation;
 use App\Rules\IntegerOrArrayKeyExists;
 use Illuminate\Foundation\Http\FormRequest;
@@ -36,12 +37,12 @@ final class AddContractFeesRequest extends FormRequest
                 Rule::excludeIf(Gate::denies('is-admin')),
                 'required',
                 'integer',
-                'exists:\App\Models\BillingCompany,id',
+                'exists:\App\Models\BillingCompany,id'
             ],
             'contract_fees.*.id' => [
                 'nullable',
                 'integer',
-                'exists:\App\Models\ContractFee,id',
+                new CustomValidateExist()
             ],
             'contract_fees.*.insurance_company_ids' => [
                 'nullable',

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace App\Rules\Company;
+use Carbon\Carbon;
 
 use Illuminate\Contracts\Validation\Rule;
 
@@ -64,41 +65,38 @@ final class DuplicityContractValidation implements Rule
         return $duplicates->isNotEmpty();
     }
 
-    public function hasOverlappingDates(array $contractFees): bool
+    public function hasOverlappingDates(array $contractFees)
     {
         $contractFeesCollection = collect($contractFees);
 
-        $overlapping = false;
-
-        $contractFeesCollection->each(function ($contractFee, $index) use ($contractFeesCollection, &$overlapping) {
-            $currentStartDate = $contractFee['start_date'] ?? null;
-            $currentEndDate = $contractFee['end_date'] ?? null;
+        return $contractFeesCollection->search(function ($contractFee, $index) use ($contractFeesCollection) {
+            $currentStartDate = isset($contractFee['start_date'])
+                ? Carbon::createFromDate($contractFee['start_date'])->format('Y-m-d')
+                : null;
+            $currentEndDate = isset($contractFee['end_date'])
+                ? Carbon::createFromDate($contractFee['end_date'])->format('Y-m-d')
+                : null;
 
             $otherFees = $contractFeesCollection->except($index);
 
-            $overlapping = $otherFees->contains(function ($otherContractFee) use ($currentStartDate, $currentEndDate) {
-                $otherStartDate = $otherContractFee['start_date'] ?? null;
-                $otherEndDate = $otherContractFee['end_date'] ?? null;
+            return $otherFees->search(function ($otherContractFee) use ($currentStartDate, $currentEndDate) {
+                $otherStartDate = isset($otherContractFee['start_date'])
+                    ? Carbon::createFromDate($otherContractFee['start_date'])->format('Y-m-d')
+                    : null;
+                $otherEndDate = isset($otherContractFee['end_date'])
+                    ? Carbon::createFromDate($otherContractFee['end_date'])->format('Y-m-d')
+                    : null;
 
-                if ((null === $currentStartDate && null === $currentEndDate) || (null === $otherStartDate && null === $otherEndDate)) {
-                    return true; // No overlap if both ranges are entirely null
+                if ($currentStartDate !== null || $currentEndDate !== null || $otherStartDate !== null || $otherEndDate !== null) {
+                    if (
+                        ($currentStartDate <= $otherStartDate && $currentEndDate <= $otherEndDate)
+                        || (isset($currentStartDate) && $currentStartDate <= ($otherEndDate ?? $otherStartDate))
+                        || (isset($currentStartDate) && $currentStartDate <= ($otherEndDate ?? $otherStartDate))
+                    ) {
+                        return true;
+                    }
                 }
-
-                if ($currentStartDate <= $otherStartDate && $currentEndDate <= $otherEndDate) {
-                    return true; // Overlap if current range is contained in other range
-                }
-
-                if (isset($currentStartDate) && $currentStartDate <= ($otherEndDate ?? $otherStartDate)) {
-                    return true; // Overlap if current range starts before other range ends
-                }
-
-                return ($currentStartDate <= $otherStartDate && $otherEndDate <= $currentEndDate)
-                    || ($otherStartDate <= $currentStartDate && $currentEndDate <= $otherEndDate);
-            });
-
-            return !$overlapping; // Stop iteration if overlapping found
+            }) == 0;
         });
-
-        return $overlapping;
     }
 }
