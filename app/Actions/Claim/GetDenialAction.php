@@ -36,7 +36,11 @@ final class GetDenialAction
                 }
 
                 if (isset($request->filter)) {
-                    $options['filter'] = $request->filter;
+                    $options['filter'] = collect(['transmited = true'])
+                        ->when(isset($request->filter), function ($collection) use ($request) {
+                            $collection->push($request->filter);
+                        })
+                        ->implode(' AND ');
                 }
 
                 return $searchEngine->search($query, $options);
