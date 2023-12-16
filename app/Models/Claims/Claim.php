@@ -585,6 +585,7 @@ class Claim extends Model implements Auditable
             'amount_paid' => $this->amount_paid,
             'past_due_date' => $this->past_due_date,
             'date_of_service' => $this->date_of_service,
+            'transmitted' => $this->claimTransmissionResponses->count() > 0,
             'status' => $this->status()
                 ->orderBy('created_at', 'desc')
                 ->orderBy('id', 'desc')
