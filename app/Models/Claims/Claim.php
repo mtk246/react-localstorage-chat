@@ -586,7 +586,13 @@ class Claim extends Model implements Auditable
             'amount_paid' => $this->amount_paid,
             'past_due_date' => $this->past_due_date,
             'date_of_service' => $this->date_of_service,
+            'company.name' => $this->demographicInformation->company->name,
+            'company.abbreviation' => $this->demographicInformation->company->abbreviations
+                ->where('billing_company_id', $this->billing_company_id)
+                ->first()
+                ?->abbreviation,
             'patient' => $this->demographicInformation->patient->profile->only(['first_name', 'last_name', 'ssn']),
+            'health_professionals' => $this->demographicInformation->healthProfessionals,
             'insurance_plan' => $this->higherInsurancePlan(),
             'transmitted' => $this->claimTransmissionResponses->count() > 0,
             'status' => $this->status()
