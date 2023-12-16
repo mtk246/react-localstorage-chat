@@ -590,13 +590,11 @@ class Claim extends Model implements Auditable
             'insurance_plan' => $this->higherInsurancePlan(),
             'transmitted' => $this->claimTransmissionResponses->count() > 0,
             'status' => $this->status()
-                ->orderBy('created_at', 'desc')
-                ->orderBy('id', 'desc')
+                ->orderBy('claim_status_claim.id', 'desc')
                 ->first()
                 ?->status,
             'sub_status' => $this->subStatus()
-                ->orderBy('created_at', 'desc')
-                ->orderBy('id', 'desc')
+                ->orderBy('claim_status_claim.id', 'desc')
                 ->first()
                 ?->status,
             'user_created' => $this->user_created,
