@@ -8,7 +8,6 @@ use App\Facades\Pagination;
 use App\Http\Casts\Claims\DenialTrackingWrapper;
 use App\Http\Resources\Claim\DenialBodyResource;
 use App\Models\Claims\Claim;
-use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\DenialTracking;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -25,41 +24,24 @@ final class GetDenialAction
         return DenialBodyResource::make($claim);
     }
 
-    public function all(Claim $claim, Request $request, $status, $subStatus)
+    public function all(Request $request)
     {
-        $claimsQuery = Claim::when(count($status) > 0, function ($query) use ($status) {
-            $query->whereHas('claimStatusClaims', function ($query) use ($status) {
-                $query
-                    ->where('claim_status_claim.claim_status_type', ClaimStatus::class)
-                    ->whereIn('claim_status_claim.claim_status_id', $status)
-                    ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
-            });
-        })
-            ->search(
-                $request->query('query', ''),
-                function (Indexes $searchEngine, string $query, array $options) use ($request, $status) {
-                    $config = config('scout.meilisearch.index-settings.'.Claim::class);
+        $claimsQuery = Claim::search(
+            $request->query('query', ''),
+            function (Indexes $searchEngine, string $query, array $options) use ($request) {
+                $config = config('scout.meilisearch.index-settings.'.Claim::class);
 
-                    if (isset($request->sortBy) && in_array($request->sortBy, $config['sortableAttributes'])) {
-                        $options['sort'] = [$request->sortBy.':'.Pagination::sortDesc()];
-                    }
-
-                    if (isset($request->filter)) {
-                        $options['filter'] = $request->filter;
-                    }
-
-                    if (isset($request->status)) {
-                        $statusFilter = is_array($request->status) ? $request->status : [$request->status];
-                        $options['filter'] = [];
-
-                        foreach ($statusFilter as $status) {
-                            $options['filter'][] = 'status:'.$status;
-                        }
-                    }
-
-                    return $searchEngine->search($query, $options);
+                if (isset($request->sortBy) && in_array($request->sortBy, $config['sortableAttributes'])) {
+                    $options['sort'] = [$request->sortBy.':'.Pagination::sortDesc()];
                 }
-            )
+
+                if (isset($request->filter)) {
+                    $options['filter'] = $request->filter;
+                }
+
+                return $searchEngine->search($query, $options);
+            }
+        )
             ->when(
                 Gate::denies('is-admin'),
                 fn ($query) => $query->where('billing_company_id', $request->user()->billing_company_id),
