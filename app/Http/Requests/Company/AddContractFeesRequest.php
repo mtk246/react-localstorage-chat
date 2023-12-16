@@ -37,12 +37,12 @@ final class AddContractFeesRequest extends FormRequest
                 Rule::excludeIf(Gate::denies('is-admin')),
                 'required',
                 'integer',
-                'exists:\App\Models\BillingCompany,id'
+                'exists:\App\Models\BillingCompany,id',
             ],
             'contract_fees.*.id' => [
                 'nullable',
                 'integer',
-                new CustomValidateExist()
+                new CustomValidateExist(),
             ],
             'contract_fees.*.insurance_company_ids' => [
                 'nullable',

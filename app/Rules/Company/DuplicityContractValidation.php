@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 namespace App\Rules\Company;
-use Carbon\Carbon;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Rule;
 
 final class DuplicityContractValidation implements Rule
@@ -79,7 +79,7 @@ final class DuplicityContractValidation implements Rule
 
             $otherFees = $contractFeesCollection->except($index);
 
-            return $otherFees->search(function ($otherContractFee) use ($currentStartDate, $currentEndDate) {
+            return 0 == $otherFees->search(function ($otherContractFee) use ($currentStartDate, $currentEndDate) {
                 $otherStartDate = isset($otherContractFee['start_date'])
                     ? Carbon::createFromDate($otherContractFee['start_date'])->format('Y-m-d')
                     : null;
@@ -87,7 +87,7 @@ final class DuplicityContractValidation implements Rule
                     ? Carbon::createFromDate($otherContractFee['end_date'])->format('Y-m-d')
                     : null;
 
-                if ($currentStartDate !== null || $currentEndDate !== null || $otherStartDate !== null || $otherEndDate !== null) {
+                if (null !== $currentStartDate || null !== $currentEndDate || null !== $otherStartDate || null !== $otherEndDate) {
                     if (
                         ($currentStartDate <= $otherStartDate && $currentEndDate <= $otherEndDate)
                         || (isset($currentStartDate) && $currentStartDate <= ($otherEndDate ?? $otherStartDate))
@@ -96,7 +96,7 @@ final class DuplicityContractValidation implements Rule
                         return true;
                     }
                 }
-            }) == 0;
+            });
         });
     }
 }

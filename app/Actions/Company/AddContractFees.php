@@ -30,7 +30,6 @@ final class AddContractFees
                     $contractFeesRequest->wrapperContractFeesBody()
                 ),
                 function (ContractFee $contractFee) use ($contractFeesRequest, $company): void {
-
                     if (is_null($company->contractFees()->find($contractFee->id))) {
                         $company->contractFees()->attach($contractFee->id);
                     }
@@ -70,7 +69,7 @@ final class AddContractFees
                 'modifiers',
                 'macLocality',
                 'insurancePlans',
-                'contractFeeSpecifications'
+                'contractFeeSpecifications',
             ]));
         });
     }

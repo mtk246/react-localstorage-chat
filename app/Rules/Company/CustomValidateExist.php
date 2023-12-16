@@ -16,9 +16,9 @@ final class CustomValidateExist implements Rule
         $index = $collection->search(fn ($item) => isset($item['id']) ? $item['id'] === $value : null);
 
         $contract = ContractFee::when(
-                Gate::allows('is-admin'),
-                fn ($query)  => $query->where('billing_company_id', $collection[$index]['billing_company_id']),
-            )->find($value);
+            Gate::allows('is-admin'),
+            fn ($query) => $query->where('billing_company_id', $collection[$index]['billing_company_id']),
+        )->find($value);
 
         return $contract ?? false;
     }
