@@ -96,11 +96,7 @@ class InsurancePlanRepository
 
             if($data['format']) {
                 foreach ($data['format'] as $format) {
-                    InsurancePlanPrivate::updateOrCreate(
-                        [
-                            'insurance_plan_id' => $insurancePlan->id,
-                            'billing_company_id' => $billingCompany,
-                        ],
+                    InsurancePlanPrivate::create(
                         [
                             'naic' => $data['naic'] ?? null,
                             'file_method_id' => $data['file_method_id'] ?? null,
@@ -220,11 +216,7 @@ class InsurancePlanRepository
                 $insurancePlan->insurancePlanPrivate()->where('billing_company_id', $billingCompany)->delete();
 
                 foreach ($data['format'] as $format) {
-                    InsurancePlanPrivate::updateOrCreate(
-                        [
-                            'insurance_plan_id' => $insurancePlan->id,
-                            'billing_company_id' => $billingCompany,
-                        ],
+                    InsurancePlanPrivate::create(
                         [
                             'naic' => $data['naic'] ?? null,
                             'file_method_id' => $data['file_method_id'] ?? null,

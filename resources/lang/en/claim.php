@@ -5,6 +5,13 @@ declare(strict_types=1);
 use App\Enums\Claim\ClaimType;
 
 return [
+    'denial' => [
+        'refile' => [
+            'store' => [
+                'note' => 'Refile Type: :refile_type successfully completed, claim assigned to :status-:sub_status',
+            ],
+        ],
+    ],
     'rules' => [
         ClaimType::INSTITUTIONAL->getName() => [
             'group' => [

@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Models\InsurancePolicy;
+use App\Models\PrivateNote;
 use App\Models\RefileReason;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -19,7 +22,12 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $policy_id
  * @property bool|null $is_cross_over
  * @property string|null $cross_over_date
+ * @property string|null $policy_id
+ * @property bool|null $is_cross_over
+ * @property string|null $cross_over_date
  * @property string $note
+ * @property string|null $original_claim_id
+ * @property int|null $refile_reason
  * @property string|null $original_claim_id
  * @property int|null $refile_reason
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -28,6 +36,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $private_note_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property \App\Models\Claims\Claim $claim
+ * @property InsurancePolicy|null $insurancePolicy
+ * @property PrivateNote|null $privateNotes
  * @property RefileReason|null $refileReason
  *
  * @method static \Illuminate\Database\Eloquent\Builder|DenialRefile newModelQuery()
@@ -50,21 +61,22 @@ use OwenIt\Auditing\Contracts\Auditable;
  */
 final class DenialRefile extends Model implements Auditable
 {
-    use HasFactory;
     use AuditableTrait;
+    use HasFactory;
+    use Searchable;
 
     protected $table = 'denial_refile';
 
     protected $fillable = [
         'refile_type',
-        'policy_number',
+        'policy_id',
         'is_cross_over',
         'cross_over_date',
         'note',
         'original_claim_id',
         'refile_reason',
-        'denial_tracking_id',
         'claim_id',
+        'private_note_id',
     ];
 
     public function refileReason(): BelongsTo
@@ -72,29 +84,38 @@ final class DenialRefile extends Model implements Auditable
         return $this->belongsTo(RefileReason::class, 'refile_reason');
     }
 
-    public static function createDenialRefile(array $data)
+    public function insurancePolicy(): BelongsTo
     {
-        try {
-            $denial = DenialRefile::create($data);
-
-            return $denial;
-        } catch (\Exception $e) {
-            return null;
-        }
+        return $this->belongsTo(InsurancePolicy::class, 'policy_id');
     }
 
-    public static function updateDenialRefile(array $data)
+    public function privateNotes(): BelongsTo
     {
-        $denialId = $data['refile_id'];
+        return $this->belongsTo(PrivateNote::class, 'private_note_id');
+    }
 
-        $denial = DenialRefile::where('id', $denialId)->first();
+    public function claim(): BelongsTo
+    {
+        return $this->belongsTo(Claim::class, 'claim_id');
+    }
 
-        if ($denial) {
-            $denial->update($data);
-
-            return $denial;
-        }
-
-        return null;
+    public function toSearchableArray()
+    {
+        return [
+            'refile_type' => $this->refile_type,
+            'policy_id' => $this->policy_id,
+            'is_cross_over' => $this->is_cross_over,
+            'cross_over_date' => $this->cross_over_date,
+            'note' => $this->note,
+            'original_claim_id' => $this->original_claim_id,
+            'refile_reason' => $this->refile_reason,
+            'claim_id' => $this->claim_id,
+            'private_note_id' => $this->private_note_id,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'claim.code' => $this->claim->code,
+            'claim.status' => $this->claim->status->last()?->status,
+            'claim.sub_status' => $this->claim->subStatus->last()?->status,
+        ];
     }
 }
