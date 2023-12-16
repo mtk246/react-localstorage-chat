@@ -35,13 +35,11 @@ final class GetDenialAction
                     $options['sort'] = [$request->sortBy.':'.Pagination::sortDesc()];
                 }
 
-                if (isset($request->filter)) {
-                    $options['filter'] = collect(['transmited = true'])
-                        ->when(isset($request->filter), function ($collection) use ($request) {
-                            $collection->push($request->filter);
-                        })
-                        ->implode(' AND ');
-                }
+                $options['filter'] = collect(['transmited = true'])
+                    ->when(isset($request->filter), function ($collection) use ($request) {
+                        $collection->push($request->filter);
+                    })
+                    ->implode(' AND ');
 
                 return $searchEngine->search($query, $options);
             }
