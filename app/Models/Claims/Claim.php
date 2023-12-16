@@ -571,6 +571,7 @@ class Claim extends Model implements Auditable
             'id' => $this->id,
             'code' => $this->code,
             'type' => $this->type->getName(),
+            'format' => $this->type->getCode(),
             'submitter_name' => $this->submitter_name,
             'submitter_contact' => $this->submitter_contact,
             'submitter_phone' => $this->submitter_phone,
