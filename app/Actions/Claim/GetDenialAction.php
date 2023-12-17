@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace App\Actions\Claim;
 
 use App\Facades\Pagination;
-use App\Http\Casts\Claims\DenialRefileWrapper;
 use App\Http\Casts\Claims\DenialTrackingWrapper;
 use App\Http\Resources\Claim\DenialBodyResource;
 use App\Models\Claims\Claim;
-use App\Models\Claims\DenialRefile;
 use App\Models\Claims\DenialTracking;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Validator;
+use Meilisearch\Endpoints\Indexes;
 
 final class GetDenialAction
 {
@@ -23,48 +24,51 @@ final class GetDenialAction
         return DenialBodyResource::make($claim);
     }
 
-    public function all(Claim $claim, Request $request, $status, $subStatus)
+    public function all(Request $request)
     {
-        $query = $claim->query();
+        $claimsQuery = Claim::search(
+            $request->query('query', ''),
+            function (Indexes $searchEngine, string $query, array $options) use ($request) {
+                $config = config('scout.meilisearch.index-settings.'.Claim::class);
 
-        if ($status || $subStatus) {
-            if ($status) {
-                $query->whereHas('status', function ($statusQuery) use ($status) {
-                    $statusQuery->whereIn('claim_statuses.id', $status);
-                });
+                if (isset($request->sortBy) && in_array($request->sortBy, $config['sortableAttributes'])) {
+                    $options['sort'] = [$request->sortBy.':'.Pagination::sortDesc()];
+                }
+
+                $options['filter'] = collect(['transmited = true'])
+                    ->when(isset($request->filter), function ($collection) use ($request) {
+                        $collection->push($request->filter);
+                    })
+                    ->implode(' AND ');
+
+                return $searchEngine->search($query, $options);
             }
+        )
+            ->when(
+                Gate::denies('is-admin'),
+                fn ($query) => $query->where('billing_company_id', $request->user()->billing_company_id),
+            )
+            ->paginate(Pagination::itemsPerPage());
 
-            if ($subStatus) {
-                $query->orWhereHas('subStatus', function ($subStatusQuery) use ($subStatus) {
-                    $subStatusQuery->whereIn('claim_sub_statuses.id', $subStatus);
-                });
-            }
-        }
-
-        if ($request->user()->isAdmin()) {
-            $query->where('billing_company_id', $request->user()->billing_company_id);
-        }
-
-        $query->with('demographicInformation', 'service', 'insurancePolicies', 'denialTrackings', 'claimTransmissionResponses')
-            ->orderBy(Pagination::sortBy(), Pagination::sortDesc());
-
-        $claimsQuery = $query->paginate(Pagination::itemsPerPage());
-
-        $data = [
-            'data' => DenialBodyResource::collection($claimsQuery->items()),
+        return [
+            'data' => DenialBodyResource::collection(collect($claimsQuery->items())),
             'numberOfPages' => $claimsQuery->lastPage(),
             'count' => $claimsQuery->total(),
         ];
-
-        return $data;
     }
 
     public function createDenialTracking(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->all(), $this->validateDenialTrackingWrapper());
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
         $claim = Claim::find($request->input('claim_id'));
 
         if (!$claim) {
-            return response()->json(__('Error creating denial tracking'), 400);
+            return response()->json(__('Claim ID not found'), 400);
         }
 
         $note = $claim->setStates(
@@ -87,10 +91,16 @@ final class GetDenialAction
 
     public function updateDenialTracking(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->all(), $this->validateDenialTrackingWrapper());
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
         $claim = Claim::find($request->input('claim_id'));
 
         if (!$claim) {
-            return response()->json(__('Error updating denial tracking'), 400);
+            return response()->json(__('Claim ID not found'), 400);
         }
 
         $note = $claim->setStates(
@@ -109,37 +119,28 @@ final class GetDenialAction
         return $tracking ? response()->json($tracking) : response()->json(__('Error updating denial tracking'), 400);
     }
 
-    public function createDenialRefile(Request $request): JsonResponse
+    private function validateDenialTrackingWrapper(): array
     {
-        $claim = Claim::find($request->input('claim_id'));
+        $validationRules = [
+            'denial_id' => 'nullable',
+            'interface_type' => 'required',
+            'is_reprocess_claim' => 'required|boolean',
+            'is_contact_to_patient' => 'required|boolean',
+            'contact_through' => 'required_if:is_contact_to_patient,true',
+            'claim_id' => 'required|numeric',
+            'claim_number' => 'required|string',
+            'rep_name' => 'required|string',
+            'ref_number' => 'nullable|string',
+            'claim_status' => 'required|numeric',
+            'claim_sub_status' => 'nullable|numeric',
+            'tracking_date' => 'required|date',
+            'resolution_time' => 'nullable|date',
+            'past_due_date' => 'nullable|date',
+            'follow_up' => 'nullable|string',
+            'department_responsible' => 'required|string',
+            'policy_responsible' => 'required|string',
+        ];
 
-        if (!$claim) {
-            return response()->json(__('Error creating denial tracking'), 400);
-        }
-
-        $denialRefileWrapper = new DenialRefileWrapper($request->all());
-
-        $refileData = $denialRefileWrapper->getData()['denial_refile_data'];
-
-        $refile = DenialRefile::createDenialRefile($refileData);
-
-        return $refile ? response()->json($refile) : response()->json(__('Error creating denial refile'), 400);
-    }
-
-    public function updateDenialRefile(Request $request): JsonResponse
-    {
-        $claim = Claim::find($request->input('claim_id'));
-
-        if (!$claim) {
-            return response()->json(__('Error creating denial tracking'), 400);
-        }
-
-        $denialRefileWrapper = new DenialRefileWrapper($request->all());
-
-        $refileData = $denialRefileWrapper->getData()['denial_refile_data'];
-
-        $refile = DenialRefile::updateDenialRefile($refileData);
-
-        return $refile ? response()->json($refile) : response()->json(__('Error creating denial refile'), 400);
+        return $validationRules;
     }
 }

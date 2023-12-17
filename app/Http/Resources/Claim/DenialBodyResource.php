@@ -9,7 +9,9 @@ use App\Enums\InterfaceType;
 use App\Http\Resources\HealthProfessional\HealthProfessionalResource;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
+use App\Models\Claims\DenialRefile;
 use App\Models\Claims\DenialTracking;
+use App\Models\RefileReason;
 use App\Models\TypeForm;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -75,7 +77,6 @@ final class DenialBodyResource extends JsonResource
             'status' => $data,
             'sub_status' => $subStatus,
             'sub_statuses' => $subStatuses,
-            'status' => $this->getStatus(),
             'status_map' => $this->getStatusMap(),
             'status_history' => $this->getStatusHistory(),
             'notes_history' => $this->getNotesHistory(),
@@ -94,6 +95,7 @@ final class DenialBodyResource extends JsonResource
             'denial_trackings_detail' => $this->getDenialTrackingsDetailsMap(),
             'denial_refile' => $this->resource->getDenialRefile(),
             'denial_refile_detail' => $this->getDenialRefileDetailsMap(),
+            'refile_reasons' => $this->getRefileReasons(),
             'eob' => [
                 [
                     'filename' => '',
@@ -106,7 +108,7 @@ final class DenialBodyResource extends JsonResource
         ];
     }
 
-    private function getStatus(): ClaimStatus|array
+    public function getStatus(): ClaimStatus|array
     {
         $data = $this->resource->status()
             ->orderBy('claim_status_claim.id', 'desc')
@@ -279,6 +281,7 @@ final class DenialBodyResource extends JsonResource
     {
         $record = [];
         $notes = [];
+
         foreach ($status->privateNotes as $note) {
             $denialTracking = DenialTracking::query()
                 ->where('private_note_id', $note->id)
@@ -340,9 +343,11 @@ final class DenialBodyResource extends JsonResource
     {
         $records = [];
         $recordSubstatus = [];
+
         $history = $this->claimStatusClaims()
-                        ->orderBy('created_at', 'desc')
-                        ->orderBy('id', 'desc')->get() ?? [];
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')->get() ?? [];
+
         foreach ($history as $status) {
             match ($status->claim_status_type) {
                 ClaimSubStatus::class => $this->setSubNote($status, $recordSubstatus),
@@ -358,14 +363,20 @@ final class DenialBodyResource extends JsonResource
         $notes = $status->privateNotes()
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'desc')->get() ?? [];
+
         foreach ($notes as $note) {
+            $insurancePolicyInfo = $this->getInsurancePolicyInfo($note);
+
             array_push(
                 $recordSubstatus,
                 [
+                    'id' => $note->id,
                     'status' => $status->claimStatus->name ?? '',
                     'note' => $note->note,
                     'created_at' => $note->created_at,
                     'last_modified' => $note->last_modified,
+                    'policy_id' => $insurancePolicyInfo['policy_id'] ?? '',
+                    'policy_number' => $insurancePolicyInfo['policy_number'] ?? '',
                 ]
             );
         }
@@ -373,53 +384,116 @@ final class DenialBodyResource extends JsonResource
 
     private function setNote($status, &$records, &$recordSubstatus): void
     {
-        $status->load('claimStatus', 'privateNotes.claimCheckStatus');
+        $status->load('claimStatus', 'privateNotes');
+
+        $statusData = [
+            'status' => optional($status->claimStatus)->status ?? '',
+            'status_background_color' => $status->claimStatus->background_color ?? '',
+            'status_font_color' => $status->claimStatus->font_color ?? '',
+        ];
 
         foreach ($recordSubstatus as $subNote) {
+            $insurancePolicyInfo = $this->getInsurancePolicyInfo($subNote);
+
+            $denialTracking = DenialTracking::query()
+                ->with('insurancePolicy:id,policy_number')
+                ->where('private_note_id', $subNote['id'] ?? null)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            $denialRefile = DenialRefile::with('insurancePolicy', 'privateNotes', 'refileReason')
+                ->whereIn('claim_id', [$status->claim_id])
+                ->where('private_note_id', $subNote['id'] ?? null)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            $statusData['denial_tracking'] = isset($denialTracking) ? [
+                'interface_type' => $denialTracking->interface_type ?? '',
+                'is_reprocess_claim' => $denialTracking->is_reprocess_claim ?? '',
+                'is_contact_to_patient' => $denialTracking->is_contact_to_patient ?? '',
+                'contact_through' => $denialTracking->contact_through ?? '',
+                'claim_number' => $denialTracking->claim_number ?? '',
+                'rep_name' => $denialTracking->rep_name ?? '',
+                'ref_number' => $denialTracking->ref_number ?? '',
+                'claim_status' => isset($denialTracking->claimStatus) ? [
+                    'id' => $denialTracking->claimStatus->id,
+                    'status' => $denialTracking->claimStatus->status ?? '',
+                ] : null,
+                'claim_sub_status' => isset($denialTracking->claimSubStatus) ? [
+                    'id' => $denialTracking->claimSubStatus->id,
+                    'status' => $denialTracking->claimSubStatus->name ?? '',
+                ] : null,
+                'tracking_date' => $denialTracking->tracking_date ?? '',
+                'resolution_time' => $denialTracking->resolution_time ?? '',
+                'past_due_date' => $denialTracking->past_due_date ?? '',
+                'follow_up' => $denialTracking->follow_up ?? '',
+                'department_responsible' => $denialTracking->department_responsible ?? '',
+                'policy_responsible' => $denialTracking->policy_responsible ?? '',
+                'response_details' => $denialTracking->response_details ?? null,
+                'tracking_note' => $denialTracking->privateNote->note ?? '',
+                'claim_id' => $denialTracking->claim_id ?? '',
+                'policy_id' => $insurancePolicyInfo['policy_id'] ?? '',
+                'policy_number' => $insurancePolicyInfo['policy_number'] ?? '',
+            ] : null;
+
+            $statusData['denial_refile'] = isset($denialRefile) ? [
+                'policy_id' => $insurancePolicyInfo['policy_id'] ?? '',
+                'policy_number' => $insurancePolicyInfo['policy_number'] ?? '',
+                'refile_type' => $denialRefile->refile_type ?? '',
+                'is_cross_over' => $denialRefile->is_cross_over ?? '',
+                'cross_over_date' => $denialRefile->cross_over_date ?? '',
+                'original_claim_id' => $denialRefile->original_claim_id ?? '',
+                'refile_reason' => $denialRefile->refile_reason ?? '',
+                'claim_id' => $denialRefile->claim_id ?? '',
+                'note' => $denialRefile->note ?? '',
+            ] : null;
+
             array_push(
                 $records,
                 [
+                    'id' => $subNote['id'],
                     'note' => $subNote['note'],
                     'created_at' => $subNote['created_at'],
                     'last_modified' => $subNote['last_modified'],
-                    'check_status' => null,
-                    'status' => $status->claimStatus->status.' - '.$subNote['status'],
-                    'status_background_color' => $status->claimStatus->background_color ?? '',
-                    'status_font_color' => $status->claimStatus->font_color ?? '',
-                    'denial_tracking' => $this->resource->getDenialTrackings(),
+                    'status' => $statusData['status'].' - '.$subNote['status'],
+                    'status_background_color' => $statusData['status_background_color'],
+                    'status_font_color' => $statusData['status_font_color'],
+                    'policy_id' => $insurancePolicyInfo['policy_id'] ?? '',
+                    'policy_number' => $insurancePolicyInfo['policy_number'] ?? '',
+                    'denial_tracking' => $statusData['denial_tracking'],
+                    'denial_refile' => $statusData['denial_refile'],
                 ]
             );
         }
 
         $recordSubstatus = [];
         $notes = $status->privateNotes()
-            ->with('claimCheckStatus')
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'desc')
             ->get() ?? [];
 
         foreach ($notes as $note) {
-            $check = $note->claimCheckStatus;
+            $insurancePolicyInfo = $this->getInsurancePolicyInfo($note);
+            $denialTracking = DenialTracking::query()
+                ->with('insurancePolicy:id,policy_number')
+                ->where('private_note_id', $note->id ?? null)
+                ->first();
 
-            array_push(
-                $records,
-                [
-                    'note' => $note->note,
-                    'created_at' => $note->created_at,
-                    'last_modified' => $note->last_modified,
-                    'check_status' => isset($check) ? [
-                        'response_details' => $check->response_details ?? '',
-                        'interface_type' => $check->interface_type ?? '',
-                        'interface' => $check->interface ?? '',
-                        'consultation_date' => $check->consultation_date ?? '',
-                        'resolution_time' => $check->resolution_time ?? '',
-                        'past_due_date' => $check->past_due_date ?? '',
-                    ] : null,
-                    'status' => $status->claimStatus->status ?? '',
-                    'status_background_color' => $status->claimStatus->background_color ?? '',
-                    'status_font_color' => $status->claimStatus->font_color ?? '',
-                ]
-            );
+            $statusData['denial_tracking'] = $denialTracking ?? null;
+
+            $recordData = [
+                'note' => $note->note,
+                'created_at' => $note->created_at,
+                'last_modified' => $note->last_modified,
+                'status' => $statusData['status'],
+                'status_background_color' => $statusData['status_background_color'],
+                'status_font_color' => $statusData['status_font_color'],
+                'policy_id' => $insurancePolicyInfo['policy_id'] ?? '',
+                'policy_number' => $insurancePolicyInfo['policy_number'] ?? '',
+                'denial_tracking' => $statusData['denial_tracking'] ?? null,
+            ];
+
+            array_push($records, $recordData);
         }
     }
 
@@ -453,5 +527,27 @@ final class DenialBodyResource extends JsonResource
         return !empty($billing)
             ? $billing->profile->first_name.' '.$billing->profile->last_name
             : '';
+    }
+
+    private function getRefileReasons(): ?array
+    {
+        $refileReasons = RefileReason::all();
+
+        return $refileReasons->toArray();
+    }
+
+    private function getInsurancePolicyInfo($note): array
+    {
+        $insurancePolicy = $this->insurancePolicies()
+            ->wherePivot('order', 1)
+            ->first();
+
+        return isset($insurancePolicy) ? [
+            'insurance_plan_id' => optional($insurancePolicy->insurancePlan)->id ?? '',
+            'insurance_company_id' => optional($insurancePolicy->insurancePlan->insuranceCompany)->id ?? '',
+            'insurance_company' => optional($insurancePolicy->insurancePlan->insuranceCompany)->name ?? '',
+            'policy_id' => $insurancePolicy->id ?? '',
+            'policy_number' => $insurancePolicy->policy_number ?? '',
+        ] : [];
     }
 }

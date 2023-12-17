@@ -19,6 +19,11 @@ final class UpdateBachAction
     {
         return DB::transaction(function () use ($batch, $request): BatchResource {
             $batch->update($request->getBatchData());
+
+            $batch->payments()->whereNotIn('id', $request->getPaymentsData()->map(
+                fn (PaymentWrapper $paymentRequest) => $paymentRequest->getId()
+            ))->delete();
+
             $request->getPaymentsData()->each(function (PaymentWrapper $paymentRequest) use ($batch): void {
                 $payment = Payment::query()->updateOrCreate([
                     'id' => $paymentRequest->getId(),

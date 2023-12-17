@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services\Claim;
 
+use App\Enums\Claim\ClaimType;
 use App\Enums\Claim\FormatType;
 use App\Models\Claims\Services;
+use App\Models\Company;
 use App\Models\Diagnosis;
+use App\Models\HealthProfessional;
 use App\Models\InsurancePolicy;
 use App\Models\TypeCatalog;
 use Carbon\Carbon;
@@ -531,7 +534,7 @@ final class FileDictionary extends Dictionary
     {
         $model = $this->claim
             ?->dateInformations
-            ?->first(fn ($dateInformation) => $dateInformation->field_id == $field);
+            ?->first(fn ($dateInformation) => $dateInformation->field_id?->value == $field);
 
         return match ($key) {
             'year_of_from_date' => explode('-', $model?->from_date ?? '')[0] ?? '',
@@ -582,5 +585,129 @@ final class FileDictionary extends Dictionary
             'zip' => str_replace('-', '', substr($value ?? '', 0, 12)),
             default => $value ?? '',
         };
+    }
+
+    protected function getBillingProviderAttribute(string $key): string
+    {
+        $healthProfessional = match ($this->claim->type) {
+            ClaimType::PROFESSIONAL => $this->claim->demographicInformation
+                ?->healthProfessionals()
+                ?->wherePivot('field_id', 5)
+                ?->first(),
+            ClaimType::INSTITUTIONAL => $this->claim->demographicInformation
+                ?->healthProfessionals()
+                ?->wherePivot('field_id', 1)
+                ?->orWherePivot('field_id', 76)
+                ?->first(),
+        };
+
+        $contractFeeSpecification = $this->claim?->demographicInformation->company->contractFees()
+            ->whereHas('insurancePlans', function ($query) {
+                $query->where('insurance_plans.id', $this->claim?->higherInsurancePlan()?->id);
+            })
+            ?->first()
+            ?->contractFeeSpecifications()
+            ?->whereNull('health_professional_id')
+            ?->orWhere('health_professional_id', $healthProfessional?->id)
+            ?->first();
+
+        if (is_null($contractFeeSpecification)) {
+            $companyAddress = $this->claim
+                ->demographicInformation
+                ->company
+                ->addresses
+                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
+                ->where('address_type_id', 1)
+                ->first();
+            $companyContact = $this->claim
+                ->demographicInformation
+                ->company
+                ->contacts
+                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
+                ->first();
+
+            return match ($key) {
+                'federal_tax' => str_replace('-', '', $this->company->getAttribute('ein') ?? $this->company->getAttribute('ssn') ?? ''),
+                'federal_tax_value' => !empty($this->company->ein)
+                    ? 'EIN'
+                    : (!empty($this->company->ssn)
+                        ? 'SSN'
+                        : ''),
+                'ein' => str_replace('-', '', $this->company->ein ?? ''),
+                'address' => substr($companyAddress?->{$key} ?? '', 0, 55),
+                'city' => substr($companyAddress?->{$key} ?? '', 0, 30),
+                'state' => substr($companyAddress?->{$key} ?? '', 0, 2),
+                'zip' => str_replace('-', '', substr($companyAddress?->{$key} ?? '', 0, 12)),
+                'other_country' => $companyAddress?->country && 'US' != $companyAddress?->country
+                    ? $companyAddress?->country
+                    : '',
+                'code_area' => str_replace('-', '', substr($companyContact?->phone ?? '', 0, 3)),
+                'phone' => str_replace('-', '', substr($companyContact?->phone ?? '', 0, 10)),
+                'phone_fax' => str_replace('-', '', substr($companyContact?->phone ?? $companyContact?->fax ?? '', 0, 10)),
+                default => (string) $this->company->getAttribute($key),
+            };
+        }
+
+        $billingProvider = $contractFeeSpecification?->billingProvider ?? $this->claim->company;
+
+        if (Company::class === $contractFeeSpecification->billing_provider_type) {
+            $billingProviderAddress = $billingProvider->addresses
+                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
+                ->where('address_type_id', 1)
+                ->first();
+            $billingProviderContact = $billingProvider->contacts
+                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
+                ->first();
+            $response = match ($key) {
+                'federal_tax' => str_replace('-', '', $billingProvider->getAttribute('ein') ?? $billingProvider->getAttribute('ssn') ?? ''),
+                'federal_tax_value' => !empty($billingProvider->ein)
+                    ? 'EIN'
+                    : (!empty($billingProvider->ssn)
+                        ? 'SSN'
+                        : ''),
+                'ein' => str_replace('-', '', $billingProvider->ein ?? ''),
+                'address' => substr($billingProviderAddress?->{$key} ?? '', 0, 55),
+                'city' => substr($billingProviderAddress?->{$key} ?? '', 0, 30),
+                'state' => substr($billingProviderAddress?->{$key} ?? '', 0, 2),
+                'zip' => str_replace('-', '', substr($billingProviderAddress?->{$key} ?? '', 0, 12)),
+                'other_country' => $billingProviderAddress?->country && 'US' != $billingProviderAddress?->country
+                    ? $billingProviderAddress?->country
+                    : '',
+                'code_area' => str_replace('-', '', substr($billingProviderContact?->phone ?? '', 0, 3)),
+                'phone' => str_replace('-', '', substr($billingProviderContact?->phone ?? '', 0, 10)),
+                'phone_fax' => str_replace('-', '', substr($billingProviderContact?->phone ?? $billingProviderContact?->fax ?? '', 0, 10)),
+                default => (string) $billingProvider->getAttribute($key),
+            };
+        } elseif (HealthProfessional::class === $contractFeeSpecification->billing_provider_type) {
+            $billingProviderAddress = $billingProvider->profile->addresses
+                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
+                ->first();
+            $billingProviderContact = $billingProvider->profile->contacts
+                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
+                ->first();
+
+            $response = match ($key) {
+                'name' => $billingProvider->profile?->last_name.', '.$billingProvider->profile?->first_name
+                    .(!empty($billingProvider->profile?->nameSuffix?->code)
+                        ? ' '.$billingProvider->profile?->nameSuffix?->code
+                        : '')
+                    .(!empty($billingProvider->profile?->middle_name)
+                        ? ', '.substr($billingProvider->profile?->middle_name, 0, 1)
+                        : ''),
+                'address' => substr($billingProviderAddress?->{$key} ?? '', 0, 55),
+                'city' => substr($billingProviderAddress?->{$key} ?? '', 0, 30),
+                'state' => substr($billingProviderAddress?->{$key} ?? '', 0, 2),
+                'zip' => str_replace('-', '', substr($billingProviderAddress?->{$key} ?? '', 0, 12)),
+                'other_country' => $billingProviderAddress?->country && 'US' != $billingProviderAddress?->country
+                    ? $billingProviderAddress?->country
+                    : '',
+                'code_area' => str_replace('-', '', substr($billingProviderContact?->phone ?? '', 0, 3)),
+                'phone' => str_replace('-', '', substr($billingProviderContact?->phone ?? '', 0, 10)),
+                'phone_fax' => str_replace('-', '', substr($billingProviderContact?->phone ?? $billingProviderContact?->fax ?? '', 0, 10)),
+                default => $billingProvider->{$key} ?? '',
+            };
+        }
+
+        return $response ?? '';
     }
 }

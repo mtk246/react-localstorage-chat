@@ -23,7 +23,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  *
  * @property int $id
  * @property string $name
- * @property \Illuminate\Support\Carbon $posting_date
+ * @property \Illuminate\Support\Carbon|null $posting_date
  * @property string $currency
  * @property \Cknow\Money\Money|null $amount
  * @property BatchStateType $status

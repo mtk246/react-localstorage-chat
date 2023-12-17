@@ -21,6 +21,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimTransmissionResponse> $ClaimTransmissionResponses
  * @property int|null $claim_transmission_responses_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimTransmissionStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimTransmissionStatus newQuery()

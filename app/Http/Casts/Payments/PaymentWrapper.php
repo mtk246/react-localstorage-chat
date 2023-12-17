@@ -25,7 +25,7 @@ final class PaymentWrapper extends CastsRequest
             'reference' => $this->get('reference'),
             'statement' => $this->get('statement'),
             'note' => $this->get('note'),
-            'insurance_company_id' => $this->get('insurance_company_id'),
+            'insurance_plan_id' => $this->get('insurance_plan_id'),
         ];
     }
 
@@ -44,10 +44,10 @@ final class PaymentWrapper extends CastsRequest
 
     public function hasEob(): bool
     {
-        return $this->has('eobs');
+        return $this->hasArray('eobs');
     }
 
-    public function getEobs(): Collection
+    public function getEobs(): ?Collection
     {
         return $this->castMany('eobs', EobWrapper::class);
     }
