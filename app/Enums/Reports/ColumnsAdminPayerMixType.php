@@ -36,20 +36,20 @@ enum ColumnsAdminPayerMixType: string implements TypeInterface
 
     #[TypeAttribute('string')]
     #[TextAttribute('Insurance')]
-    #[AlignAttribute('center')]
+    #[AlignAttribute('left')]
     #[WidthAttribute('170px')]
     #[PublicAttribute(true)]
     case INSURANCE = 'insurance';
 
     #[TypeAttribute('string')]
     #[TextAttribute('Claims processed')]
-    #[AlignAttribute('left')]
+    #[AlignAttribute('center')]
     #[WidthAttribute('370px')]
     #[PublicAttribute(true)]
     case CLAIMS_PROCESSED = 'claims_processed';
 
     #[TypeAttribute('string')]
-    #[AlignAttribute('left')]
+    #[AlignAttribute('center')]
     #[TextAttribute('% Of Total Charges')]
     #[WidthAttribute('110px')]
     #[PublicAttribute(true)]
@@ -99,8 +99,57 @@ enum ColumnsAdminPayerMixType: string implements TypeInterface
 
     #[TypeAttribute('string')]
     #[TextAttribute('Plan')]
-    #[AlignAttribute('center')]
+    #[AlignAttribute('left')]
     #[WidthAttribute('170px')]
     #[PublicAttribute(true)]
     case PLAN = 'plan';
+
+    #[TypeAttribute('string')]
+    #[TextAttribute('Plan type')]
+    #[AlignAttribute('left')]
+    #[WidthAttribute('170px')]
+    #[PublicAttribute(true)]
+    case PLAN_TYPE = 'plan_type';
+
+    #[TypeAttribute('string')]
+    #[TextAttribute('% of total Payments')]
+    #[AlignAttribute('center')]
+    #[WidthAttribute('100px')]
+    #[PublicAttribute(true)]
+    case TOTAL_PAYMENTS_PLAN = 'total_payments_plan';
+
+    #[TypeAttribute('string')]
+    #[TextAttribute('Payments Amount')]
+    #[AlignAttribute('center')]
+    #[WidthAttribute('100px')]
+    #[PublicAttribute(true)]
+    case PAYMENTS_AMOUNT_PLAN = 'payments_amount_plan';
+
+    #[TypeAttribute('string')]
+    #[TextAttribute('% of total write offs')]
+    #[AlignAttribute('center')]
+    #[WidthAttribute('100px')]
+    #[PublicAttribute(true)]
+    case TOTAL_WRITE_OFFS_PLAN = 'total_write_offs_plan';
+    
+    #[TypeAttribute('string')]
+    #[TextAttribute('Writeoffs Amount')]
+    #[AlignAttribute('center')]
+    #[WidthAttribute('100px')]
+    #[PublicAttribute(true)]
+    case WRITEOFFS_AMOUNT_PLAN = 'writeoffs_amount_plan';
+
+    #[TypeAttribute('string')]
+    #[TextAttribute('% of total denied')]
+    #[AlignAttribute('center')]
+    #[WidthAttribute('100px')]
+    #[PublicAttribute(true)]
+    case TOTAL_DENIED_PLAN = 'total_denied_plan';
+
+    #[TypeAttribute('string')]
+    #[TextAttribute('Denied Amount')]
+    #[AlignAttribute('center')]
+    #[WidthAttribute('100px')]
+    #[PublicAttribute(true)]
+    case DENIED_AMOUN_PLAN = 'denied_amoun_plant';
 }
