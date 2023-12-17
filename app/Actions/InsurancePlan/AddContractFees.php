@@ -25,84 +25,55 @@ final class AddContractFees
         return DB::transaction(function () use ($contractFees, $insurance, $user): Collection {
             $this->syncContractFee($insurance, $contractFees, $user->billing_company_id);
 
-            return $contractFees->map(fn (ContractFeesRequestCast $contractFee) => tap(
-                ContractFee::query()->updateOrCreate([
-                    'id' => $contractFee->getId(),
-                    'billing_company_id' => $contractFee->getBillingCompanyId(),
-                ], [
-                    'mac_locality_id' => $contractFee->getMacLocality()?->id,
-                    'insurance_label_fee_id' => $contractFee->getInsuranceLabelFeeId(),
-                    'contract_fee_type_id' => $contractFee->getTypeId(),
-                    'start_date' => $contractFee->getStartDate(),
-                    'private_note' => $contractFee->getPrivateNote(),
-                    'end_date' => $contractFee->getEndDate(),
-                    'price' => $contractFee->getPrice(),
-                    'price_percentage' => $contractFee->getPricePercentage(),
-                ]),
-                fn (ContractFee $model) => $this->afterCreate(
-                    $model,
-                    $insurance,
-                    $contractFee,
-                )
-            ))
-            ->map(fn (ContractFee $contractFee) => $contractFee->load([
+            return $contractFees->map(fn (ContractFeesRequestCast $contractFeesRequest) => tap(
+                ContractFee::query()->updateOrCreate(
+                    ['id' => $contractFeesRequest->getId()],
+                    $contractFeesRequest->wrapperContractFeesBody()
+                ),
+                function (ContractFee $contractFee) use ($contractFeesRequest, $insurance): void {
+                    if (is_null($insurance->contractFees()->find($contractFee->id))) {
+                        $insurance->contractFees()->attach($contractFee->id);
+                    }
+
+                    $contractFee->procedures()->sync($contractFeesRequest->getProceduresIds());
+
+                    $contractFee->modifiers()->sync($contractFeesRequest->getModifierIds());
+
+                    $contractFee->companies()->sync($contractFeesRequest->getCompanyId());
+
+                    $contractFeesRequest->getPatients()->each(
+                        fn (ContractFeePatiensCast $patient) => $contractFee->patients()->attach(
+                            $patient->getId(),
+                            $patient->wrapperPatientsBody()
+                        )
+                    );
+
+                    if ($contractFeesRequest->getHaveContractSpecifications()) {
+                        $contractFeesRequest->getContractSpecifications()->each(
+                            function (ContractFeeSpecificationWrapper $contractSpecification, int $contractFeeIndex) use ($contractFee): void {
+                                $contractSpecificationRequestBody = $contractSpecification->wrapperContractFeesSpecificationBody();
+                                $contractSpecificationRequestBody['code'] = $contractFee->id.$contractFeeIndex;
+                                $contractSpecificationRequestBody['contract_fee_id'] = $contractFee->id;
+
+                                ContractFeeSpecification::updateOrCreate(
+                                    ['id' => $contractSpecification->getId()],
+                                    $contractSpecificationRequestBody
+                                );
+                            }
+                        );
+                    } else {
+                        $contractFee->contractFeeSpecifications()->delete();
+                    }
+                }
+            ))->map(fn (ContractFee $contractFee) => $contractFee->load([
                 'procedures',
                 'patients',
                 'modifiers',
                 'macLocality',
                 'companies',
+                'contractFeeSpecifications'
             ]));
         });
-    }
-
-    private function afterCreate(
-        ContractFee &$contractFee,
-        InsurancePlan &$insurance,
-        ContractFeesRequestCast $contractFeesRequest
-    ): void {
-        if (is_null($insurance->contractFees()->find($contractFee->id))) {
-            $insurance->contractFees()->attach($contractFee->id);
-        }
-
-        $contractFee->procedures()->sync($contractFeesRequest->getProceduresIds());
-
-        $contractFee->modifiers()->sync($contractFeesRequest->getModifierIds());
-
-        $contractFee->companies()->sync($contractFeesRequest->getCompanyId());
-
-        $contractFeesRequest->getPatients()->each(
-            fn (ContractFeePatiensCast $patient) => $contractFee->patients()->attach($patient->getId(), [
-                'start_date' => $patient->getStartDate(),
-                'end_date' => $patient->getEndDate(),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ])
-        );
-
-        if ($contractFeesRequest->getHaveContractSpecifications()) {
-            $contractFeesRequest->getContractSpecifications()->each(
-                function (ContractFeeSpecificationWrapper $contractSpecification, int $contractFeeIndex) use ($contractFee): void {
-                    $billingProvider = explode(':', $contractSpecification->getBillingProviderId());
-                    $healthProfessional = explode(':', $contractSpecification->getHealthProfessionalId());
-
-                    ContractFeeSpecification::updateOrCreate([
-                        'id' => $contractSpecification->getId(),
-                    ], [
-                        'code' => $contractFee->id.$contractFeeIndex,
-                        'contract_fee_id' => $contractFee->id,
-                        'billing_provider_type' => ('healthProfessional' === $billingProvider[0]) ? HealthProfessional::class : Company::class,
-                        'billing_provider_id' => $billingProvider[1],
-                        'billing_provider_tax_id' => $contractSpecification->getBillingProviderTaxId(),
-                        'billing_provider_taxonomy_id' => $contractSpecification->getBillingProviderTaxonomyId(),
-                        'health_professional_id' => $healthProfessional[1] ?? null,
-                        'health_professional_tax_id' => $contractSpecification->getHealthProfessionalTaxId(),
-                        'health_professional_taxonomy_id' => $contractSpecification->getHealthProfessionalTaxonomyId(),
-                    ]);
-                }
-            );
-        } else {
-            $contractFee->contractFeeSpecifications()->delete();
-        }
     }
 
     private function syncContractFee(InsurancePlan $insurance, collection $contractFees, ?int $billingCompanyId): void

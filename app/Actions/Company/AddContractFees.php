@@ -42,12 +42,10 @@ final class AddContractFees
 
                     $contractFee->patients()->detach();
                     $contractFeesRequest->getPatients()->each(
-                        fn (ContractFeePatiensCast $patient) => $contractFee->patients()->attach($patient->getId(), [
-                            'start_date' => $patient->getStartDate(),
-                            'end_date' => $patient->getEndDate(),
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ])
+                        fn (ContractFeePatiensCast $patient) => $contractFee->patients()->attach(
+                            $patient->getId(),
+                            $patient->wrapperPatientsBody()
+                        )
                     );
 
                     $contractFeesRequest->getContractSpecifications()->each(
@@ -72,53 +70,6 @@ final class AddContractFees
                 'contractFeeSpecifications',
             ]));
         });
-    }
-
-    private function afterCreate(
-        ContractFee &$contractFee,
-        Company &$company,
-        ContractFeesRequestCast $contractFeesRequest
-    ): void {
-        if (is_null($company->contractFees()->find($contractFee->id))) {
-            $company->contractFees()->attach($contractFee->id);
-        }
-
-        $contractFee->procedures()->sync($contractFeesRequest->getProceduresIds());
-
-        $contractFee->modifiers()->sync($contractFeesRequest->getModifierIds());
-
-        $contractFee->insurancePlans()->sync($contractFeesRequest->getInsurancePlanIds());
-
-        $contractFee->patients()->detach();
-        $contractFeesRequest->getPatients()->each(
-            fn (ContractFeePatiensCast $patient) => $contractFee->patients()->attach($patient->getId(), [
-                'start_date' => $patient->getStartDate(),
-                'end_date' => $patient->getEndDate(),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ])
-        );
-
-        $contractFeesRequest->getContractSpecifications()->each(
-            function (ContractFeeSpecificationWrapper $contractSpecification, int $contractFeeIndex) use ($contractFee): void {
-                $billingProvider = explode(':', $contractSpecification->getBillingProviderId());
-                $healthProfessional = explode(':', $contractSpecification->getHealthProfessionalId());
-
-                ContractFeeSpecification::updateOrCreate([
-                    'id' => $contractSpecification->getId(),
-                ], [
-                    'code' => $contractFee->id.$contractFeeIndex,
-                    'contract_fee_id' => $contractFee->id,
-                    'billing_provider_type' => ('healthProfessional' === $billingProvider[0]) ? HealthProfessional::class : Company::class,
-                    'billing_provider_id' => $billingProvider[1],
-                    'billing_provider_tax_id' => $contractSpecification->getBillingProviderTaxId(),
-                    'billing_provider_taxonomy_id' => $contractSpecification->getBillingProviderTaxonomyId(),
-                    'health_professional_id' => $healthProfessional[1] ?? null,
-                    'health_professional_tax_id' => $contractSpecification->getHealthProfessionalTaxId(),
-                    'health_professional_taxonomy_id' => $contractSpecification->getHealthProfessionalTaxonomyId(),
-                ]);
-            }
-        );
     }
 
     private function syncContractFee(Company $company, collection $contractFees, ?int $billingCompanyId): void
