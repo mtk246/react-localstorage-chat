@@ -23,18 +23,9 @@ final class DenialController extends Controller
 
     public function getServerAll(
         Request $request,
-        Claim $claim,
         GetDenialAction $getDenial
     ): JsonResponse {
-        $status = ((is_array($request->status))
-            ? $request->status
-            : json_decode($request->status ?? '[]'));
-
-        $subStatus = ((is_array($request->subStatus))
-            ? $request->subStatus
-            : json_decode($request->subStatus ?? '[]'));
-
-        return response()->json($getDenial->all($claim, $request, $status, $subStatus));
+        return response()->json($getDenial->all($request));
     }
 
     public function getOneDenial(
