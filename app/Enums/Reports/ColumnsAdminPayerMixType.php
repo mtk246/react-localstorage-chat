@@ -131,7 +131,7 @@ enum ColumnsAdminPayerMixType: string implements TypeInterface
     #[WidthAttribute('100px')]
     #[PublicAttribute(true)]
     case TOTAL_WRITE_OFFS_PLAN = 'total_write_offs_plan';
-    
+
     #[TypeAttribute('string')]
     #[TextAttribute('Writeoffs Amount')]
     #[AlignAttribute('center')]
