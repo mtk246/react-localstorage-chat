@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -98,5 +99,13 @@ final class ContractFeeSpecification extends Model implements Auditable
     public function healthProfessionalTaxonomy(): BelongsTo
     {
         return $this->belongsTo(Taxonomy::class);
+    }
+
+    /**
+     * Get the billingProvider that owns the ContractFeeSpecification.
+     */
+    public function billingProvider(): MorphTo
+    {
+        return $this->morphTo();
     }
 }

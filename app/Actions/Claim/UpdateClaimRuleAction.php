@@ -12,6 +12,14 @@ final class UpdateClaimRuleAction
 {
     public function invoke(Rules $rules, UpdateRulesWrapper $rulesWrapper): RuleResource
     {
+        if ($rulesWrapper->hasChangeStatus()) {
+            $rules->update([
+                'active' => $rulesWrapper->getActive(),
+            ]);
+
+            return new RuleResource($rules->refresh());
+        }
+
         $rules->update($rulesWrapper->getRuleData());
 
         if ($rulesWrapper->hasResponsibilities()) {

@@ -25,7 +25,7 @@ final class BatchResource extends JsonResource
             'name' => $this->resource->name,
             'posting_date' => $this->resource->posting_date,
             'currency' => $this->resource->currency,
-            'amount' => $this->resource->amount->getAmount(),
+            'amount' => $this->resource->amount->formatByDecimal(),
             'status' => $this->resource->status,
             'payments' => PaymentResource::collection($this->resource->payments),
             'created_at' => $this->resource->created_at,

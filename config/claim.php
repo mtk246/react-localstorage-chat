@@ -7,7 +7,7 @@ use App\Enums\Claim\FormatType;
 
 return [
     'preview_837p' => [
-        '0a' => [
+        '0.a' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -18,7 +18,7 @@ return [
                 'y' => 16,
             ],
         ],
-        '0b' => [
+        '0.b' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -29,7 +29,7 @@ return [
                 'y' => 20,
             ],
         ],
-        '0c' => [
+        '0.c' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -143,7 +143,7 @@ return [
                 'y' => 48,
             ],
         ],
-        '3a' => [
+        '3.a' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -154,7 +154,7 @@ return [
                 'y' => 48.5,
             ],
         ],
-        '3b' => [
+        '3.b' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -165,7 +165,7 @@ return [
                 'y' => 48.5,
             ],
         ],
-        '3c' => [
+        '3.c' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -176,7 +176,7 @@ return [
                 'y' => 48.5,
             ],
         ],
-        '3d' => [
+        '3.d' => [
             'options' => [
                 'M' => [
                     'properties' => [
@@ -213,7 +213,7 @@ return [
                 'y' => 48,
             ],
         ],
-        '5a' => [
+        '5.a' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -224,7 +224,7 @@ return [
                 'y' => 56.5,
             ],
         ],
-        '5b' => [
+        '5.b' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -235,7 +235,7 @@ return [
                 'y' => 64.5,
             ],
         ],
-        '5c' => [
+        '5.c' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -246,7 +246,7 @@ return [
                 'y' => 64.5,
             ],
         ],
-        '5d' => [
+        '5.d' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -257,7 +257,7 @@ return [
                 'y' => 74,
             ],
         ],
-        '5e' => [
+        '5.e' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -268,7 +268,7 @@ return [
                 'y' => 74,
             ],
         ],
-        '5f' => [
+        '5.f' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -327,7 +327,7 @@ return [
                 ],
             ],
         ],
-        '7a' => [
+        '7.a' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -338,7 +338,7 @@ return [
                 'y' => 56.5,
             ],
         ],
-        '7b' => [
+        '7.b' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -349,7 +349,7 @@ return [
                 'y' => 64.5,
             ],
         ],
-        '7c' => [
+        '7.c' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -360,7 +360,7 @@ return [
                 'y' => 64.5,
             ],
         ],
-        '7d' => [
+        '7.d' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -371,7 +371,7 @@ return [
                 'y' => 74,
             ],
         ],
-        '7e' => [
+        '7.e' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -382,7 +382,7 @@ return [
                 'y' => 74,
             ],
         ],
-        '7f' => [
+        '7.f' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -405,7 +405,7 @@ return [
                 'y' => 81.5,
             ],
         ],
-        '9a' => [
+        '9.a' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -418,7 +418,7 @@ return [
         ],
         // '9b' => ''
         // '9c' => '',
-        '9d' => [
+        '9.d' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -429,7 +429,7 @@ return [
                 'y' => 115.5,
             ],
         ],
-        '10a' => [
+        '10.a' => [
             'options' => [
                 true => [
                     'properties' => [
@@ -455,7 +455,7 @@ return [
                 ],
             ],
         ],
-        '10ba' => [
+        '10.b1' => [
             'options' => [
                 true => [
                     'properties' => [
@@ -481,7 +481,7 @@ return [
                 ],
             ],
         ],
-        '10bb' => [
+        '10.b2' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -492,7 +492,7 @@ return [
                 'y' => 99,
             ],
         ],
-        '10c' => [
+        '10.c' => [
             'options' => [
                 true => [
                     'properties' => [
@@ -530,7 +530,7 @@ return [
                 'y' => 82,
             ],
         ],
-        '11aa' => [
+        '11.a1' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -541,7 +541,7 @@ return [
                 'y' => 91,
             ],
         ],
-        '11ab' => [
+        '11.a2' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -552,7 +552,7 @@ return [
                 'y' => 91,
             ],
         ],
-        '11ac' => [
+        '11.a3' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -563,7 +563,7 @@ return [
                 'y' => 91,
             ],
         ],
-        '11ad' => [
+        '11.a4' => [
             'options' => [
                 'M' => [
                     'properties' => [
@@ -589,7 +589,7 @@ return [
                 ],
             ],
         ],
-        '11c' => [
+        '11.c' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -600,7 +600,7 @@ return [
                 'y' => 107.5,
             ],
         ],
-        '11d' => [
+        '11.d' => [
             'options' => [
                 true => [
                     'properties' => [
@@ -626,7 +626,7 @@ return [
                 ],
             ],
         ],
-        '12a' => [
+        '12.a' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -637,7 +637,7 @@ return [
                 'y' => 131.5,
             ],
         ],
-        '12b' => [
+        '12.b' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -659,7 +659,7 @@ return [
                 'y' => 131.5,
             ],
         ],
-        '14a' => [
+        '14.a' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -670,7 +670,7 @@ return [
                 'y' => 141,
             ],
         ],
-        '14b' => [
+        '14.b' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -681,7 +681,7 @@ return [
                 'y' => 141,
             ],
         ],
-        '14c' => [
+        '14.c' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -692,7 +692,7 @@ return [
                 'y' => 141,
             ],
         ],
-        '14d' => [
+        '14.d' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -703,7 +703,7 @@ return [
                 'y' => 141,
             ],
         ],
-        '15a' => [
+        '15.a' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -714,7 +714,7 @@ return [
                 'y' => 141,
             ],
         ],
-        '15b' => [
+        '15.b' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -725,7 +725,7 @@ return [
                 'y' => 141,
             ],
         ],
-        '15c' => [
+        '15.c' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -736,7 +736,7 @@ return [
                 'y' => 141,
             ],
         ],
-        '15d' => [
+        '15.d' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -747,7 +747,7 @@ return [
                 'y' => 141,
             ],
         ],
-        '16a' => [
+        '16.a' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -758,7 +758,7 @@ return [
                 'y' => 141,
             ],
         ],
-        '16b' => [
+        '16.b' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -769,29 +769,7 @@ return [
                 'y' => 141,
             ],
         ],
-        '16c' => [
-            'properties' => [
-                'fontFamily' => 'helvetica',
-                'fontSize' => '9px',
-                'align' => 'L',
-                'w' => 70,
-                'h' => 10,
-                'x' => 177,
-                'y' => 141,
-            ],
-        ],
-        '16d' => [
-            'properties' => [
-                'fontFamily' => 'helvetica',
-                'fontSize' => '9px',
-                'align' => 'L',
-                'w' => 70,
-                'h' => 10,
-                'x' => 183,
-                'y' => 141,
-            ],
-        ],
-        '16e' => [
+        '16.c' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -802,7 +780,29 @@ return [
                 'y' => 141,
             ],
         ],
-        '16f' => [
+        '16.d' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 177,
+                'y' => 141,
+            ],
+        ],
+        '16.e' => [
+            'properties' => [
+                'fontFamily' => 'helvetica',
+                'fontSize' => '9px',
+                'align' => 'L',
+                'w' => 70,
+                'h' => 10,
+                'x' => 183,
+                'y' => 141,
+            ],
+        ],
+        '16.f' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -813,7 +813,7 @@ return [
                 'y' => 141,
             ],
         ],
-        '170' => [
+        '17.0' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -824,7 +824,7 @@ return [
                 'y' => 149,
             ],
         ],
-        '171' => [
+        '17.1' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -835,7 +835,7 @@ return [
                 'y' => 149,
             ],
         ],
-        '17a0' => [
+        '17.a0' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -846,7 +846,7 @@ return [
                 'y' => 145,
             ],
         ],
-        '17a1' => [
+        '17.a1' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -857,7 +857,7 @@ return [
                 'y' => 145,
             ],
         ],
-        '17b' => [
+        '17.b' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -868,7 +868,7 @@ return [
                 'y' => 149,
             ],
         ],
-        '18a' => [
+        '18.a' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -879,7 +879,7 @@ return [
                 'y' => 149,
             ],
         ],
-        '18b' => [
+        '18.b' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -890,7 +890,7 @@ return [
                 'y' => 149,
             ],
         ],
-        '18c' => [
+        '18.c' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -901,7 +901,7 @@ return [
                 'y' => 149,
             ],
         ],
-        '18d' => [
+        '18.d' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -912,7 +912,7 @@ return [
                 'y' => 149,
             ],
         ],
-        '18e' => [
+        '18.e' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -923,7 +923,7 @@ return [
                 'y' => 149,
             ],
         ],
-        '18f' => [
+        '18.f' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -945,7 +945,7 @@ return [
                 'y' => 157,
             ],
         ],
-        '20a' => [
+        '20.a' => [
             'options' => [
                 true => [
                     'properties' => [
@@ -971,7 +971,7 @@ return [
                 ],
             ],
         ],
-        '20b' => [
+        '20.b' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -993,7 +993,7 @@ return [
                 'y' => 162,
             ],
         ],
-        '21A' => [
+        '21.A' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -1004,7 +1004,7 @@ return [
                 'y' => 166,
             ],
         ],
-        '21B' => [
+        '21.B' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -1015,7 +1015,7 @@ return [
                 'y' => 166,
             ],
         ],
-        '21C' => [
+        '21.C' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -1026,7 +1026,7 @@ return [
                 'y' => 166,
             ],
         ],
-        '21D' => [
+        '21.D' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -1037,7 +1037,7 @@ return [
                 'y' => 166.3,
             ],
         ],
-        '21E' => [
+        '21.E' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -1048,7 +1048,7 @@ return [
                 'y' => 170,
             ],
         ],
-        '21F' => [
+        '21.F' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -1059,7 +1059,7 @@ return [
                 'y' => 170.1,
             ],
         ],
-        '21G' => [
+        '21.G' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -1070,7 +1070,7 @@ return [
                 'y' => 170,
             ],
         ],
-        '21H' => [
+        '21.H' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -1081,7 +1081,7 @@ return [
                 'y' => 170.5,
             ],
         ],
-        '21I' => [
+        '21.I' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -1092,7 +1092,7 @@ return [
                 'y' => 174,
             ],
         ],
-        '21J' => [
+        '21.J' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -1103,7 +1103,7 @@ return [
                 'y' => 174.2,
             ],
         ],
-        '21K' => [
+        '21.K' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -1114,7 +1114,7 @@ return [
                 'y' => 174.2,
             ],
         ],
-        '21L' => [
+        '21.L' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -1125,7 +1125,7 @@ return [
                 'y' => 174.2,
             ],
         ],
-        '22A' => [
+        '22.A' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -1136,7 +1136,7 @@ return [
                 'y' => 166.3,
             ],
         ],
-        '22B' => [
+        '22.B' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -2679,7 +2679,7 @@ return [
                 ],
             ],
         ],
-        '25A' => [
+        '25.A' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -2690,7 +2690,7 @@ return [
                 'y' => 240.8,
             ],
         ],
-        '25B' => [
+        '25.B' => [
             'options' => [
                 'SSN' => [
                     'properties' => [
@@ -2801,7 +2801,7 @@ return [
                 ],
             ],
         ],
-        '31A' => [
+        '31.A' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -2812,7 +2812,7 @@ return [
                 'y' => 255.5,
             ],
         ],
-        '31B' => [
+        '31.B' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -2823,7 +2823,7 @@ return [
                 'y' => 260,
             ],
         ],
-        '31C' => [
+        '31.C' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -2834,7 +2834,7 @@ return [
                 'y' => 260,
             ],
         ],
-        '32A0' => [
+        '32.A0' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -2845,7 +2845,7 @@ return [
                 'y' => 248,
             ],
         ],
-        '32A1' => [
+        '32.A1' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -2856,7 +2856,7 @@ return [
                 'y' => 252,
             ],
         ],
-        '32A2' => [
+        '32.A2' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -2867,7 +2867,7 @@ return [
                 'y' => 256,
             ],
         ],
-        '32A' => [
+        '32.A' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -2878,7 +2878,7 @@ return [
                 'y' => 262,
             ],
         ],
-        '33A0' => [
+        '33.A0' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -2889,7 +2889,7 @@ return [
                 'y' => 248,
             ],
         ],
-        '33A1' => [
+        '33.A1' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -2900,7 +2900,7 @@ return [
                 'y' => 252,
             ],
         ],
-        '33A2' => [
+        '33.A2' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -2911,7 +2911,7 @@ return [
                 'y' => 256,
             ],
         ],
-        '33A3' => [
+        '33.A3' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -2922,7 +2922,7 @@ return [
                 'y' => 246,
             ],
         ],
-        '33A4' => [
+        '33.A4' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
@@ -2933,7 +2933,7 @@ return [
                 'y' => 246,
             ],
         ],
-        '33A' => [
+        '33.A' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',

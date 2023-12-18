@@ -47,6 +47,16 @@ final class UpdateRulesWrapper extends CastsRequest
         return $this->getCollect('responsibilities');
     }
 
+    public function hasChangeStatus(): bool
+    {
+        return 1 === count($this->inputs) && filled($this->get('active', ''));
+    }
+
+    public function getActive(): bool
+    {
+        return $this->getBool('active', true);
+    }
+
     private function getRules(): Collection
     {
         return $this->getCollect('rules');
