@@ -149,7 +149,6 @@ final class ContractFeesRequestCast extends CastsRequest
     public function wrapperContractFeesBody(): array
     {
         return [
-            'id' => $this->getId(),
             'billing_company_id' => $this->getBillingCompanyId(),
             'mac_locality_id' => $this->getMacLocality()?->id,
             'contract_fee_type_id' => $this->getTypeId(),
