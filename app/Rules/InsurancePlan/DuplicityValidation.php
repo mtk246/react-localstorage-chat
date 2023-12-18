@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Rules\Company;
+namespace App\Rules\InsurancePlan;
 
 use Illuminate\Contracts\Validation\Rule;
 
