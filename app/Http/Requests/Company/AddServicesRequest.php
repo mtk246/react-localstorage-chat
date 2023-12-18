@@ -6,7 +6,8 @@ namespace App\Http\Requests\Company;
 
 use App\Http\Casts\Company\ServiceRequestCast;
 use App\Http\Requests\Traits\HasCastedClass;
-use App\Rules\Company\DuplicityValidation;
+use App\Rules\Company\DuplicityServiceValidation;
+use App\Rules\Company\ExistModifierRevenueValidation;
 use Illuminate\Foundation\Http\FormRequest;
 
 final class AddServicesRequest extends FormRequest
@@ -28,7 +29,7 @@ final class AddServicesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'services' => ['nullable', 'array', new DuplicityValidation()],
+            'services' => ['nullable', 'array', new DuplicityServiceValidation(), new ExistModifierRevenueValidation()],
             'services.*.id' => ['nullable', 'integer'],
             'services.*.billing_company_id' => ['nullable', 'integer'],
             'services.*.procedure_id' => ['nullable', 'integer', 'required_without:services.*.revenue_code_id'],

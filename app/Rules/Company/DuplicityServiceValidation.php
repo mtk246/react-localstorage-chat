@@ -6,7 +6,7 @@ namespace App\Rules\Company;
 
 use Illuminate\Contracts\Validation\Rule;
 
-final class DuplicityValidation implements Rule
+final class DuplicityServiceValidation implements Rule
 {
     public function passes($attribute, $value): bool
     {
