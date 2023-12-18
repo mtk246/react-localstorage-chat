@@ -14,7 +14,7 @@ final class ExistModifierRevenueValidation implements Rule
             $modifierId = $item['modifier_id'] ?? null;
             $revenueCodeId = $item['revenue_code_id'] ?? null;
 
-            if ( (!is_null($modifierId) && !is_null($revenueCodeId)) || (is_null($modifierId) && is_null($revenueCodeId)) ) {
+            if ((!is_null($modifierId) && !is_null($revenueCodeId)) || (is_null($modifierId) && is_null($revenueCodeId))) {
                 return false;
             }
         }

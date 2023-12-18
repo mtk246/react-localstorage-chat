@@ -14,8 +14,7 @@ final class DuplicityCopayValidation implements Rule
         $filterProcedureIds = $this->hasDuplicateArrayIds($value, 'procedure_ids');
         $filterBillingCompanyIds = collect($value)->pluck('billing_company_id')->duplicates()->count() <= 0 ?? false;
 
-        if ($filterInsurancePlanIds && $filterProcedureIds && $filterBillingCompanyIds)
-        {
+        if ($filterInsurancePlanIds && $filterProcedureIds && $filterBillingCompanyIds) {
             return false;
         }
 
