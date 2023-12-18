@@ -10,7 +10,6 @@ use App\Http\Casts\Company\ContractFeesRequestCast;
 use App\Models\Company;
 use App\Models\ContractFee;
 use App\Models\ContractFeeSpecification;
-use App\Models\HealthProfessional;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;

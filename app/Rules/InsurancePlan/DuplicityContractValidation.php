@@ -80,23 +80,23 @@ final class DuplicityContractValidation implements Rule
             $otherFees = $contractFeesCollection->except($index);
 
             return 0 == $otherFees->search(function ($otherContractFee) use ($currentStartDate, $currentEndDate) {
-                    $otherStartDate = isset($otherContractFee['start_date'])
-                        ? Carbon::createFromDate($otherContractFee['start_date'])->format('Y-m-d')
-                        : null;
-                    $otherEndDate = isset($otherContractFee['end_date'])
-                        ? Carbon::createFromDate($otherContractFee['end_date'])->format('Y-m-d')
-                        : null;
+                $otherStartDate = isset($otherContractFee['start_date'])
+                    ? Carbon::createFromDate($otherContractFee['start_date'])->format('Y-m-d')
+                    : null;
+                $otherEndDate = isset($otherContractFee['end_date'])
+                    ? Carbon::createFromDate($otherContractFee['end_date'])->format('Y-m-d')
+                    : null;
 
-                    if (null !== $currentStartDate || null !== $currentEndDate || null !== $otherStartDate || null !== $otherEndDate) {
-                        if (
-                            ($currentStartDate <= $otherStartDate && $currentEndDate <= $otherEndDate)
-                            || (isset($currentStartDate) && $currentStartDate <= ($otherEndDate ?? $otherStartDate))
-                            || (isset($currentStartDate) && $currentStartDate <= ($otherEndDate ?? $otherStartDate))
-                        ) {
-                            return true;
-                        }
+                if (null !== $currentStartDate || null !== $currentEndDate || null !== $otherStartDate || null !== $otherEndDate) {
+                    if (
+                        ($currentStartDate <= $otherStartDate && $currentEndDate <= $otherEndDate)
+                        || (isset($currentStartDate) && $currentStartDate <= ($otherEndDate ?? $otherStartDate))
+                        || (isset($currentStartDate) && $currentStartDate <= ($otherEndDate ?? $otherStartDate))
+                    ) {
+                        return true;
                     }
-                });
+                }
+            });
         });
     }
 }

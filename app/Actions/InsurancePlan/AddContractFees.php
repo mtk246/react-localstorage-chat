@@ -7,10 +7,8 @@ namespace App\Actions\InsurancePlan;
 use App\Http\Casts\InsurancePlan\ContractFeePatiensCast;
 use App\Http\Casts\InsurancePlan\ContractFeeSpecificationWrapper;
 use App\Http\Casts\InsurancePlan\ContractFeesRequestCast;
-use App\Models\Company;
 use App\Models\ContractFee;
 use App\Models\ContractFeeSpecification;
-use App\Models\HealthProfessional;
 use App\Models\InsurancePlan;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -71,7 +69,7 @@ final class AddContractFees
                 'modifiers',
                 'macLocality',
                 'companies',
-                'contractFeeSpecifications'
+                'contractFeeSpecifications',
             ]));
         });
     }
