@@ -22,11 +22,21 @@ final class EobWrapper extends CastsRequest
         ];
     }
 
+    public function getUpdateData(int $paymentId): array
+    {
+        return [
+            'name' => $this->get('name'),
+            'date' => $this->get('date'),
+            'file_name' => $this->getFileName(),
+            'payment_id' => $this->get('payment_id', $paymentId),
+        ];
+    }
+
     public function getFileName(): string
     {
         $allowedfileExtension = ['pdf', 'jpg', 'jpeg', 'png'];
 
-        $file = $this->getFileByName('eob_files', $this->get('file_name') ?? '', $allowedfileExtension);
+        $file = $this->getFileByName('files', $this->get('file_name') ?? '', $allowedfileExtension);
 
         return $file ? $file->store('eobs') : '';
     }
