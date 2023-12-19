@@ -37,6 +37,7 @@ final class StoreBatchRequest extends FormRequest
             'currency' => 'required|string',
             'amount' => 'required|numeric',
             'payments' => 'required|array',
+            'payments.*.order' => 'nullable|integer|distinct',
             'payments.*.source_id' => 'required|integer',
             'paiments.*.insurance_plan_id' => 'required|integer|exists:\App\Models\InsuranceCompany,id',
             'payments.*.payment_date' => 'required|date',
@@ -60,8 +61,8 @@ final class StoreBatchRequest extends FormRequest
             'payments.*.eobs.*.name' => 'required|string',
             'payments.*.eobs.*.date' => 'required|date',
             'payments.*.eobs.*.file_name' => 'required|string',
-            'eobs' => 'nullable|array',
-            'eobs.*' => 'file|mimes:pdf,jpg,jpeg,png',
+            'files' => 'nullable|array',
+            'files.*' => 'file|mimes:pdf,jpg,jpeg,png',
         ];
     }
 }
