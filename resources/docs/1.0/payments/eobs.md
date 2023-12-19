@@ -124,7 +124,9 @@
   "name": "eob name",
   "date": "22-10-1992",
   "file_name": "file name",
-  "file": "file"
+  "files": [
+    eob_file
+  ]
 }
 ```
 
@@ -170,7 +172,10 @@
   "name": "edited eob name",
   "date": "22-10-1992",
   "file_name": "asd",
-  "payment_id": 2 // new payment id
+  "payment_id": 2, // new payment id
+  "files": [
+    eob_file
+  ]
 }
 ```
 
