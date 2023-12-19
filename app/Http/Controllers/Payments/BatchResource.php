@@ -78,7 +78,7 @@ final class BatchResource extends Controller
     {
         return response()->json(TypeCatalog::query()->whereHas('type', function ($q) {
             $q->where('description', 'Claim adjustment reason code');
-        }));
+        })->get(['id', 'code', 'description']));
     }
 
     public function showEob(Eob $eobFile)
