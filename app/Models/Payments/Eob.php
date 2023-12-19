@@ -50,6 +50,7 @@ final class Eob extends Model
         'name',
         'date',
         'file_name',
+        'payment_id',
     ];
 
     /** @var array<string, string> */
