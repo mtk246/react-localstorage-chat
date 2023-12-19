@@ -22,6 +22,7 @@ use App\Http\Resources\Enums\TypeResource;
 use App\Http\Resources\Payments\BatchResource as BatchApiResource;
 use App\Models\Payments\Batch;
 use App\Models\Payments\Eob;
+use App\Models\TypeCatalog;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -71,6 +72,13 @@ final class BatchResource extends Controller
         return response()->json(
             new EnumResource(collect(MethodType::cases()), TypeResource::class),
         );
+    }
+
+    public function getCodes(): JsonResponse
+    {
+        return response()->json(TypeCatalog::query()->whereHas('type', function ($q) {
+            $q->where('description', 'Claim adjustment reason code');
+        })->get(['id', 'code', 'description']));
     }
 
     public function showEob(Eob $eobFile)
