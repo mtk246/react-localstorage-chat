@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Policies\Payments;
 
+use App\Enums\Payments\BatchStateType;
 use App\Models\Payments\Batch;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -42,7 +43,7 @@ final class BatchPolicy
     public function update(User $user, Batch $batch)
     {
         return Gate::check('is-admin')
-            || $user->billing_company_id === $batch->billing_company_id;
+            || ($user->billing_company_id === $batch->billing_company_id && BatchStateType::COMPLETED->value !== $batch->status->value);
     }
 
     /**
@@ -53,6 +54,6 @@ final class BatchPolicy
     public function delete(User $user, Batch $batch)
     {
         return Gate::check('is-admin')
-            || $user->billing_company_id === $batch->billing_company_id;
+            || ($user->billing_company_id === $batch->billing_company_id && BatchStateType::COMPLETED->value !== $batch->status->value);
     }
 }
