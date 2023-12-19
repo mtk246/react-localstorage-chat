@@ -77,7 +77,7 @@ enum ColumnsBillingDetailPatinetType: string implements TypeInterface
     case SEX = 'sex';
 
     #[TypeAttribute('string')]
-    #[TextAttribute('ssn')]
+    #[TextAttribute('SSN')]
     #[AlignAttribute('center')]
     #[WidthAttribute('70px')]
     #[PublicAttribute(true)]

@@ -22,4 +22,14 @@ final class ContractFeePatiensCast extends CastsRequest
     {
         return $this->get('end_date');
     }
+
+    public function wrapperPatientsBody(): array
+    {
+        return [
+            'start_date' => $this->getStartDate(),
+            'end_date' => $this->getEndDate(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+    }
 }
