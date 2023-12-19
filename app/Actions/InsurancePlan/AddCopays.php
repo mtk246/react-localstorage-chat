@@ -21,11 +21,10 @@ final class AddCopays
             $this->syncCopays($insurance, $copays, $user->billing_company_id);
 
             return $copays->map(fn (CopayRequestCast $copayData) => tap(
-                Copay::query()->updateOrCreate(['id' => $copayData->getId()], [
-                    'billing_company_id' => $copayData->getBillingCompanyId(),
-                    'copay' => $copayData->getCopay(),
-                    'private_note' => $copayData->getPrivateNote(),
-                ]),
+                Copay::query()->updateOrCreate(
+                    ['id' => $copayData->getId()],
+                    $copayData->wrapperCopayBody()
+                ),
                 fn (Copay $copay) => $this->afterCreate(
                     $copay,
                     $insurance,
@@ -59,7 +58,7 @@ final class AddCopays
             ->when(Gate::denies('is-admin'), function (Builder $query) use ($billingInsurancePlanId): void {
                 $query->where('billing_company_id', $billingInsurancePlanId);
             })
-            ->whereNotIn('copays.id', $services->map(// TODO: Preguntarle a henry si aca se deberia usar el where o el whereNotIn ya que no esta eliminando las copays que nos e envian
+            ->whereNotIn('copays.id', $services->map(
                 fn (CopayRequestCast $services) => $services->getId() ?? null
             )->toArray())
             ->get()
