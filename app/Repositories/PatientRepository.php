@@ -373,7 +373,7 @@ class PatientRepository
                 ->orderBy(Pagination::sortBy(), Pagination::sortDesc())
                 ->paginate(Pagination::itemsPerPage());
         } else {
-            $billingCompany = auth()->user()->billingCompanies->first();
+            $billingCompany = auth()->user()?->billingCompanies->first();
             $dataCompany = $patient->companies()
                 ->wherePivot('billing_company_id', $billingCompany->id)
                 ->get();
@@ -894,7 +894,7 @@ class PatientRepository
 
             $billingCompany = Gate::allows('is-admin')
                 ? $data['billing_company_id']
-                : auth()->user()->billingCompanies->first();
+                : auth()->user()?->billingCompanies->first();
 
             /* Update Patient */
             $patient->update([
@@ -1161,7 +1161,7 @@ class PatientRepository
     {
         $patient_id = $data['patient_id'];
         $billingCompany = !Gate::allows('is-admin')
-            ? auth()->user()->billingCompanies->first()
+            ? auth()->user()?->billingCompanies->first()
             : $data['billing_company_id'] ?? null;
         $patient = Patient::find($patient_id);
         $subscribers = [];
@@ -1225,7 +1225,7 @@ class PatientRepository
      */
     public function changeStatus(bool $status, int $id)
     {
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()?->billingCompanies->first();
         if (is_null($billingCompany)) {
             return null;
         }
@@ -1261,7 +1261,7 @@ class PatientRepository
 
             $patient = Patient::find($id);
             if (!Gate::allows('is-admin')) {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()?->billingCompanies->first();
             }
 
             /** Attached patient to insurance plan */
@@ -1367,7 +1367,7 @@ class PatientRepository
         }
 
         if (!Gate::allows('is-admin')) {
-            $billingCompany = auth()->user()->billingCompanies->first();
+            $billingCompany = auth()->user()?->billingCompanies->first();
         }
 
         $insurancePolicy->update([
@@ -1600,7 +1600,7 @@ class PatientRepository
 
         $billingCompany = Gate::allows('is-admin')
             ? $billingCompanyId
-            : auth()->user()->billingCompanies->first();
+            : auth()->user()?->billingCompanies->first();
 
         $patients = Patient::with('user.profile');
 
@@ -1816,7 +1816,7 @@ class PatientRepository
             if (Gate::allows('is-admin')) {
                 $companies = $patient->companies()->get();
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()?->billingCompanies->first();
                 $companies = $patient->companies()
                                      ->where('billing_company_id', $billingCompany->id ?? $billingCompany)
                                      ->get();
@@ -1859,7 +1859,7 @@ class PatientRepository
             if (Gate::allows('is-admin')) {
                 $dataCompany = $patient->companies;
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()?->billingCompanies->first();
                 $dataCompany = $patient->companies()
                     ->wherePivot('billing_company_id', $billingCompany->id)
                     ->get();

@@ -33,7 +33,7 @@ class ServiceRepository
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()?->billingCompanies->first();
             }
 
             $service = Service::create([
@@ -222,7 +222,7 @@ class ServiceRepository
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()?->billingCompanies->first();
             }
 
             $service = Service::find($id);

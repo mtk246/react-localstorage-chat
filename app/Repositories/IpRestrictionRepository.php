@@ -22,7 +22,7 @@ class IpRestrictionRepository
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()?->billingCompanies->first();
             }
 
             $restriction = IpRestriction::create([
@@ -68,7 +68,7 @@ class IpRestrictionRepository
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data['billing_company_id'];
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()?->billingCompanies->first();
             }
 
             $restriction = IpRestriction::find($id);

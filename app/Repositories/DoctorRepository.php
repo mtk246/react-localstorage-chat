@@ -971,7 +971,7 @@ class DoctorRepository
      */
     public function changeStatus(bool $status, int $id)
     {
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()?->billingCompanies->first();
         if (is_null($billingCompany)) {
             return null;
         }
@@ -998,7 +998,7 @@ class DoctorRepository
             return null;
         }
 
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()?->billingCompanies->first();
         if (is_null($billingCompany)) {
             return null;
         }
@@ -1054,7 +1054,7 @@ class DoctorRepository
         if (auth()->user()->hasRole('superuser')) {
             $billingCompany = $billingCompanyId;
         } else {
-            $billingCompany = auth()->user()->billingCompanies->first();
+            $billingCompany = auth()->user()?->billingCompanies->first();
         }
 
         $healthProfessionals = HealthProfessional::query()->with('profile', 'companies');
