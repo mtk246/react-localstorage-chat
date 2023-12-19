@@ -32,7 +32,7 @@ class ClaimBatchRepository
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data['billing_company_id'] ?? null;
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()?->billingCompanies->first();
             }
 
             $status = (isset($data['send']) && true == $data['send']) ? $claimBatchSubmitted : $claimBatchNotSubmitted;
@@ -284,7 +284,7 @@ class ClaimBatchRepository
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $data['billing_company_id'] ?? null;
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()?->billingCompanies->first();
             }
 
             if (isset($data['send'])) {

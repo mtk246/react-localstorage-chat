@@ -509,7 +509,7 @@ class UserRepository
         if (auth()->user()->hasRole('superuser')) {
             $billingCompany = $billingCompanyId;
         } else {
-            $billingCompany = auth()->user()->billingCompanies->first();
+            $billingCompany = auth()->user()?->billingCompanies->first();
         }
 
         $users = User::with('profile');
