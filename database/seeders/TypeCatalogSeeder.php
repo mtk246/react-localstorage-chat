@@ -8,6 +8,7 @@ use App\Models\PrivateNote;
 use App\Models\Type;
 use App\Models\TypeCatalog;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class TypeCatalogSeeder extends Seeder
 {
@@ -2604,8 +2605,8 @@ class TypeCatalogSeeder extends Seeder
 
         foreach ($types as $type) {
             $typeC = Type::updateOrCreate(
-                ['description' => $type['description']],
-                ['description' => $type['description']]
+                ['description' => Str::limit($type['description'], 250)],
+                ['description' => Str::limit($type['description'], 250)]
             );
 
             if (isset($type['type_catalogs'])) {
@@ -2613,12 +2614,12 @@ class TypeCatalogSeeder extends Seeder
                     $catalog = TypeCatalog::updateOrCreate(
                         [
                             'code' => $typeCatalog['code'],
-                            'description' => $typeCatalog['description'],
+                            'description' => Str::limit($typeCatalog['description'], 250),
                             'type_id' => $typeC->id,
                         ],
                         [
                             'code' => $typeCatalog['code'],
-                            'description' => $typeCatalog['description'],
+                            'description' => Str::limit($typeCatalog['description'], 250),
                         ]
                     );
 
