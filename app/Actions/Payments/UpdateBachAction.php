@@ -24,11 +24,11 @@ final class UpdateBachAction
                 fn (PaymentWrapper $paymentRequest) => $paymentRequest->getId()
             ))->delete();
 
-            $request->getPaymentsData()->each(function (PaymentWrapper $paymentRequest) use ($batch): void {
+            $request->getPaymentsData()->each(function (PaymentWrapper $paymentRequest, int $key) use ($batch): void {
                 $payment = Payment::query()->updateOrCreate([
                     'id' => $paymentRequest->getId(),
                     'payment_batch_id' => $batch->id,
-                ], $paymentRequest->getPaymentdata());
+                ], $paymentRequest->getPaymentdata($batch->id, $key));
 
                 if (MethodType::CREDIT_CARD === $paymentRequest->getMethod()) {
                     $payment->card()->updateOrCreate([
