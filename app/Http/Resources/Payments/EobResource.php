@@ -20,6 +20,7 @@ final class EobResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->resource->id,
             'name' => $this->resource->name,
             'date' => $this->resource->date,
             'file_name' => $this->resource->file_name,
