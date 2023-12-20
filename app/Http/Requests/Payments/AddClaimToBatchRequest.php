@@ -19,12 +19,12 @@ final class AddClaimToBatchRequest extends FormRequest
     public function rules()
     {
         return [
-            'payments' => 'required|array',
+            'payments' => 'nullable|array',
             'payments.*.id' => ['required', 'integer', Rule::exists('payments', 'id')->where(
                 'payment_batch_id',
                 $this->route()->parameter('batch')->id,
             )],
-            'payments.*.claims' => 'required|array',
+            'payments.*.claims' => 'nullable|array',
             'payments.*.claims.*' => ['required', 'integer', Rule::exists('claims', 'id')],
         ];
     }

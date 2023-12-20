@@ -21,11 +21,10 @@ final class AddCopays
             $this->syncCopays($company, $copays, $user->billing_company_id);
 
             return $copays->map(fn (CopayRequestCast $copayData) => tap(
-                Copay::query()->updateOrCreate(['id' => $copayData->getId()], [
-                    'billing_company_id' => $copayData->getBillingCompanyId(),
-                    'copay' => $copayData->getCopay(),
-                    'private_note' => $copayData->getPrivateNote(),
-                ]),
+                Copay::query()->updateOrCreate(
+                    ['id' => $copayData->getId()],
+                    $copayData->wrapperCopayBody()
+                ),
                 fn (Copay $copay) => $this->afterCreate(
                     $copay,
                     $company,

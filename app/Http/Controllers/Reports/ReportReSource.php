@@ -8,6 +8,8 @@ use App\Actions\Reports\StoreReportAction;
 use App\Actions\Reports\UpdateReportAction;
 use App\Enums\Reports\ClassificationType;
 use App\Enums\Reports\ColumnsAdminDetailPatinetType;
+use App\Enums\Reports\ColumnsAdminPayerMixType;
+use App\Enums\Reports\ColumnsAdminProfessionalProductivityType;
 use App\Enums\Reports\ColumnsBillingDetailPatinetType;
 use App\Enums\Reports\ColumnsBillingGeneralFacilityType;
 use App\Enums\Reports\ColumnsBillingGeneralHealthcareProfessionalType;
@@ -15,6 +17,8 @@ use App\Enums\Reports\ColumnsBillingGeneralPatinetType;
 use App\Enums\Reports\ColumnsGeneralFacilityType;
 use App\Enums\Reports\ColumnsGeneralHealthcareProfessionalType;
 use App\Enums\Reports\ColumnsGeneralPatinetType;
+use App\Enums\Reports\ColumnsPayerMixType;
+use App\Enums\Reports\ColumnsProfessionalProductivityType;
 use App\Enums\Reports\ReportType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reports\GetAllRequest;
@@ -102,6 +106,8 @@ final class ReportReSource extends Controller
                 'PGFOODVKOC' => new EnumResource(collect(ColumnsAdminDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
                 'JBEPEUZRBK' => new EnumResource(collect(ColumnsGeneralPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
                 'QVHZFWCVGJ' => new EnumResource(collect(ColumnsGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'HHSUUILJFV' => new EnumResource(collect(ColumnsAdminPayerMixType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'TPEMOBKSKL' => new EnumResource(collect(ColumnsAdminProfessionalProductivityType::cases()), ColumnsAdminDetailPatinetResource::class),
                 'QNSJADXODC' => 
                     new EnumResource(collect(ColumnsGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class),
             ]
@@ -109,7 +115,9 @@ final class ReportReSource extends Controller
                 'PGFOODVKOC' => new EnumResource(collect(ColumnsBillingDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
                 'JBEPEUZRBK' => new EnumResource(collect(ColumnsBillingGeneralPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
                 'QVHZFWCVGJ' => new EnumResource(collect(ColumnsBillingGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class),
-                'QNSJADXODC' => new EnumResource( collect(ColumnsBillingGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'QNSJADXODC' => new EnumResource(collect(ColumnsBillingGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'HHSUUILJFV' => new EnumResource(collect(ColumnsPayerMixType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'TPEMOBKSKL' => new EnumResource(collect(ColumnsProfessionalProductivityType::cases()), ColumnsAdminDetailPatinetResource::class),
             ];
 
         if (!$rs) return response()->json(__('Columns list not available'), 400);

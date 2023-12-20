@@ -43,4 +43,13 @@ final class CopayRequestCast extends CastsRequest
     {
         return $this->get('private_note');
     }
+
+    public function wrapperCopayBody(): array
+    {
+        return [
+            'billing_company_id' => $this->getBillingCompanyId(),
+            'copay' => $this->getCopay(),
+            'private_note' => $this->getPrivateNote(),
+        ];
+    }
 }

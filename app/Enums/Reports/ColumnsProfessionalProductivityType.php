@@ -67,7 +67,7 @@ enum ColumnsProfessionalProductivityType: string implements TypeInterface
     #[AlignAttribute('left')]
     #[WidthAttribute('370px')]
     #[PublicAttribute(true)]
-    case CHARGE_AMOUNT = 'charges';
+    case CHARGE_AMOUNT = 'charges_amount';
 
     #[TypeAttribute('string')]
     #[TextAttribute('Charge count')]
