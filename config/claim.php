@@ -40,7 +40,7 @@ return [
                 'y' => 28,
             ],
         ],
-        '1' => [
+        '1.0' => [
             'options' => [
                 'MED' => [
                     'properties' => [
@@ -394,7 +394,7 @@ return [
             ],
         ],
         // '8' => '',
-        '9' => [
+        '9.0' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -519,7 +519,7 @@ return [
             ],
         ],
         // '10d' => '',
-        '11' => [
+        '11.0' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',
@@ -982,7 +982,7 @@ return [
                 'y' => 157.2,
             ],
         ],
-        '21' => [
+        '21.0' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '10px',

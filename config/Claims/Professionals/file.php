@@ -523,7 +523,7 @@ return [
         'value' => [],
         'values' => [],
     ],
-    '11' => [
+    '11.0' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Insurance policy group number',
         'value' => ['name' => 'Insurance policy group number', 'id' => 'higherOrderPolicy:group_number'],
