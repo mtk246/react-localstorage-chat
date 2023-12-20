@@ -67,7 +67,7 @@ return [
             ],
         ],
     ],
-    '1' => [
+    '1.0' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Type of insurance',
         'value' => ['name' => 'Type code of insurance', 'id' => 'insType:code'],
@@ -432,7 +432,7 @@ return [
             ],
         ],
     ],
-    '9' => [
+    '9.0' => [
         'type' => RuleType::MULTIPLE->value,
         'length' => 30,
         'description' => 'Secondary policy subscriber',
@@ -523,7 +523,7 @@ return [
         'value' => [],
         'values' => [],
     ],
-    '11' => [
+    '11.0' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Insurance policy group number',
         'value' => ['name' => 'Insurance policy group number', 'id' => 'higherOrderPolicy:group_number'],
@@ -1128,7 +1128,7 @@ return [
             ],
         ],
     ],
-    '21' => [
+    '21.0' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Claim diagnosis ICD indicator',
         'value' => ['name' => 'ICD indicator', 'id' => 'demograficInformation:|0'],
