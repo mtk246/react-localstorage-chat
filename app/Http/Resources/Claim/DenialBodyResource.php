@@ -8,6 +8,7 @@ use App\Enums\ClaimStatusMap;
 use App\Enums\InterfaceType;
 use App\Http\Resources\HealthProfessional\HealthProfessionalResource;
 use App\Http\Resources\Payments\EobResource;
+use App\Http\Resources\Payments\PaymentResource;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
 use App\Models\Claims\DenialRefile;
@@ -35,7 +36,14 @@ final class DenialBodyResource extends JsonResource
             ->setVisible(['id', 'name'])
             ->toArray() ?? [];
 
-        $eobs = Eob::where('payment_id', $this->resource->id)->get();
+        $eobs = Eob::where('payment_id', $this->resource->id)->with('payments')->get();
+
+        $eobDetails = $eobs->map(function ($eob) {
+            return [
+                'eob' => EobResource::make($eob),
+                'payments' => PaymentResource::collection($eob->payments),
+            ];
+        });
 
         return [
             'id' => $this->resource->id,
@@ -100,7 +108,7 @@ final class DenialBodyResource extends JsonResource
             'denial_refile' => $this->resource->getDenialRefile(),
             'denial_refile_detail' => $this->getDenialRefileDetailsMap(),
             'refile_reasons' => $this->getRefileReasons(),
-            'eob' => EobResource::collection($eobs),
+            'eob_details' => $eobDetails,
         ];
     }
 

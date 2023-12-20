@@ -7,7 +7,6 @@ namespace App\Models\Payments;
 use App\Models\Claims\Claim;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Collection;
@@ -75,9 +74,9 @@ final class Eob extends Model
             : $this->claimsMany()?->get();
     }
 
-    public function payments(): BelongsTo
+    public function payments(): hasMany
     {
-        return $this->belongsTo(Payment::class);
+        return $this->hasMany(Payment::class, 'id');
     }
 
     public function claimsMany(): HasMany
