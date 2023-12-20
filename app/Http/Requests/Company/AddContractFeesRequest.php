@@ -10,6 +10,8 @@ use App\Models\InsuranceCompany;
 use App\Models\InsurancePlan;
 use App\Models\Modifier;
 use App\Models\Procedure;
+use App\Rules\Company\CustomValidateExist;
+use App\Rules\Company\DuplicityContractValidation;
 use App\Rules\IntegerOrArrayKeyExists;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
@@ -30,7 +32,7 @@ final class AddContractFeesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'contract_fees' => ['nullable', 'array'],
+            'contract_fees' => ['nullable', 'array', new DuplicityContractValidation()],
             'contract_fees.*.billing_company_id' => [
                 Rule::excludeIf(Gate::denies('is-admin')),
                 'required',
@@ -40,7 +42,7 @@ final class AddContractFeesRequest extends FormRequest
             'contract_fees.*.id' => [
                 'nullable',
                 'integer',
-                'exists:\App\Models\ContractFee,id',
+                new CustomValidateExist(),
             ],
             'contract_fees.*.insurance_company_ids' => [
                 'nullable',
@@ -63,12 +65,10 @@ final class AddContractFeesRequest extends FormRequest
             'contract_fees.*.start_date' => [
                 'nullable',
                 'date',
-                'before:contract_fees.*.end_date',
             ],
             'contract_fees.*.end_date' => [
                 'nullable',
                 'date',
-                'after:contract_fees.*.start_date',
             ],
             'contract_fees.*.mac' => ['nullable', 'string'],
             'contract_fees.*.locality_number' => ['nullable', 'numeric'],

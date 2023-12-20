@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Models\Payments;
 
+use App\Models\Claims\Claim;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\Payments\Eob.
@@ -55,7 +58,7 @@ final class Eob extends Model
     ];
 
     /** @var string[] */
-    protected $appends = ['file_url'];
+    protected $appends = ['file_url', 'claims'];
 
     public function getFileUrlAttribute(): ?string
     {
@@ -64,13 +67,25 @@ final class Eob extends Model
             : null;
     }
 
+    public function getClaimsAttribute(): ?Collection
+    {
+        return $this->payment_id
+            ? $this->claimsThrough()?->get()
+            : $this->claimsMany()?->get();
+    }
+
     public function payments(): BelongsTo
     {
         return $this->belongsTo(Payment::class);
     }
 
-    public function batch(): HasOneThrough
+    public function claimsMany(): HasMany
     {
-        return $this->hasOneThrough(Batch::class, Payment::class);
+        return $this->hasMany(Claim::class);
+    }
+
+    public function claimsThrough(): HasManyThrough
+    {
+        return $this->hasManyThrough(Claim::class, Payment::class);
     }
 }

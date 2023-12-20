@@ -403,9 +403,40 @@ final class FileDictionary extends Dictionary
 
     protected function getClaimProfessionalServicesAttribute(string $key): Collection
     {
+        $healthProfessional = match ($this->claim->type) {
+            ClaimType::PROFESSIONAL => $this->claim->demographicInformation
+                ?->healthProfessionals()
+                ?->wherePivot('field_id', 5)
+                ?->first(),
+            ClaimType::INSTITUTIONAL => $this->claim->demographicInformation
+                ?->healthProfessionals()
+                ?->wherePivot('field_id', 1)
+                ?->orWherePivot('field_id', 76)
+                ?->first(),
+        };
+
+        $contractFeeSpecification = $this->claim?->demographicInformation->company->contractFees()
+            ->whereHas('insurancePlans', function ($query) {
+                $query->where('insurance_plans.id', $this->claim?->higherInsurancePlan()?->id);
+            })
+            ?->first()
+            ?->contractFeeSpecifications()
+            ?->whereNull('health_professional_id')
+            ?->orWhere('health_professional_id', $healthProfessional?->id)
+            ?->first();
+
         $resultServices = [];
         $totalCharge = 0;
         $totalCopay = 0;
+        $healthProfessional_BP = $this->claim
+            ?->demographicInformation
+            ?->healthProfessionals()
+            ?->wherePivot('field_id', 5)
+            ?->first() ?? null;
+
+        $taxonomyHealthP = ($contractFeeSpecification?->healthProfessionalTaxonomy)
+            ? ($contractFeeSpecification->healthProfessionalTaxonomy?->tax_id ?? '')
+            : ($healthProfessional_BP?->taxonomies()?->where('taxonomies.primary', true)?->first()?->tax_id ?? '');
 
         foreach ($this->claim->service->services ?? [] as $index => $item) {
             $arrayPrice = explode('.', (string) ($item['price'] ?? ''));
@@ -413,11 +444,6 @@ final class FileDictionary extends Dictionary
             $totalCopay += $item['copay'] ?? 0;
             $fromService = explode('-', $item['from_service'] ?? '');
             $toService = explode('-', $item['to_service'] ?? '');
-            $billingProvider = $this->claim
-                ?->demographicInformation
-                ?->healthProfessionals()
-                ?->wherePivot('field_id', 5)
-                ?->first() ?? null;
 
             /* 24A */
             $medication = $item->procedure?->companyServices
@@ -455,13 +481,12 @@ final class FileDictionary extends Dictionary
             /* 24H */
             $resultServices['epsdt_H'.($index + 1)] = $item?->epsdt?->code ?? '';
             $resultServices['family_planing_H'.($index + 1)] = $item->familyPlanning?->code ?? '';
-            /** 24I */
+            /* 24I */
             // $tax_id = $this->claim?->provider?->taxonomies()->where('primary', true)->first()?->tax_id ?? '';
-            $tax_id_BP = $billingProvider?->taxonomies()->where('taxonomies.primary', true)->first()?->tax_id ?? '';
-            $resultServices['qualifier_I'.($index + 1)] = !empty($tax_id_BP) ? 'ZZ' : '';
+            $resultServices['qualifier_I'.($index + 1)] = !empty($taxonomyHealthP) ? 'ZZ' : '';
             /* 24J */
-            $resultServices['npi_J'.($index + 1)] = str_replace('-', '', $billingProvider?->npi ?? '');
-            $resultServices['tax_J'.($index + 1)] = str_replace('-', '', $tax_id_BP);
+            $resultServices['npi_J'.($index + 1)] = str_replace('-', '', $healthProfessional_BP?->npi ?? '');
+            $resultServices['tax_J'.($index + 1)] = str_replace('-', '', $taxonomyHealthP ?? '');
         }
 
         return Collect($resultServices);

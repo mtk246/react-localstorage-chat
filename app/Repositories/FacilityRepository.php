@@ -836,7 +836,7 @@ class FacilityRepository
      */
     public function changeStatus(bool $status, int $id)
     {
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()?->billingCompanies->first();
         if (is_null($billingCompany)) {
             return null;
         }
@@ -863,7 +863,7 @@ class FacilityRepository
             return null;
         }
 
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()?->billingCompanies->first();
         if (is_null($billingCompany)) {
             return null;
         }

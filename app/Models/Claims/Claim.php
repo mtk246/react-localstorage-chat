@@ -571,6 +571,7 @@ class Claim extends Model implements Auditable
             'id' => $this->id,
             'code' => $this->code,
             'type' => $this->type->getName(),
+            'format' => $this->type->getCode(),
             'submitter_name' => $this->submitter_name,
             'submitter_contact' => $this->submitter_contact,
             'submitter_phone' => $this->submitter_phone,
@@ -585,14 +586,21 @@ class Claim extends Model implements Auditable
             'amount_paid' => $this->amount_paid,
             'past_due_date' => $this->past_due_date,
             'date_of_service' => $this->date_of_service,
+            'company.name' => $this->demographicInformation->company->name,
+            'company.abbreviation' => $this->demographicInformation->company->abbreviations
+                ->where('billing_company_id', $this->billing_company_id)
+                ->first()
+                ?->abbreviation,
+            'patient' => $this->demographicInformation->patient->profile->only(['first_name', 'last_name', 'ssn']),
+            'health_professionals' => $this->demographicInformation->healthProfessionals,
+            'insurance_plan' => $this->higherInsurancePlan(),
+            'transmitted' => $this->claimTransmissionResponses->count() > 0,
             'status' => $this->status()
-                ->orderBy('created_at', 'desc')
-                ->orderBy('id', 'desc')
+                ->orderBy('claim_status_claim.id', 'desc')
                 ->first()
                 ?->status,
             'sub_status' => $this->subStatus()
-                ->orderBy('created_at', 'desc')
-                ->orderBy('id', 'desc')
+                ->orderBy('claim_status_claim.id', 'desc')
                 ->first()
                 ?->status,
             'user_created' => $this->user_created,
