@@ -23,9 +23,7 @@ final class UpdateClaimRuleAction
         $rules->update($rulesWrapper->getRuleData());
 
         if ($rulesWrapper->hasResponsibilities()) {
-            $rulesWrapper->getResponsibilities()->each(function ($responsibility) use ($rules) {
-                $rules->typesOfResponsibilities()->attach($responsibility);
-            });
+            $rules->typesOfResponsibilities()->sync($rulesWrapper->getResponsibilities()->toArray());
         }
 
         $rules->insurancePlans()->sync($rulesWrapper->getInsurancePlans());
