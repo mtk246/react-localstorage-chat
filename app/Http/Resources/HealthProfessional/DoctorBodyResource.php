@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\HealthProfessional;
 
-use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
 use App\Http\Resources\Company\TaxonomiesResource;
 use App\Models\Company;
 use App\Models\HealthProfessional;
@@ -123,13 +122,10 @@ final class DoctorBodyResource extends JsonResource
             ->where('billing_company_id', $billingCompanyId)
             ->first()?->type;
 
-        $enums = collect(HealthProfessionalTypeEnum::cases());
-        $item = $enums->first(fn ($item) => $item->value === (int) $type);
-
-        return ($item)
+        return ($type)
             ? [
-                'id' => $item->value,
-                'name' => $item->getName(),
+                'id' => $type->value,
+                'name' => $type->getName(),
             ]
             : null;
     }

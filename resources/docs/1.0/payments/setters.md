@@ -45,6 +45,7 @@
   "amount": "25000",
   "payments": [
     {
+      "order": 1,
       "source_id":1,
       "insurance_company_id": 1,
       "payment_date": "2015-10-5",
@@ -60,6 +61,10 @@
         "file_name": "test"
       }]
     }
+  ],
+  "files": [ // files for eobs
+    eob_files 
+    ...
   ]
 }
 ```
@@ -80,6 +85,7 @@
   "payments": [
     {
       "id": 20,
+      "order": 1,
       "source": 1,
       "payment_date": "2015-10-05T00:00:00.000000Z",
       "total_amount": "25000",
@@ -143,6 +149,7 @@
   "amount": "25000",
   "payments": [
     {
+      "order": 1,
       "source_id":1,
       "insurance_company_id": 1,
       "payment_date": "2015-10-5",
@@ -158,6 +165,10 @@
         "file_name": "test"
       }]
     }
+  ]
+  "files": [ // files for eobs
+    eob_files 
+    ...
   ]
 }
 ```

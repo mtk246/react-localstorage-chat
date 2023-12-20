@@ -174,6 +174,7 @@ return [
             BillingCompany::class => [
                 'filterableAttributes' => ['tax_id', 'name', 'code', 'abbreviation'],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Claim::class => [
                 'filterableAttributes' => [
@@ -217,6 +218,7 @@ return [
                     'sub_status',
                     'user_created',
                 ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Rules::class => [
                 'filterableAttributes' => [
@@ -236,6 +238,7 @@ return [
                     'billing_company',
                     'insurance_plans',
                 ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Company::class => [
                 'filterableAttributes' => [
@@ -261,6 +264,7 @@ return [
                     'ein',
                     'created_at',
                 ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Facility::class => [
                 'filterableAttributes' => [
@@ -280,6 +284,7 @@ return [
                     'npi',
                     'created_at',
                 ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             HealthProfessional::class => [
                 'filterableAttributes' => [
@@ -308,6 +313,7 @@ return [
                     'npi',
                     'created_at',
                 ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Patient::class => [
                 'filterableAttributes' => [
@@ -332,6 +338,7 @@ return [
                     'profile.date_of_birth',
                     'created_at',
                 ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             InsuranceCompany::class => [
                 'filterableAttributes' => [
@@ -343,6 +350,7 @@ return [
                     'addresses',
                 ],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             InsurancePlan::class => [
                 'filterableAttributes' => [
@@ -353,6 +361,7 @@ return [
                     'addresses',
                 ],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Procedure::class => [
                 'filterableAttributes' => [
@@ -366,6 +375,7 @@ return [
                     'clasifications',
                 ],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Diagnosis::class => [
                 'filterableAttributes' => [
@@ -376,6 +386,7 @@ return [
                     'public_note',
                 ],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Modifier::class => [
                 'filterableAttributes' => [
@@ -389,6 +400,7 @@ return [
                     'public_note',
                 ],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             User::class => [
                 'filterableAttributes' => [
@@ -402,6 +414,7 @@ return [
                     'profile.phone',
                 ],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             ClearingHouse::class => [
                 'filterableAttributes' => [
@@ -411,6 +424,7 @@ return [
                     'addresses',
                 ],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             PaymentsBatch::class => [
                 'filterableAttributes' => [
@@ -442,6 +456,7 @@ return [
                     'billing_company.name',
                     'created_at',
                 ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             DenialRefile::class => [
                 'filterableAttributes' => [
@@ -488,6 +503,7 @@ return [
                     'private_notes.publishable_id',
                     'claim.code',
                 ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             DenialTracking::class => [
                 'filterableAttributes' => [
@@ -536,6 +552,7 @@ return [
                     'claim_id',
                     'policy_id',
                 ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
         ],
     ],

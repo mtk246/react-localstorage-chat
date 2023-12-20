@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $insurance_plan_id
+ * @property int|null $order
  * @property MethodType $method
  * @property \App\Models\Payments\Batch $batch
  * @property \App\Models\Payments\Card|null $card
@@ -47,6 +48,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereInsurancePlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentBatchId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentMethod($value)
@@ -74,6 +76,7 @@ final class Payment extends Model
         'note',
         'payment_batch_id',
         'insurance_plan_id',
+        'order',
     ];
 
     /** @var array<string, string> */

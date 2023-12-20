@@ -4,6 +4,7 @@
 - [Get list of batch states](#get-list-batch-states)
 - [Get list of payments source](#get-list-payment-source)
 - [Get list of payments methods](#get-list-payment-methods)
+- [Get adjustment reason code](#get-adjustment-reason-code)
 - [Get eob file view](#get-eob-file)
 - [Get all batches](#get-all-batch)
 - [Get single batch](#get-single-batch)
@@ -18,9 +19,10 @@
 |1|GET|`Get list of batch states`|`/payments/batch/states`|yes|Get all baches states list|
 |2|GET|`Get list payments source`|`/payments/sources`|yes|Get all payments sources list|
 |3|GET|`Get list of payments methods`|`/payments/methods`|yes|Get all payments metods list|
-|4|GET|`Get eob file view`|`/payments/eob/{eob_file}`|yes|this is the view for the eob file|
-|5|GET|`Get all batches`|`/payments/batch`|yes|Get list of all payments batches|
-|6|GET|`Get single batch`|`/payments/batch/{batch_id}`|yes|Get all of batch information|
+|4|GET|`Get adjustment reason code`|`/payments/codes`|yes|get the list of payments adjustment reason code|
+|5|GET|`Get eob file view`|`/payments/eob/{eob_file}`|yes|this is the view for the eob file|
+|6|GET|`Get all batches`|`/payments/batch`|yes|Get list of all payments batches|
+|7|GET|`Get single batch`|`/payments/batch/{batch_id}`|yes|Get all of batch information|
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
 
@@ -143,6 +145,42 @@
 ]
 ```
 
+<a name="get-adjustment-reason-code"></a>
+## Get adjustment reason code list
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Response
+
+> {success} 200 data retorned
+
+#
+```json
+[
+  {
+    "id": 2142,
+    "code": "1",
+    "description": "Deductible Amount"
+  },
+  {
+    "id": 2143,
+    "code": "2",
+    "description": "Coinsurance Amount"
+  },
+  {
+    "id": 2144,
+    "code": "3",
+    "description": "Co-payment Amount"
+  },
+  ...
+]
+```
 
 <a name="get-eob-file"></a>
 ## this is the view for the eob file

@@ -9,6 +9,7 @@ use App\Http\Requests\Traits\HasCastedClass;
 use App\Models\InsuranceCompany;
 use App\Models\InsurancePlan;
 use App\Models\Procedure;
+use App\Rules\Company\DuplicityCopayValidation;
 use App\Rules\IntegerOrArrayKeyExists;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,7 +23,7 @@ final class AddCompanyCopaysRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'copays' => ['nullable', 'array'],
+            'copays' => ['nullable', 'array', new DuplicityCopayValidation()],
             'copays.*.id' => [
                 'nullable',
                 'integer',

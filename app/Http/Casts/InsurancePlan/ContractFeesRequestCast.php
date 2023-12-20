@@ -100,29 +100,16 @@ final class ContractFeesRequestCast extends CastsRequest
 
     public function getMacLocality(): ?MacLocality
     {
-        $query = MacLocality::query();
-
-        if ($this->getMac()) {
-            $query = $query->where('mac', $this->getMac());
-        }
-
-        if ($this->getLocalityNumber()) {
-            $query = $query->where('locality_number', $this->getLocalityNumber());
-        }
-
-        if ($this->getState()) {
-            $query = $query->where('state', $this->getState());
-        }
-
-        if ($this->getFsa()) {
-            $query = $query->where('fsa', $this->getFsa());
-        }
-
-        if ($this->getCounties()) {
-            $query = $query->where('counties', $this->getCounties());
-        }
-
-        return $query->first() ?? null;
+        return MacLocality::query()
+            ->when($this->getLocalityNumber(), fn ($query) => $query->where('locality_number', $this->getLocalityNumber()))
+            ->when($this->getState(), fn ($query) => $query->where('state', $this->getState()))
+            ->when($this->getFsa(), fn ($query) => $query->where('fsa', $this->getFsa()))
+            ->when($this->getCounties(), fn ($query) => $query->where('counties', $this->getCounties()))
+            ->when(
+                $this->getMac(),
+                fn ($query) => $query->where('mac', $this->getMac()),
+                fn ($query) => $query->whereNull('mac')
+            )->first();
     }
 
     public function getHaveContractSpecifications(): bool
@@ -150,5 +137,20 @@ final class ContractFeesRequestCast extends CastsRequest
                 : []
         )
             ->map(fn (array $inputs) => new ContractFeeSpecificationWrapper($inputs, $this->request, $this->user));
+    }
+
+    public function wrapperContractFeesBody(): array
+    {
+        return [
+            'billing_company_id' => $this->getBillingCompanyId(),
+            'mac_locality_id' => $this->getMacLocality()?->id,
+            'insurance_label_fee_id' => $this->getInsuranceLabelFeeId(),
+            'contract_fee_type_id' => $this->getTypeId(),
+            'start_date' => $this->getStartDate(),
+            'private_note' => $this->getPrivateNote(),
+            'end_date' => $this->getEndDate(),
+            'price' => $this->getPrice(),
+            'price_percentage' => $this->getPricePercentage(),
+        ];
     }
 }

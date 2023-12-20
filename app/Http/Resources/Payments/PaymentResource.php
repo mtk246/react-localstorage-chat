@@ -21,6 +21,7 @@ final class PaymentResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
+            'order' => $this->resource->order,
             'source' => $this->resource->source,
             'payment_date' => $this->resource->payment_date,
             'total_amount' => $this->resource->total_amount->formatByDecimal(),

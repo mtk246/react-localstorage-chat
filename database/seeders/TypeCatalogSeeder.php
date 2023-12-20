@@ -8,6 +8,7 @@ use App\Models\PrivateNote;
 use App\Models\Type;
 use App\Models\TypeCatalog;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class TypeCatalogSeeder extends Seeder
 {
@@ -1744,6 +1745,855 @@ class TypeCatalogSeeder extends Seeder
                     ],
                 ],
             ],
+            [
+                'description' => 'Claim adjustment reason code',
+                'type_catalogs' => [
+                    [
+                        'code' => '1',
+                        'description' => 'Deductible Amount',
+                    ],
+                    [
+                        'code' => '2',
+                        'description' => 'Coinsurance Amount',
+                    ],
+                    [
+                        'code' => '3',
+                        'description' => 'Co-payment Amount',
+                    ],
+                    [
+                        'code' => '4',
+                        'description' => 'The procedure code is inconsistent with the modifier used.',
+                    ],
+                    [
+                        'code' => '5',
+                        'description' => 'The procedure code/type of bill is inconsistent with the place of service.',
+                    ],
+                    [
+                        'code' => '6',
+                        'description' => 'The procedure/revenue code is inconsistent with the patient\'s age.',
+                    ],
+                    [
+                        'code' => '7',
+                        'description' => 'The procedure/revenue code is inconsistent with the patient\'s gender.',
+                    ],
+                    [
+                        'code' => '8',
+                        'description' => 'The procedure code is inconsistent with the provider type/specialty (taxonomy).',
+                    ],
+                    [
+                        'code' => '9',
+                        'description' => 'The diagnosis is inconsistent with the patient\'s age.',
+                    ],
+                    [
+                        'code' => '10',
+                        'description' => 'The diagnosis is inconsistent with the patient\'s gender.',
+                    ],
+                    [
+                        'code' => '11',
+                        'description' => 'The diagnosis is inconsistent with the procedure.',
+                    ],
+                    [
+                        'code' => '12',
+                        'description' => 'The diagnosis is inconsistent with the provider type.',
+                    ],
+                    [
+                        'code' => '13',
+                        'description' => 'The date of death precedes the date of service.',
+                    ],
+                    [
+                        'code' => '14',
+                        'description' => ' The date of birth follows the date of service.',
+                    ],
+                    [
+                        'code' => '16',
+                        'description' => 'Claim/service lacks information or has submission/billing error(s).',
+                    ],
+                    [
+                        'code' => '18',
+                        'description' => 'Exact duplicate claim/service.',
+                    ],
+                    [
+                        'code' => '19',
+                        'description' => 'This is a work-related injury/illness and thus the liability of the Worker\'s Compensation Carrier.',
+                    ],
+                    [
+                        'code' => '20',
+                        'description' => 'This injury/illness is covered by the liability carrier.',
+                    ],
+                    [
+                        'code' => '21',
+                        'description' => 'This injury/illness is the liability of the no-fault carrier.',
+                    ],
+                    [
+                        'code' => '22',
+                        'description' => 'This care may be covered by another payer per coordination of benefits.',
+                    ],
+                    [
+                        'code' => '23',
+                        'description' => 'The impact of prior payer(s) adjudication including payments and/or adjustments.',
+                    ],
+                    [
+                        'code' => '24',
+                        'description' => 'Charges are covered under a capitation agreement/managed care plan.',
+                    ],
+                    [
+                        'code' => '26',
+                        'description' => 'Expenses incurred prior to coverage.',
+                    ],
+                    [
+                        'code' => '27',
+                        'description' => 'Expenses incurred after coverage terminated.',
+                    ],
+                    [
+                        'code' => '29',
+                        'description' => 'The time limit for filing has expired.',
+                    ],
+                    [
+                        'code' => '31',
+                        'description' => 'Patient cannot be identified as our insured.',
+                    ],
+                    [
+                        'code' => '32',
+                        'description' => 'Our records indicate the patient is not an eligible dependent.',
+                    ],
+                    [
+                        'code' => '33',
+                        'description' => 'Insured has no dependent coverage.',
+                    ],
+                    [
+                        'code' => '34',
+                        'description' => 'Insured has no coverage for newborns.',
+                    ],
+                    [
+                        'code' => '35',
+                        'description' => 'Lifetime benefit maximum has been reached.',
+                    ],
+                    [
+                        'code' => '39',
+                        'description' => 'Services denied at the time authorization/pre-certification was requested.',
+                    ],
+                    [
+                        'code' => '40',
+                        'description' => 'Charges do not meet qualifications for emergent/urgent care.',
+                    ],
+                    [
+                        'code' => '44',
+                        'description' => 'Prompt-pay discount (aunque es un descuento, si no se aplica correctamente, podría resultar en una denegación de pago).',
+                    ],
+                    [
+                        'code' => '45',
+                        'description' => 'Charge exceeds fee schedule/maximum allowable or contracted/legislated fee arrangement.',
+                    ],
+                    [
+                        'code' => '49',
+                        'description' => 'This is a non-covered service because it is a routine/preventive exam or a diagnostic/screening procedure done in conjunction with a routine/preventive exam.',
+                    ],
+                    [
+                        'code' => '50',
+                        'description' => 'These are non-covered services because this is not deemed a \'medical necessity\' by the payer.',
+                    ],
+                    [
+                        'code' => '51',
+                        'description' => 'These are non-covered services because this is a pre-existing condition.',
+                    ],
+                    [
+                        'code' => '53',
+                        'description' => 'Services by an immediate relative or a member of the same household are not covered.',
+                    ],
+                    [
+                        'code' => '54',
+                        'description' => 'Multiple physicians/assistants are not covered in this case.',
+                    ],
+                    [
+                        'code' => '55',
+                        'description' => 'Procedure/treatment/drug is deemed experimental/investigational by the payer.',
+                    ],
+                    [
+                        'code' => '56',
+                        'description' => 'Procedure/treatment has not been deemed \'proven to be effective\' by the payer.',
+                    ],
+                    [
+                        'code' => '58',
+                        'description' => 'Treatment was deemed by the payer to have been rendered in an inappropriate or invalid place of service.',
+                    ],
+                    [
+                        'code' => '59',
+                        'description' => 'Processed based on multiple or concurrent procedure rules.',
+                    ],
+                    [
+                        'code' => '60',
+                        'description' => 'for outpatient services are not covered when performed within a period of time prior to or after inpatient services.',
+                    ],
+                    [
+                        'code' => '61',
+                        'description' => 'Adjusted for failure to obtain second surgical opinion.',
+                    ],
+                    [
+                        'code' => '66',
+                        'description' => 'Blood Deductible.',
+                    ],
+                    [
+                        'code' => '69',
+                        'description' => 'Day outlier amount.',
+                    ],
+                    [
+                        'code' => '70',
+                        'description' => 'Cost outlier - Adjustment to compensate for additional costs.',
+                    ],
+                    [
+                        'code' => '74',
+                        'description' => 'Indirect Medical Education Adjustment.',
+                    ],
+                    [
+                        'code' => '75',
+                        'description' => 'Direct Medical Education Adjustment.',
+                    ],
+                    [
+                        'code' => '76',
+                        'description' => 'Disproportionate Share Adjustment.',
+                    ],
+                    [
+                        'code' => '78',
+                        'description' => 'Non-Covered days/Room charge adjustment.',
+                    ],
+                    [
+                        'code' => '85',
+                        'description' => 'Patient Interest Adjustment',
+                    ],
+                    [
+                        'code' => '89',
+                        'description' => 'Professional fees removed from charges.',
+                    ],
+                    [
+                        'code' => '90',
+                        'description' => 'Ingredient cost adjustment. (Se usa solo para farmacéuticos).',
+                    ],
+                    [
+                        'code' => '91',
+                        'description' => 'Dispensing fee adjustment.',
+                    ],
+                    [
+                        'code' => '94',
+                        'description' => 'Processed in Excess of charges.',
+                    ],
+                    [
+                        'code' => '95',
+                        'description' => 'Plan procedures not followed.',
+                    ],
+                    [
+                        'code' => '96',
+                        'description' => 'Non-covered charge(s).',
+                    ],
+                    [
+                        'code' => '97',
+                        'description' => 'The benefit for this service is included in the payment/allowance for another service/procedure that has already been adjudicated.',
+                    ],
+                    [
+                        'code' => '100',
+                        'description' => 'Payment made to patient/insured/responsible party.',
+                    ],
+                    [
+                        'code' => '102',
+                        'description' => 'Major Medical Adjustment.',
+                    ],
+                    [
+                        'code' => '103',
+                        'description' => 'Provider promotional discount (e.g., Senior citizen discount).',
+                    ],
+                    [
+                        'code' => '104',
+                        'description' => 'Managed care withholding.',
+                    ],
+                    [
+                        'code' => '105',
+                        'description' => 'Tax withholding.',
+                    ],
+                    [
+                        'code' => '106',
+                        'description' => 'Patient payment option/election not in effect.',
+                    ],
+                    [
+                        'code' => '107',
+                        'description' => 'The related or qualifying claim/service was not identified on this claim.',
+                    ],
+                    [
+                        'code' => '108',
+                        'description' => 'Rent/purchase guidelines were not met.',
+                    ],
+                    [
+                        'code' => '109',
+                        'description' => 'Claim/service not covered by this payer/contractor.',
+                    ],
+                    [
+                        'code' => '110',
+                        'description' => 'Billing date predates service date.',
+                    ],
+                    [
+                        'code' => '111',
+                        'description' => 'Not covered unless the provider accepts assignment.',
+                    ],
+                    [
+                        'code' => '112',
+                        'description' => 'Service not furnished directly to the patient and/or not documented.',
+                    ],
+                    [
+                        'code' => '114',
+                        'description' => 'Procedure/product not approved by the Food and Drug Administration.',
+                    ],
+                    [
+                        'code' => '115',
+                        'description' => 'Procedure postponed, canceled, or delayed.',
+                    ],
+                    [
+                        'code' => '116',
+                        'description' => 'The advance indemnification notice signed by the patient did not comply with requirements.',
+                    ],
+                    [
+                        'code' => '117',
+                        'description' => 'Transportation is only covered to the closest facility that can provide the necessary care.',
+                    ],
+                    [
+                        'code' => '118',
+                        'description' => 'ESRD network support adjustment.',
+                    ],
+                    [
+                        'code' => '119',
+                        'description' => 'Benefit maximum for this time period or occurrence has been reached.',
+                    ],
+                    [
+                        'code' => '121',
+                        'description' => 'Indemnification adjustment - compensation for outstanding member responsibility.',
+                    ],
+                    [
+                        'code' => '122',
+                        'description' => 'Psychiatric reduction.',
+                    ],
+                    [
+                        'code' => '128',
+                        'description' => 'Newborn\'s services are covered in the mother\'s Allowance.',
+                    ],
+                    [
+                        'code' => '129',
+                        'description' => 'Prior processing information appears incorrect.',
+                    ],
+                    [
+                        'code' => '130',
+                        'description' => 'Claim submission fee.',
+                    ],
+                    [
+                        'code' => '131',
+                        'description' => 'Claim specific negotiated discount.',
+                    ],
+                    [
+                        'code' => '132',
+                        'description' => 'Prearranged demonstration project adjustment.',
+                    ],
+                    [
+                        'code' => '133',
+                        'description' => 'The disposition of this service line is pending further review.',
+                    ],
+                    [
+                        'code' => '134',
+                        'description' => 'Technical fees removed from charges.',
+                    ],
+                    [
+                        'code' => '135',
+                        'description' => 'Interim bills cannot be processed.',
+                    ],
+                    [
+                        'code' => '136',
+                        'description' => 'Failure to follow prior payer\'s coverage rules.',
+                    ],
+                    [
+                        'code' => '137',
+                        'description' => 'Regulatory Surcharges, Assessments, Allowances or Health Related Taxes.',
+                    ],
+                    [
+                        'code' => '139',
+                        'description' => 'Contracted funding agreement - Subscriber is employed by the provider of services.',
+                    ],
+                    [
+                        'code' => '140',
+                        'description' => 'Patient/Insured health identification number and name do not match.',
+                    ],
+                    [
+                        'code' => '142',
+                        'description' => 'Monthly Medicaid patient liability amount.',
+                    ],
+                    [
+                        'code' => '143',
+                        'description' => 'Portion of payment deferred.',
+                    ],
+                    [
+                        'code' => '144',
+                        'description' => 'Incentive adjustment, e.g., preferred product/service.',
+                    ],
+                    [
+                        'code' => '146',
+                        'description' => 'Diagnosis was invalid for the date(s) of service reported.',
+                    ],
+                    [
+                        'code' => '147',
+                        'description' => 'Provider contracted/negotiated rate expired or not on file.',
+                    ],
+                    [
+                        'code' => '148',
+                        'description' => 'Information from another provider was not provided or was insufficient/incomplete.',
+                    ],
+                    [
+                        'code' => '149',
+                        'description' => 'Lifetime benefit maximum has been reached for this service/benefit category.',
+                    ],
+                    [
+                        'code' => '150',
+                        'description' => 'Payer deems the information submitted does not support this level of service.',
+                    ],
+                    [
+                        'code' => '151',
+                        'description' => 'Payment adjusted because the payer deems the information submitted does not support this many/frequency of services.',
+                    ],
+                    [
+                        'code' => '152',
+                        'description' => 'Payer deems the information submitted does not support this length of service.',
+                    ],
+                    [
+                        'code' => '153',
+                        'description' => 'Payer deems the information submitted does not support this dosage.',
+                    ],
+                    [
+                        'code' => '154',
+                        'description' => 'Payer deems the information submitted does not support this day\'s supply.',
+                    ],
+                    [
+                        'code' => '155',
+                        'description' => 'Patient refused the service/procedure.',
+                    ],
+                    [
+                        'code' => '157',
+                        'description' => 'Service/procedure was provided as a result of an act of war.',
+                    ],
+                    [
+                        'code' => '158',
+                        'description' => 'Service/procedure was provided outside of the United States.',
+                    ],
+                    [
+                        'code' => '159',
+                        'description' => 'Service/procedure was provided as a result of terrorism.',
+                    ],
+                    [
+                        'code' => '160',
+                        'description' => 'Injury/illness was the result of an activity that is a benefit exclusion.',
+                    ],
+                    [
+                        'code' => '161',
+                        'description' => 'Provider performance bonus',
+                    ],
+                    [
+                        'code' => '163',
+                        'description' => 'Attachment/other documentation referenced on the claim was not received.',
+                    ],
+                    [
+                        'code' => '164',
+                        'description' => 'Attachment/other documentation referenced on the claim was not received in a timely fashion.',
+                    ],
+                    [
+                        'code' => '166',
+                        'description' => 'These services were submitted after this payers responsibility for processing claims under this plan ended.',
+                    ],
+                    [
+                        'code' => '167',
+                        'description' => 'This (these) diagnosis(es) is (are) not covered.',
+                    ],
+                    [
+                        'code' => '169',
+                        'description' => 'Alternate benefit has been provided.',
+                    ],
+                    [
+                        'code' => '170',
+                        'description' => 'Payment is denied when performed/billed by this type of provider.',
+                    ],
+                    [
+                        'code' => '171',
+                        'description' => 'Payment is denied when performed/billed by this type of provider in this type of facility.',
+                    ],
+                    [
+                        'code' => '172',
+                        'description' => 'Payment is adjusted when performed/billed by a provider of this specialty.',
+                    ],
+                    [
+                        'code' => '173',
+                        'description' => 'Service/equipment was not prescribed by a physician.',
+                    ],
+                    [
+                        'code' => '174',
+                        'description' => 'Service was not prescribed prior to delivery.',
+                    ],
+                    [
+                        'code' => '175',
+                        'description' => 'Prescription is incomplete.',
+                    ],
+                    [
+                        'code' => '176',
+                        'description' => 'Prescription is not current.',
+                    ],
+                    [
+                        'code' => '177',
+                        'description' => 'Patient has not met the required eligibility requirements.',
+                    ],
+                    [
+                        'code' => '178',
+                        'description' => 'Patient has not met the required spend down requirements.',
+                    ],
+                    [
+                        'code' => '179',
+                        'description' => 'Patient has not met the required waiting requirements.',
+                    ],
+                    [
+                        'code' => '180',
+                        'description' => 'Patient has not met the required residency requirements.',
+                    ],
+                    [
+                        'code' => '181',
+                        'description' => 'Procedure code was invalid on the date of service.',
+                    ],
+                    [
+                        'code' => '182',
+                        'description' => 'Procedure modifier was invalid on the date of service.',
+                    ],
+                    [
+                        'code' => '183',
+                        'description' => 'The referring provider is not eligible to refer the service billed.',
+                    ],
+                    [
+                        'code' => '184',
+                        'description' => 'The prescribing/ordering provider is not eligible to prescribe/order the service billed.',
+                    ],
+                    [
+                        'code' => '185',
+                        'description' => 'The rendering provider is not eligible to perform the service billed.',
+                    ],
+                    [
+                        'code' => '186',
+                        'description' => 'Level of care change adjustment.',
+                    ],
+                    [
+                        'code' => '187',
+                        'description' => 'Consumer Spending Account payments (includes but is not limited to Flexible Spending Account, Health Savings Account, Health Reimbursement Account, etc.).',
+                    ],
+                    [
+                        'code' => '188',
+                        'description' => 'This product/procedure is only covered when used according to FDA recommendations.',
+                    ],
+                    [
+                        'code' => '189',
+                        'description' => 'Not otherwise classified\' or \'unlisted\' procedure code was billed when there is a specific procedure code for this procedure/service.',
+                    ],
+                    [
+                        'code' => '190',
+                        'description' => 'Payment is included in the allowance for a Skilled Nursing Facility (SNF) qualified stay.',
+                    ],
+                    [
+                        'code' => '192',
+                        'description' => 'Non standard adjustment code from paper remittance.',
+                    ],
+                    [
+                        'code' => '193',
+                        'description' => 'Original payment decision is being maintained. Upon review, it was determined that this claim was processed properly.',
+                    ],
+                    [
+                        'code' => '194',
+                        'description' => 'Anesthesia performed by the operating physician, the assistant surgeon or the attending physician.',
+                    ],
+                    [
+                        'code' => '195',
+                        'description' => 'Refund issued to an erroneous priority payer for this claim/service.',
+                    ],
+                    [
+                        'code' => '196',
+                        'description' => 'Claim/service denied based on prior payer\'s coverage determination.',
+                    ],
+                    [
+                        'code' => '197',
+                        'description' => 'Precertification/authorization/notification/pre-treatment absent.',
+                    ],
+                    [
+                        'code' => '198',
+                        'description' => 'Precertification/notification/authorization/pre-treatment exceeded.',
+                    ],
+                    [
+                        'code' => '199',
+                        'description' => 'Revenue code and Procedure code do not match.',
+                    ],
+                    [
+                        'code' => '200',
+                        'description' => 'Expenses incurred during lapse in coverage',
+                    ],
+                    [
+                        'code' => '201',
+                        'description' => 'Patient is responsible for amount of this claim/service through \'set aside arrangement\' or other agreement. (Use only with Group Code PR) At least one Remark Code must be provided (may be comprised of either the NCPDP Reject Reason Code, or Remittance Advice Remark Code that is not an ALERT.)',
+                    ],
+                    [
+                        'code' => '202',
+                        'description' => 'Non-covered personal comfort or convenience services.',
+                    ],
+                    [
+                        'code' => '203',
+                        'description' => 'Discontinued or reduced service.',
+                    ],
+                    [
+                        'code' => '204',
+                        'description' => 'This service/equipment/drug is not covered under the patient\'s current benefit plan',
+                    ],
+                    [
+                        'code' => '205',
+                        'description' => 'Pharmacy discount card processing fee',
+                    ],
+                    [
+                        'code' => '206',
+                        'description' => 'National Provider Identifier - missing.',
+                    ],
+                    [
+                        'code' => '207',
+                        'description' => 'National Provider identifier - Invalid format',
+                    ],
+                    [
+                        'code' => '208',
+                        'description' => 'National Provider Identifier - Not matched.',
+                    ],
+                    [
+                        'code' => '209',
+                        'description' => 'Per regulatory or other agreement. The provider cannot collect this amount from the patient. However, this amount may be billed to subsequent payer. Refund to patient if collected. (Use only with Group code OA)',
+                    ],
+                    [
+                        'code' => '210',
+                        'description' => 'Payment adjusted because pre-certification/authorization not received in a timely fashion',
+                    ],
+                    [
+                        'code' => '211',
+                        'description' => 'National Drug Codes (NDC) not eligible for rebate, are not covered.',
+                    ],
+                    [
+                        'code' => '212',
+                        'description' => 'Administrative surcharges are not covered',
+                    ],
+                    [
+                        'code' => '213',
+                        'description' => 'Non-compliance with the physician self referral prohibition legislation or payer policy.',
+                    ],
+                    [
+                        'code' => '215',
+                        'description' => 'Based on subrogation of a third party settlement',
+                    ],
+                    [
+                        'code' => '216',
+                        'description' => 'Based on the findings of a review organization',
+                    ],
+                    [
+                        'code' => '219',
+                        'description' => 'Based on extent of injury. Usage: If adjustment is at the Claim Level, the payer must send and the provider should refer to the 835 Insurance Policy Number Segment (Loop 2100 Other Claim Related Information REF qualifier \'IG\') for the jurisdictional regulation. If adjustment is at the Line Level, the payer must send and the provider should refer to the 835 Healthcare Policy Identification Segment (loop 2110 Service Payment information REF).',
+                    ],
+                    [
+                        'code' => '222',
+                        'description' => 'Exceeds the contracted maximum number of hours/days/units by this provider for this period. This is not patient specific. Usage: Refer to the 835 Healthcare Policy Identification Segment (loop 2110 Service Payment Information REF), if present.',
+                    ],
+                    [
+                        'code' => '223',
+                        'description' => 'Adjustment code for mandated federal, state or local law/regulation that is not already covered by another code and is mandated before a new code can be created.',
+                    ],
+                    [
+                        'code' => '224',
+                        'description' => 'Patient identification compromised by identity theft. Identity verification required for processing this and future claims.',
+                    ],
+                    [
+                        'code' => '225',
+                        'description' => 'Penalty or Interest Payment by Payer (Only used for plan to plan encounter reporting within the 837)',
+                    ],
+                    [
+                        'code' => '226',
+                        'description' => 'Information requested from the Billing/Rendering Provider was not provided or not provided timely or was insufficient/incomplete. At least one Remark Code must be provided (may be comprised of either the NCPDP Reject Reason Code, or Remittance Advice Remark Code that is not an ALERT.)',
+                    ],
+                    [
+                        'code' => '227',
+                        'description' => 'Information requested from the patient/insured/responsible party was not provided or was insufficient/incomplete. At least one Remark Code must be provided (may be comprised of either the NCPDP Reject Reason Code, or Remittance Advice Remark Code that is not an ALERT.)',
+                    ],
+                    [
+                        'code' => '228',
+                        'description' => 'Denied for failure of this provider, another provider or the subscriber to supply requested information to a previous payer for their adjudication',
+                    ],
+                    [
+                        'code' => '229',
+                        'description' => 'Partial charge amount not considered by Medicare due to the initial claim Type of Bill being 12X. Usage: This code can only be used in the 837 transaction to convey Coordination of Benefits information when the secondary payer\'s cost avoidance policy allows providers to bypass claim submission to a prior payer. (Use only with Group Code PR)',
+                    ],
+                    [
+                        'code' => '231',
+                        'description' => 'Mutually exclusive procedures cannot be done in the same day/setting. Usage: Refer to the 835 Healthcare Policy Identification Segment (loop 2110 Service Payment Information REF), if present.',
+                    ],
+                    [
+                        'code' => '232',
+                        'description' => 'Institutional Transfer Amount. Usage: Applies to institutional claims only and explains the DRG amount difference when the patient care crosses multiple institutions.',
+                    ],
+                    [
+                        'code' => '233',
+                        'description' => 'Services/charges related to the treatment of a hospital-acquired condition or preventable medical error.',
+                    ],
+                    [
+                        'code' => '234',
+                        'description' => 'This procedure is not paid separately. At least one Remark Code must be provided (may be comprised of either the NCPDP Reject Reason Code, or Remittance Advice Remark Code that is not an ALERT.)',
+                    ],
+                    [
+                        'code' => '235',
+                        'description' => 'Sales Tax',
+                    ],
+                    [
+                        'code' => '236',
+                        'description' => 'This procedure or procedure/modifier combination is not compatible with another procedure or procedure/modifier combination provided on the same day according to the National Correct Coding Initiative or workers compensation state regulations/ fee schedule requirements.',
+                    ],
+                    [
+                        'code' => '237',
+                        'description' => 'Legislated/Regulatory Penalty. At least one Remark Code must be provided (may be comprised of either the NCPDP Reject Reason Code, or Remittance Advice Remark Code that is not an ALERT.)',
+                    ],
+                    [
+                        'code' => '238',
+                        'description' => 'Claim spans eligible and ineligible periods of coverage, this is the reduction for the ineligible period. (Use only with Group Code PR)',
+                    ],
+                    [
+                        'code' => '239',
+                        'description' => 'Claim spans eligible and ineligible periods of coverage. Rebill separate claims.',
+                    ],
+                    [
+                        'code' => '240',
+                        'description' => 'The diagnosis is inconsistent with the patient\'s birth weight. Usage: Refer to the 835 Healthcare Policy Identification Segment (loop 2110 Service Payment Information REF), if present.',
+                    ],
+                    [
+                        'code' => '241',
+                        'description' => 'Low Income Subsidy (LIS) Co-payment Amount',
+                    ],
+                    [
+                        'code' => '242',
+                        'description' => 'Services not provided by network/primary care providers.',
+                    ],
+                    [
+                        'code' => '243',
+                        'description' => 'Services not authorized by network/primary care providers.',
+                    ],
+                    [
+                        'code' => '245',
+                        'description' => 'Provider performance program withhold.',
+                    ],
+                    [
+                        'code' => '246',
+                        'description' => 'This non-payable code is for required reporting only.',
+                    ],
+                    [
+                        'code' => '247',
+                        'description' => 'Deductible for Professional service rendered in an Institutional setting and billed on an Institutional claim.',
+                    ],
+                    [
+                        'code' => '248',
+                        'description' => 'Coinsurance for Professional service rendered in an Institutional setting and billed on an Institutional claim.',
+                    ],
+                    [
+                        'code' => '249',
+                        'description' => 'This claim has been identified as a readmission. (Use only with Group Code CO)',
+                    ],
+                    [
+                        'code' => '250',
+                        'description' => 'The attachment/other documentation that was received was the incorrect attachment/document. The expected attachment/document is still missing. At least one Remark Code must be provided (may be comprised of either the NCPDP Reject Reason Code, or Remittance Advice Remark Code that is not an ALERT).',
+                    ],
+                    [
+                        'code' => '251',
+                        'description' => 'The attachment/other documentation that was received was incomplete or deficient. The necessary information is still needed to process the claim. At least one Remark Code must be provided (may be comprised of either the NCPDP Reject Reason Code, or Remittance Advice Remark Code that is not an ALERT).',
+                    ],
+                    [
+                        'code' => '252',
+                        'description' => 'An attachment/other documentation is required to adjudicate this claim/service. At least one Remark Code must be provided (may be comprised of either the NCPDP Reject Reason Code, or Remittance Advice Remark Code that is not an ALERT).',
+                    ],
+                    [
+                        'code' => '253',
+                        'description' => 'Sequestration - reduction in federal payment',
+                    ],
+                    [
+                        'code' => '254',
+                        'description' => 'Claim received by the dental plan, but benefits not available under this plan. Submit these services to the patient\'s medical plan for further consideration.',
+                    ],
+                    [
+                        'code' => '256',
+                        'description' => 'Service not payable per managed care contract.',
+                    ],
+                    [
+                        'code' => '257',
+                        'description' => 'The disposition of the claim/service is undetermined during the premium payment grace period, per Health Insurance Exchange requirements. This claim/service will be reversed and corrected when the grace period ends (due to premium payment or lack of premium payment). (Use only with Group Code OA)',
+                    ],
+                    [
+                        'code' => '258',
+                        'description' => 'Claim/service not covered when patient is in custody/incarcerated. Applicable federal, state or local authority may cover the claim/service.',
+                    ],
+                    [
+                        'code' => '259',
+                        'description' => 'Additional payment for Dental/Vision service utilization.',
+                    ],
+                    [
+                        'code' => '260',
+                        'description' => 'Processed under Medicaid ACA Enhanced Fee Schedule',
+                    ],
+                    [
+                        'code' => '261',
+                        'description' => 'The procedure or service is inconsistent with the patient\'s history.',
+                    ],
+                    [
+                        'code' => '262',
+                        'description' => 'Adjustment for delivery cost. Usage: To be used for pharmaceuticals only.',
+                    ],
+                    [
+                        'code' => '263',
+                        'description' => 'Adjustment for shipping cost. Usage: To be used for pharmaceuticals only.',
+                    ],
+                    [
+                        'code' => '264',
+                        'description' => 'Adjustment for postage cost. Usage: To be used for pharmaceuticals only.',
+                    ],
+                    [
+                        'code' => '265',
+                        'description' => 'Adjustment for administrative cost. Usage: To be used for pharmaceuticals only.',
+                    ],
+                    [
+                        'code' => '266',
+                        'description' => 'Adjustment for compound preparation cost. Usage: To be used for pharmaceuticals only.',
+                    ],
+                    [
+                        'code' => '267',
+                        'description' => 'Claim/service spans multiple months. At least one Remark Code must be provided (may be comprised of either the NCPDP Reject Reason Code, or Remittance Advice Remark Code that is not an ALERT.)',
+                    ],
+                    [
+                        'code' => '268',
+                        'description' => 'The Claim spans two calendar years. Please resubmit one claim per calendar year.',
+                    ],
+                    [
+                        'code' => '269',
+                        'description' => 'Anesthesia not covered for this service/procedure. Usage: Refer to the 835 Healthcare Policy Identification Segment (loop 2110 Service Payment Information REF), if present.',
+                    ],
+                    [
+                        'code' => '270',
+                        'description' => 'Claim received by the medical plan, but benefits not available under this plan. Submit these services to the patient\'s dental plan for further consideration.',
+                    ],
+                    [
+                        'code' => '271',
+                        'description' => 'Prior contractual reductions related to a current periodic payment as part of a contractual payment schedule when deferred amounts have been previously reported. (Use only with Group Code OA)',
+                    ],
+                    [
+                        'code' => '272',
+                        'description' => 'Coverage/program guidelines were not met.',
+                    ],
+                    [
+                        'code' => '273',
+                        'description' => 'Coverage/program guidelines were exceeded.',
+                    ],
+                    [
+                        'code' => '274',
+                        'description' => 'Fee/Service not payable per patient Care Coordination arrangement.',
+                    ],
+                ],
+            ],
         ];
 
         $appealRules = "5 things to know when filing an appeal
@@ -1755,8 +2605,8 @@ class TypeCatalogSeeder extends Seeder
 
         foreach ($types as $type) {
             $typeC = Type::updateOrCreate(
-                ['description' => $type['description']],
-                ['description' => $type['description']]
+                ['description' => Str::limit($type['description'], 250)],
+                ['description' => Str::limit($type['description'], 250)]
             );
 
             if (isset($type['type_catalogs'])) {
@@ -1764,12 +2614,12 @@ class TypeCatalogSeeder extends Seeder
                     $catalog = TypeCatalog::updateOrCreate(
                         [
                             'code' => $typeCatalog['code'],
-                            'description' => $typeCatalog['description'],
+                            'description' => Str::limit($typeCatalog['description'], 250),
                             'type_id' => $typeC->id,
                         ],
                         [
                             'code' => $typeCatalog['code'],
-                            'description' => $typeCatalog['description'],
+                            'description' => Str::limit($typeCatalog['description'], 250),
                         ]
                     );
 

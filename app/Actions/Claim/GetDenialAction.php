@@ -35,7 +35,7 @@ final class GetDenialAction
                     $options['sort'] = [$request->sortBy.':'.Pagination::sortDesc()];
                 }
 
-                $options['filter'] = collect(['transmited = true'])
+                $options['filter'] = collect(['transmitted = true'])
                     ->when(isset($request->filter), function ($collection) use ($request) {
                         $collection->push($request->filter);
                     })
