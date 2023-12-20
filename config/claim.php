@@ -121,7 +121,7 @@ return [
                 ],
             ],
         ],
-        '1a' => [
+        '1.a' => [
             'properties' => [
                 'fontFamily' => 'helvetica',
                 'fontSize' => '9px',
