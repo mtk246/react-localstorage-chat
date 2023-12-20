@@ -77,7 +77,7 @@ return [
             ],
         ],
     ],
-    '1a' => [
+    '1.a' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Higher insurance policy number',
         'value' => ['name' => 'Higher insurance policy number', 'id' => 'higherOrderPolicy:policy_number'],
