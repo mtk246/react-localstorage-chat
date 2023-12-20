@@ -7,10 +7,12 @@ namespace App\Http\Resources\Claim;
 use App\Enums\ClaimStatusMap;
 use App\Enums\InterfaceType;
 use App\Http\Resources\HealthProfessional\HealthProfessionalResource;
+use App\Http\Resources\Payments\EobResource;
 use App\Models\Claims\ClaimStatus;
 use App\Models\Claims\ClaimSubStatus;
 use App\Models\Claims\DenialRefile;
 use App\Models\Claims\DenialTracking;
+use App\Models\Payments\Eob;
 use App\Models\RefileReason;
 use App\Models\TypeForm;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -32,6 +34,8 @@ final class DenialBodyResource extends JsonResource
             ->get()
             ->setVisible(['id', 'name'])
             ->toArray() ?? [];
+
+        $eobs = Eob::where('payment_id', $this->resource->id)->get();
 
         return [
             'id' => $this->resource->id,
@@ -96,15 +100,7 @@ final class DenialBodyResource extends JsonResource
             'denial_refile' => $this->resource->getDenialRefile(),
             'denial_refile_detail' => $this->getDenialRefileDetailsMap(),
             'refile_reasons' => $this->getRefileReasons(),
-            'eob' => [
-                [
-                    'filename' => '',
-                    'dos' => $this->getDateOfServiceAttribute(),
-                    'payment' => [],
-                    'associated_batch' => [],
-                    'insurance_plan' => [],
-                ],
-            ],
+            'eob' => EobResource::collection($eobs),
         ];
     }
 
