@@ -612,6 +612,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/codes', [BatchResource::class, 'getCodes'])->name('payments.codes');
         Route::get('/eob/{eob_file}', [BatchResource::class, 'showEob'])->name('payments.eob.show');
         Route::get('/batch/{batch}/close', [BatchResource::class, 'close'])->name('batch.close');
+        Route::get('/batch/{batch}/eobs', [BatchResource::class, 'getEobs'])->name('batch.eobs');
         Route::post('/batch/{batch}/claims', [BatchResource::class, 'storeClaims'])->name('batch.claims');
         Route::post('/batch/{batch}/services', [BatchResource::class, 'storeServices'])->name('batch.services');
         Route::resource('batch', BatchResource::class)->only(['index', 'store', 'show', 'update', 'destroy'])->name('batch', 'payments.batch');
