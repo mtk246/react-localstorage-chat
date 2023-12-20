@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Payments;
 
+use App\Http\Resources\Payments\EobPaymentResource;
 use App\Actions\Payments\GetBatchAction;
 use App\Actions\Payments\StoreBachAction;
 use App\Actions\Payments\UpdateBachAction;
@@ -14,6 +15,7 @@ use App\Http\Requests\Payments\StoreBatchRequest;
 use App\Actions\Payments\AddClaimsToBachAction;
 use App\Actions\Payments\AddServicesToBachAction;
 use App\Enums\Payments\BatchStateType;
+use App\Facades\Pagination;
 use App\Http\Requests\Payments\AddClaimToBatchRequest;
 use App\Http\Requests\Payments\AddServicesToBatchRequest;
 use App\Http\Resources\Enums\ColorsTypeResource;
@@ -79,6 +81,18 @@ final class BatchResource extends Controller
         return response()->json(TypeCatalog::query()->whereHas('type', function ($q) {
             $q->where('description', 'Claim adjustment reason code');
         })->get(['id', 'code', 'description']));
+    }
+
+    public function getEobs(Batch $batch): JsonResponse
+    {
+        $this->authorize('view', $batch);
+
+        return response()->json(EobPaymentResource::collection(
+            $batch->eobs()
+                ->get()
+                /*->orderBy(Pagination::sortBy(), Pagination::sortDesc())
+                ->paginate(Pagination::itemsPerPage())*/
+        ));
     }
 
     public function showEob(Eob $eobFile)
