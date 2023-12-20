@@ -19,11 +19,8 @@ final class StoreBachAction
     {
         return DB::transaction(function () use ($request): BatchResource {
             return new BatchResource(tap(Batch::query()->create($request->getBatchData()), function (Batch $batch) use ($request): void {
-                $request->getPaymentsData()->each(function (PaymentWrapper $paymentRequest) use ($batch): void {
-                    $paymentData = array_merge($paymentRequest->getPaymentdata(), [
-                        'payment_batch_id' => $batch->id,
-                    ]);
-                    $payment = Payment::query()->create($paymentData);
+                $request->getPaymentsData()->each(function (PaymentWrapper $paymentRequest, int $key) use ($batch): void {
+                    $payment = Payment::query()->create($paymentRequest->getPaymentdata($batch->id, $key));
 
                     if (MethodType::CREDIT_CARD === $paymentRequest->getMethod()) {
                         $payment->card()->create($paymentRequest->getCardData());
