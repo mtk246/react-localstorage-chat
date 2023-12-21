@@ -88,10 +88,7 @@ final class BatchResource extends Controller
         $this->authorize('view', $batch);
 
         return response()->json(EobPaymentResource::collection(
-            $batch->eobs()
-                ->get()
-                /*->orderBy(Pagination::sortBy(), Pagination::sortDesc())
-                ->paginate(Pagination::itemsPerPage())*/
+            $batch->eobs()->orderBy(Pagination::sortBy(), Pagination::sortDesc())->paginate(Pagination::itemsPerPage())
         ));
     }
 
