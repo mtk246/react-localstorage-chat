@@ -81,7 +81,7 @@ final class Eob extends Model
 
     public function payment(): BelongsTo
     {
-        return $this->BelongsTo(Payment::class);
+        return $this->belongsTo(Payment::class);
     }
 
     public function claimsMany(): HasMany
