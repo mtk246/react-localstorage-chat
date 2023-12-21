@@ -12,13 +12,21 @@ final class UpdateClaimRuleAction
 {
     public function invoke(Rules $rules, UpdateRulesWrapper $rulesWrapper): RuleResource
     {
+        if ($rulesWrapper->hasChangeStatus()) {
+            $rules->update([
+                'active' => $rulesWrapper->getActive(),
+            ]);
+
+            return new RuleResource($rules->refresh());
+        }
+
         $rules->update($rulesWrapper->getRuleData());
 
         if ($rulesWrapper->hasResponsibilities()) {
-            $rulesWrapper->getResponsibilities()->each(function ($responsibility) use ($rules) {
-                $rules->typesOfResponsibilities()->attach($responsibility);
-            });
+            $rules->typesOfResponsibilities()->sync($rulesWrapper->getResponsibilities()->toArray());
         }
+
+        $rules->insurancePlans()->sync($rulesWrapper->getInsurancePlans());
 
         return new RuleResource($rules->refresh());
     }

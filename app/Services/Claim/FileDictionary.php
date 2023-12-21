@@ -390,14 +390,15 @@ final class FileDictionary extends Dictionary
 
     protected function getFirstClaimServiceAttribute(string $key): string
     {
-        return Carbon::createFromFormat(
-            'Y-m-d',
-            $this->claim
-                ->service
-                ?->services()
-                ?->first()
-                ?->{$key} ?? ''
-        )->format('m/d/Y');
+        $key = $this->claim
+            ->service
+            ?->services()
+            ?->first()
+            ?->{$key} ?? '';
+
+        return !empty($key)
+            ? Carbon::createFromFormat('Y-m-d', $key)->format('m/d/Y')
+            : '';
     }
 
     protected function getClaimProfessionalServicesAttribute(string $key): Collection
@@ -599,8 +600,8 @@ final class FileDictionary extends Dictionary
         $value = (string) $this->claim
             ->demographicInformation
             ->facility
-            ->addresses
-            ->get((int) $entry)
+            ?->addresses
+            ?->get((int) $entry)
             ?->{$key};
 
         return match ($key) {

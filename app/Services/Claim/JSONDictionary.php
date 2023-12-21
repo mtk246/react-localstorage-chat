@@ -30,9 +30,9 @@ final class JSONDictionary extends Dictionary
         );
     }
 
-    protected function getSingleArrayFormat(string $value): array
+    protected function getSingleArrayFormat(object $value): array
     {
-        return array_filter_recursive($this->getSingleFormat($value)->toArray());
+        return array_filter_recursive($this->getSingleFormat($value->id)->toArray());
     }
 
     protected function getClaimAttribute(string $key): string|Collection|null
