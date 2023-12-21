@@ -11,7 +11,6 @@ final class DuplicityContractValidation implements Rule
 {
     public function passes($attribute, $value): bool
     {
-        $filterInsurancePlanIds = $this->hasDuplicateArrayIds($value, 'insurance_plan_ids');
         $filterModifierIds = $this->hasDuplicateArrayIds($value, 'modifier_ids');
         $filterProcedureIds = $this->hasDuplicateArrayIds($value, 'procedure_ids');
 
@@ -19,7 +18,7 @@ final class DuplicityContractValidation implements Rule
         $duplicateFound = $this->hasDuplicateBillingAndTypeIds($value);
 
         // if no duplicity found, go to validate overlapping dates
-        if ($filterInsurancePlanIds && $filterModifierIds && $filterProcedureIds && $duplicateFound) {
+        if ($filterModifierIds && $filterProcedureIds && $duplicateFound) {
             if ($this->hasOverlappingDates($value)) {
                 return false;
             }
@@ -57,7 +56,7 @@ final class DuplicityContractValidation implements Rule
         $contractFeesCollection = collect($contractFees);
 
         $duplicates = $contractFeesCollection->groupBy(function ($item) {
-            return $item['billing_company_id'].'-'.$item['type_id'];
+            return $item['billing_company_id'].'-'.$item['type_id'].'-'.$item['company_id'];
         })->filter(function ($group) {
             return $group->count() > 1;
         });
