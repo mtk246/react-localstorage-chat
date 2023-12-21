@@ -30,8 +30,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property array|null $parameters
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property bool $active
- * @property string|null $note
+ * @property int|null $insurance_plan_id
  * @property BillingCompany|null $billingCompany
  * @property Collection<int, InsurancePlan> $insurancePlans
  * @property int|null $insurance_plans_count
@@ -42,14 +41,13 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Rules newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Rules newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Rules query()
- * @method static \Illuminate\Database\Eloquent\Builder|Rules whereActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereFormat($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rules whereInsurancePlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rules whereNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereParameters($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereRules($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereUpdatedAt($value)

@@ -10,13 +10,12 @@ final class ExistModifierRevenueValidation implements Rule
 {
     public function passes($attribute, $value)
     {
-        foreach ($value as $item) {
-            $modifierId = $item['modifier_id'] ?? null;
-            $revenueCodeId = $item['revenue_code_id'] ?? null;
+        $services = collect($value)->filter(
+            fn ($item) => isset($item['procedure_id']) && isset($item['revenue_code_id']) && isset($item['modifier_id'])
+        );
 
-            if ((!is_null($modifierId) && !is_null($revenueCodeId)) || (is_null($modifierId) && is_null($revenueCodeId))) {
-                return false;
-            }
+        if (!$services->isEmpty()) {
+            return false;
         }
 
         return true;
