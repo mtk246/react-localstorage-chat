@@ -94,7 +94,7 @@ final class BatchResource extends Controller
 
     public function showEob(Eob $eobFile)
     {
-        return response()->file($eobFile->file_name);
+        return response()->file(storage_path('app/eobs/'.$eobFile->file_name));
     }
 
     public function close(Batch $batch): JsonResponse
