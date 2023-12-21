@@ -8,6 +8,7 @@
 - [Get eob file view](#get-eob-file)
 - [Get all batches](#get-all-batch)
 - [Get single batch](#get-single-batch)
+- [Get batch eobs](#get-batch-eobs)
 
 
 <a name="basic-data"></a>
@@ -23,6 +24,7 @@
 |5|GET|`Get eob file view`|`/payments/eob/{eob_file}`|yes|this is the view for the eob file|
 |6|GET|`Get all batches`|`/payments/batch`|yes|Get list of all payments batches|
 |7|GET|`Get single batch`|`/payments/batch/{batch_id}`|yes|Get all of batch information|
+|8|GET|`Get batch eobs`|`/payments/batch/{batch_id}/eobs`|yes|Get all eobs of batch|
 
 >{primary} when url params have this symbol "?" mean not required, so you must to send null
 
@@ -433,4 +435,57 @@
     "addresses": [...]
   }
 }
+```
+
+<a name="get-batch-eobs"></a>
+## Get all eobs of batch
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+### Param in path
+
+```json
+{
+    "sortBy":       <string>
+    "sortDesc":     <boolean>
+}
+```
+
+## Response
+
+> {success} 200 data retorned
+
+#
+```json
+[
+  {
+    "id": 2,
+    "name": "test",
+    "date": "2015-10-05T00:00:00.000000Z",
+    "file_name": "",
+    "file_url": null,
+    "payment_amount": "250.00",
+    "payment_reference": null,
+    "payment_order": null,
+    "insurance_plan_name": "Connect 1500 Gold"
+  },
+  {
+    "id": 13,
+    "name": "test store eob",
+    "date": "1992-10-22T00:00:00.000000Z",
+    "file_name": "",
+    "file_url": null,
+    "payment_amount": "250.00",
+    "payment_reference": null,
+    "payment_order": null,
+    "insurance_plan_name": "Connect 1500 Gold"
+  },
+  ...
+]
 ```
