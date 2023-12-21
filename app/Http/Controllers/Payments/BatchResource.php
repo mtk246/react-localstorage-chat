@@ -50,9 +50,9 @@ final class BatchResource extends Controller
         return response()->json($update->invoke($batch, $request->casted()));
     }
 
-    public function destroy(Request $request): JsonResponse
+    public function destroy(Batch $batch): JsonResponse
     {
-        return response()->json();
+        return response()->json($batch->delete());
     }
 
     public function getStates(): JsonResponse
