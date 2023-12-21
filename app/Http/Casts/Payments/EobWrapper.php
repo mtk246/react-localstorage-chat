@@ -18,7 +18,7 @@ final class EobWrapper extends CastsRequest
         return [
             'name' => $this->get('name'),
             'date' => $this->get('date'),
-            'file_name' => $this->getFileName(),
+            'file_name' => $this->getFileName() ?? '',
         ];
     }
 
@@ -51,6 +51,6 @@ final class EobWrapper extends CastsRequest
 
         $file->store('eobs');
 
-        return $this->get('file_name');
+        return $file->hashName();
     }
 }
