@@ -24,20 +24,33 @@ final class EobWrapper extends CastsRequest
 
     public function getUpdateData(int $paymentId): array
     {
-        return [
+        $data = [
             'name' => $this->get('name'),
             'date' => $this->get('date'),
-            'file_name' => $this->getFileName(),
             'payment_id' => $this->get('payment_id', $paymentId),
         ];
+
+        $file = $this->getFileName();
+
+        if ($file) {
+            $data['file_name'] = $file;
+        }
+
+        return $data;
     }
 
-    public function getFileName(): string
+    public function getFileName(): ?string
     {
         $allowedfileExtension = ['pdf', 'jpg', 'jpeg', 'png'];
 
         $file = $this->getFileByName('files', $this->get('file_name') ?? '', $allowedfileExtension);
 
-        return $file ? $file->store('eobs') : '';
+        if (is_null($file)) {
+            return null;
+        }
+
+        $file->store('eobs');
+
+        return $this->get('file_name');
     }
 }
