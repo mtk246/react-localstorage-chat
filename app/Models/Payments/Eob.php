@@ -17,7 +17,7 @@ use Illuminate\Support\Collection;
  *
  * @property int $id
  * @property string $name
- * @property \Illuminate\Support\Carbon $date
+ * @property \Illuminate\Support\Carbon|null $date
  * @property string $file_name
  * @property int $payment_id
  * @property \Illuminate\Support\Carbon|null $created_at
