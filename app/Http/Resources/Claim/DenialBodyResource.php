@@ -36,12 +36,12 @@ final class DenialBodyResource extends JsonResource
             ->setVisible(['id', 'name'])
             ->toArray() ?? [];
 
-        $eobs = Eob::with('payments')->where('payment_id', $this->resource->id)->get();
+        $eobs = Eob::with('payment')->where('payment_id', $this->resource->id)->get();
 
         $eobDetails = $eobs->map(function ($eob) {
             return [
                 'eob' => EobResource::make($eob),
-                'payment' => PaymentResource::make($eob->payments),
+                'payment' => PaymentResource::make($eob->payment),
             ];
         });
 
