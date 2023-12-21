@@ -68,7 +68,7 @@ final class Eob extends Model
     public function getFileUrlAttribute(): ?string
     {
         return $this->file_name && !empty($this->file_name)
-            ? route('payments.eob.show', ['eob_file' => $this->file_name])
+            ? route('payments.eobs.show', ['eob_file' => $this->file_name])
             : null;
     }
 
