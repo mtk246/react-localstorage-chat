@@ -507,7 +507,7 @@ class InsuranceCompanyRepository
             if (Gate::check('is-admin')) {
                 $billingCompany = $data['billing_company_id'] ?? null;
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()?->billingCompanies->first();
             }
 
             return getList(
@@ -592,7 +592,7 @@ class InsuranceCompanyRepository
 
     public function changeStatus(bool $status, int $id)
     {
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()?->billingCompanies->first();
         if (is_null($billingCompany)) {
             return null;
         }
@@ -743,7 +743,7 @@ class InsuranceCompanyRepository
             return null;
         }
 
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()?->billingCompanies->first();
         if (is_null($billingCompany)) {
             return null;
         }

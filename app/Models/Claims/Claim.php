@@ -15,6 +15,7 @@ use App\Models\PrivateNote;
 use App\Models\User;
 use App\Traits\Claim\ClaimFile;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -60,7 +62,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property mixed $date_of_service
  * @property mixed $last_modified
  * @property mixed $past_due_date
- * @property \Illuminate\Database\Eloquent\Casts\Attribute $private_note
+ * @property Attribute $private_note
  * @property mixed $status_date
  * @property mixed $user_created
  * @property \Illuminate\Database\Eloquent\Collection<int, InsurancePolicy> $insurancePolicies
@@ -115,6 +117,32 @@ class Claim extends Model implements Auditable
         'last_modified', 'private_note', 'billed_amount', 'amount_paid',
         'past_due_date', 'date_of_service', 'status_date', 'user_created',
     ];
+
+    /**
+     * Get the user's first name.
+     */
+    protected function code(): Attribute
+    {
+        return Attribute::make(
+            get: function (string $value) {
+                $abbreviationCompany = $this->demographicInformation->company?->abbreviations()
+                    ->where('billing_company_id', $this->billing_company_id)
+                    ->first()
+                    ?->abbreviation ?? '';
+                $patientProfile = $this->demographicInformation->patient?->profile;
+
+                return (!empty($abbreviationCompany)
+                    ? $abbreviationCompany.'-'
+                    : '')
+                    .(!empty($this->date_of_service)
+                        ? Carbon::createFromFormat('Y-m-d', $this->date_of_service)?->format('mdY').'-'
+                        : '')
+                    .(!empty($patientProfile)
+                        ? Str::upper(Str::substr($patientProfile->first_name, 0, 1).''.Str::substr($patientProfile->last_name, 0, 1))
+                        : '').Str::padLeft($this->id, 6, '0');
+            },
+        );
+    }
 
     /**
      * The insurance policies that belong to the Claim.
@@ -535,5 +563,47 @@ class Claim extends Model implements Auditable
     public function getDenialRefile()
     {
         return $this->hasMany(DenialRefile::class, 'claim_id')->with('refileReason')->get();
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'code' => $this->code,
+            'type' => $this->type->getName(),
+            'format' => $this->type->getCode(),
+            'submitter_name' => $this->submitter_name,
+            'submitter_contact' => $this->submitter_contact,
+            'submitter_phone' => $this->submitter_phone,
+            'billing_company' => $this->billingCompany->only(['code', 'name', 'abbreviation']),
+            'billing_company.code' => $this->billingCompany->code,
+            'billing_company.name' => $this->billingCompany->name,
+            'billing_company.abbreviation' => $this->billingCompany->abbreviation,
+            'aditional_information' => $this->aditional_information,
+            'icon' => $this->billingCompany->logo,
+            'last_modified' => $this->last_modified,
+            'billed_amount' => $this->billed_amount,
+            'amount_paid' => $this->amount_paid,
+            'past_due_date' => $this->past_due_date,
+            'date_of_service' => $this->date_of_service,
+            'company.name' => $this->demographicInformation->company->name,
+            'company.abbreviation' => $this->demographicInformation->company->abbreviations
+                ->where('billing_company_id', $this->billing_company_id)
+                ->first()
+                ?->abbreviation,
+            'patient' => $this->demographicInformation->patient->profile->only(['first_name', 'last_name', 'ssn']),
+            'health_professionals' => $this->demographicInformation->healthProfessionals,
+            'insurance_plan' => $this->higherInsurancePlan(),
+            'transmitted' => $this->claimTransmissionResponses->count() > 0,
+            'status' => $this->status()
+                ->orderBy('claim_status_claim.id', 'desc')
+                ->first()
+                ?->status,
+            'sub_status' => $this->subStatus()
+                ->orderBy('claim_status_claim.id', 'desc')
+                ->first()
+                ?->status,
+            'user_created' => $this->user_created,
+        ];
     }
 }

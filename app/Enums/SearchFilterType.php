@@ -24,4 +24,6 @@ enum SearchFilterType: string
     case MODIFIER = 'modifier';
     case USER = 'user';
     case CLEARING_HOUSE = 'clearing_house';
+    case PAYMENT_BATCH = 'payment_batch';
+    case DENIAL_TRACKING = 'denial_tracking';
 }

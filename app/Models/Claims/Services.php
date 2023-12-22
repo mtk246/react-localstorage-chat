@@ -10,6 +10,8 @@ use App\Models\TypeCatalog;
 use App\Models\TypeOfService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\Claims\Services.
@@ -33,6 +35,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $family_planning_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  * @property \App\Models\Claims\ClaimService|null $claimService
  * @property TypeCatalog|null $epsdt
  * @property TypeCatalog|null $familyPlanning
@@ -67,9 +71,10 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
-final class Services extends Model
+final class Services extends Model implements Auditable
 {
     use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
         'from_service',

@@ -89,3 +89,9 @@
 - ## Reports
     - [get report data](/{{route}}/{{version}}/reports/get)
     - [update report](/{{route}}/{{version}}/reports/update)
+    - [Oauth](/{{route}}/{{version}}/tableau/oauth)
+
+- ## Payments
+    - [eobs](/{{route}}/{{version}}/payments/eobs)
+    - [getters](/{{route}}/{{version}}/payments/getters)
+    - [setters](/{{route}}/{{version}}/payments/setters)

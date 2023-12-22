@@ -225,7 +225,7 @@ class Facility extends Model implements Auditable
     */
     public function getStatusAttribute()
     {
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()?->billingCompanies->first();
         if (is_null($billingCompany)) {
             return false;
         }

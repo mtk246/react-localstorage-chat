@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\morphMany;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\Claims\ClaimStatus.
@@ -18,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\morphMany;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $background_color
  * @property string|null $font_color
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
  * @property int|null $claim_status_claims_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimSubStatus> $claimSubStatuses
@@ -35,9 +39,10 @@ use Illuminate\Database\Eloquent\Relations\morphMany;
  *
  * @mixin \Eloquent
  */
-final class ClaimStatus extends Model
+final class ClaimStatus extends Model implements Auditable
 {
     use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
         'status', 'background_color', 'font_color',

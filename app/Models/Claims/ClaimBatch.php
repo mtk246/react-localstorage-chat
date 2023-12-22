@@ -47,6 +47,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereClaimBatchStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimBatch whereClaimsReconciled($value)
@@ -137,7 +138,15 @@ final class ClaimBatch extends Model implements Auditable
         $data = $this->claims()->whereHas('claimStatusClaims', function ($query) use ($statuses) {
             $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
                 ->whereIn('claim_status_claim.claim_status_id', $statuses)
-                ->whereRaw('claim_status_claim.created_at = (SELECT MAX(created_at) FROM claim_status_claim WHERE claim_status_claim.claim_id = claims.id)');
+                ->whereRaw(
+                    'claim_status_claim.created_at = (
+                        SELECT MAX(created_at)
+                        FROM claim_status_claim
+                        WHERE claim_status_claim.claim_id = claims.id AND claim_status_claim.claim_status_type = ?)',
+                    [
+                        ClaimStatus::class,
+                    ]
+                );
         });
 
         return count($data->get());
@@ -150,32 +159,130 @@ final class ClaimBatch extends Model implements Auditable
 
     public function getTotalAcceptedAttribute()
     {
-        return 0;
+        $statuses = ClaimStatus::where('status', 'Approved')
+            ->orWhere('status', 'Submitted')
+            ->get()->pluck('id')->toArray();
+        $data = $this->claims()->whereHas('claimStatusClaims', function ($query) use ($statuses) {
+            $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                ->whereIn('claim_status_claim.claim_status_id', $statuses)
+                ->whereRaw(
+                    'claim_status_claim.created_at = (
+                        SELECT MAX(created_at)
+                        FROM claim_status_claim
+                        WHERE claim_status_claim.claim_id = claims.id AND claim_status_claim.claim_status_type = ?)',
+                    [
+                        ClaimStatus::class,
+                    ]
+                );
+        });
+
+        return count($data->get());
     }
 
     public function getTotalDeniedAttribute()
     {
-        return 0;
+        $statuses = ClaimStatus::where('status', 'Rejected')
+            ->get()->pluck('id')->toArray();
+        $data = $this->claims()->whereHas('claimStatusClaims', function ($query) use ($statuses) {
+            $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                ->whereIn('claim_status_claim.claim_status_id', $statuses)
+                ->whereRaw(
+                    'claim_status_claim.created_at = (
+                        SELECT MAX(created_at)
+                        FROM claim_status_claim
+                        WHERE claim_status_claim.claim_id = claims.id AND claim_status_claim.claim_status_type = ?)',
+                    [
+                        ClaimStatus::class,
+                    ]
+                );
+        });
+
+        return count($data->get());
     }
 
     public function getTotalAcceptedByClearingHouseAttribute()
     {
-        return 0;
+        $statuses = ClaimStatus::where('status', 'Approved')
+            ->orWhere('status', 'Submitted')
+            ->get()->pluck('id')->toArray();
+        $data = $this->claims()->whereHas('claimStatusClaims', function ($query) use ($statuses) {
+            $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                ->whereIn('claim_status_claim.claim_status_id', $statuses)
+                ->whereRaw(
+                    'claim_status_claim.created_at = (
+                        SELECT MAX(created_at)
+                        FROM claim_status_claim
+                        WHERE claim_status_claim.claim_id = claims.id AND claim_status_claim.claim_status_type = ?)',
+                    [
+                        ClaimStatus::class,
+                    ]
+                );
+        });
+
+        return count($data->get());
     }
 
     public function getTotalDeniedByClearingHouseAttribute()
     {
-        return 0;
+        $statuses = ClaimStatus::where('status', 'Rejected')
+            ->get()->pluck('id')->toArray();
+        $data = $this->claims()->whereHas('claimStatusClaims', function ($query) use ($statuses) {
+            $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                ->whereIn('claim_status_claim.claim_status_id', $statuses)
+                ->whereRaw(
+                    'claim_status_claim.created_at = (
+                        SELECT MAX(created_at)
+                        FROM claim_status_claim
+                        WHERE claim_status_claim.claim_id = claims.id AND claim_status_claim.claim_status_type = ?)',
+                    [
+                        ClaimStatus::class,
+                    ]
+                );
+        });
+
+        return count($data->get());
     }
 
     public function getTotalAcceptedByPayerAttribute()
     {
-        return 0;
+        $statuses = ClaimStatus::where('status', 'Complete')
+            ->get()->pluck('id')->toArray();
+        $data = $this->claims()->whereHas('claimStatusClaims', function ($query) use ($statuses) {
+            $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                ->whereIn('claim_status_claim.claim_status_id', $statuses)
+                ->whereRaw(
+                    'claim_status_claim.created_at = (
+                        SELECT MAX(created_at)
+                        FROM claim_status_claim
+                        WHERE claim_status_claim.claim_id = claims.id AND claim_status_claim.claim_status_type = ?)',
+                    [
+                        ClaimStatus::class,
+                    ]
+                );
+        });
+
+        return count($data->get());
     }
 
     public function getTotalDeniedByPayerAttribute()
     {
-        return 0;
+        $statuses = ClaimStatus::where('status', 'Denied')
+            ->get()->pluck('id')->toArray();
+        $data = $this->claims()->whereHas('claimStatusClaims', function ($query) use ($statuses) {
+            $query->where('claim_status_claim.claim_status_type', ClaimStatus::class)
+                ->whereIn('claim_status_claim.claim_status_id', $statuses)
+                ->whereRaw(
+                    'claim_status_claim.created_at = (
+                        SELECT MAX(created_at)
+                        FROM claim_status_claim
+                        WHERE claim_status_claim.claim_id = claims.id AND claim_status_claim.claim_status_type = ?)',
+                    [
+                        ClaimStatus::class,
+                    ]
+                );
+        });
+
+        return count($data->get());
     }
 
     public function getclaimIdsAttribute()

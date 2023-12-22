@@ -8,12 +8,15 @@ use App\Enums\Claim\RuleFormatType;
 use App\Models\BillingCompany;
 use App\Models\InsurancePlan;
 use App\Models\TypeCatalog;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Scout\Searchable;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\Claims\Rules.
@@ -29,8 +32,9 @@ use Laravel\Scout\Searchable;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $insurance_plan_id
  * @property BillingCompany|null $billingCompany
- * @property InsurancePlan|null $insurancePlan
- * @property \Illuminate\Database\Eloquent\Collection<int, TypeCatalog> $typesOfResponsibilities
+ * @property Collection<int, InsurancePlan> $insurancePlans
+ * @property int|null $insurance_plans_count
+ * @property Collection<int, TypeCatalog> $typesOfResponsibilities
  * @property int|null $types_of_responsibilities_count
  *
  * @method static \Database\Factories\Claims\RulesFactory factory($count = null, $state = [])
@@ -50,9 +54,10 @@ use Laravel\Scout\Searchable;
  *
  * @mixin \Eloquent
  */
-final class Rules extends Model
+final class Rules extends Model implements Auditable
 {
     use HasFactory;
+    use AuditableTrait;
     use HasUlids;
     use Searchable;
 
@@ -63,15 +68,17 @@ final class Rules extends Model
         'format',
         'description',
         'billing_company_id',
-        'insurance_plan_id',
         'rules',
         'parameters',
+        'active',
+        'note',
     ];
 
     protected $casts = [
         'format' => RuleFormatType::class,
         'rules' => 'array',
         'parameters' => 'array',
+        'active' => 'boolean',
     ];
 
     public function billingCompany(): BelongsTo
@@ -79,14 +86,18 @@ final class Rules extends Model
         return $this->belongsTo(BillingCompany::class);
     }
 
-    public function insurancePlan(): BelongsTo
-    {
-        return $this->belongsTo(InsurancePlan::class);
-    }
-
     public function typesOfResponsibilities(): BelongsToMany
     {
         return $this->belongsToMany(TypeCatalog::class, 'claim_rule_type_responsibility', 'claim_rule_id', 'type_responsibility_id')->withTimestamps();
+    }
+
+    public function insurancePlans(): BelongsToMany
+    {
+        return $this->BelongsToMany(
+            InsurancePlan::class,
+            'claim_rule_insurance_plan',
+            'claim_rule_id',
+        )->withTimestamps();
     }
 
     public function toSearchableArray(): array
@@ -96,8 +107,8 @@ final class Rules extends Model
             'name' => $this->name,
             'description' => $this->description,
             'billing_company_id' => $this->billing_company_id,
-            'billing_company' => $this->billingCompany->only(['code', 'name', 'abbreviation']),
-            'insurance_plans' => $this->insurancePlan->only(['code', 'name', 'eff_date']),
+            'billing_company' => $this->billingCompany?->only(['code', 'name', 'abbreviation']),
+            'insurance_plans' => $this->insurancePlan?->only(['code', 'name', 'eff_date']),
         ];
     }
 }

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use App\Enums\SearchFilterType;
 use App\Models\BillingCompany;
-use App\Models\Claim;
+use App\Models\Claims\Claim;
+use App\Models\Claims\DenialRefile;
+use App\Models\Claims\DenialTracking;
 use App\Models\Claims\Rules;
 use App\Models\ClearingHouse;
 use App\Models\Company;
@@ -15,6 +17,7 @@ use App\Models\InsuranceCompany;
 use App\Models\InsurancePlan;
 use App\Models\Modifier;
 use App\Models\Patient;
+use App\Models\Payments\Batch as PaymentsBatch;
 use App\Models\Procedure;
 use App\Models\User;
 
@@ -34,6 +37,8 @@ return [
         SearchFilterType::MODIFIER->value => Modifier::class,
         SearchFilterType::USER->value => User::class,
         SearchFilterType::CLEARING_HOUSE->value => ClearingHouse::class,
+        SearchFilterType::PAYMENT_BATCH->value => PaymentsBatch::class,
+        SearchFilterType::DENIAL_TRACKING->value => DenialTracking::class,
     ],
     /*
     |--------------------------------------------------------------------------
@@ -169,18 +174,51 @@ return [
             BillingCompany::class => [
                 'filterableAttributes' => ['tax_id', 'name', 'code', 'abbreviation'],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Claim::class => [
                 'filterableAttributes' => [
-                    'control_number',
-                    'company.code',
+                    'id',
+                    'code',
+                    'type',
+                    'format',
+                    'submitter_name',
+                    'submitter_contact',
+                    'submitter_phone',
+                    'billing_company.code',
+                    'billing_company.name',
+                    'billing_company.abbreviation',
+                    'last_modified',
+                    'billed_amount',
+                    'amount_paid',
+                    'past_due_date',
+                    'date_of_service',
                     'company.name',
-                    'company.npi',
-                    'company.ein',
-                    'company.upin',
-                    'company.clia',
+                    'company.abbreviation',
+                    'transmitted',
+                    'status',
+                    'sub_status',
+                    'user_created',
                 ],
-                'sortableAttributes' => ['created_at'],
+                'sortableAttributes' => [
+                    'id',
+                    'code',
+                    'type',
+                    'format',
+                    'submitter_name',
+                    'submitter_contact',
+                    'submitter_phone',
+                    'billing_company.code',
+                    'billing_company.name',
+                    'billing_company.abbreviation',
+                    'company.name',
+                    'company.abbreviation',
+                    'transmitted',
+                    'status',
+                    'sub_status',
+                    'user_created',
+                ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Rules::class => [
                 'filterableAttributes' => [
@@ -200,6 +238,7 @@ return [
                     'billing_company',
                     'insurance_plans',
                 ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Company::class => [
                 'filterableAttributes' => [
@@ -225,6 +264,7 @@ return [
                     'ein',
                     'created_at',
                 ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Facility::class => [
                 'filterableAttributes' => [
@@ -244,6 +284,7 @@ return [
                     'npi',
                     'created_at',
                 ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             HealthProfessional::class => [
                 'filterableAttributes' => [
@@ -272,6 +313,7 @@ return [
                     'npi',
                     'created_at',
                 ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Patient::class => [
                 'filterableAttributes' => [
@@ -296,6 +338,7 @@ return [
                     'profile.date_of_birth',
                     'created_at',
                 ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             InsuranceCompany::class => [
                 'filterableAttributes' => [
@@ -307,6 +350,7 @@ return [
                     'addresses',
                 ],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             InsurancePlan::class => [
                 'filterableAttributes' => [
@@ -317,6 +361,7 @@ return [
                     'addresses',
                 ],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Procedure::class => [
                 'filterableAttributes' => [
@@ -330,6 +375,7 @@ return [
                     'clasifications',
                 ],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Diagnosis::class => [
                 'filterableAttributes' => [
@@ -340,6 +386,7 @@ return [
                     'public_note',
                 ],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Modifier::class => [
                 'filterableAttributes' => [
@@ -353,6 +400,7 @@ return [
                     'public_note',
                 ],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             User::class => [
                 'filterableAttributes' => [
@@ -366,6 +414,7 @@ return [
                     'profile.phone',
                 ],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             ClearingHouse::class => [
                 'filterableAttributes' => [
@@ -375,6 +424,135 @@ return [
                     'addresses',
                 ],
                 'sortableAttributes' => ['created_at'],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
+            ],
+            PaymentsBatch::class => [
+                'filterableAttributes' => [
+                    'name',
+                    'posting_date',
+                    'currency',
+                    'amount',
+                    'status',
+                    'payments',
+                    'created_at',
+                    'updated_at',
+                    'company.name',
+                    'company.code',
+                    'company.npi',
+                    'company.ein',
+                    'company.clia',
+                    'billing_company.id',
+                    'billing_company.name',
+                ],
+                'sortableAttributes' => [
+                    'name',
+                    'posting_date',
+                    'currency',
+                    'amount',
+                    'status',
+                    'payments',
+                    'company.name',
+                    'company.code',
+                    'billing_company.name',
+                    'created_at',
+                ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
+            ],
+            DenialRefile::class => [
+                'filterableAttributes' => [
+                    'refile_type',
+                    'policy_id',
+                    'is_cross_over',
+                    'cross_over_date',
+                    'note',
+                    'original_claim_id',
+                    'refile_reason',
+                    'claim_id',
+                    'private_note_id',
+                    'created_at',
+                    'updated_at',
+                    'refile_reason.description',
+                    'insurance_policy.policy_id',
+                    'insurance_policy.policy_number',
+                    'private_notes.id',
+                    'private_notes.note',
+                    'private_notes.billing_company_id',
+                    'private_notes.publishable_type',
+                    'private_notes.publishable_id',
+                    'claim.claim_number',
+                    'claim.status',
+                    'claim.sub_status',
+                ],
+                'sortableAttributes' => [
+                    'refile_type',
+                    'policy_id',
+                    'is_cross_over',
+                    'cross_over_date',
+                    'note',
+                    'original_claim_id',
+                    'refile_reason',
+                    'claim_id',
+                    'private_note_id',
+                    'refile_reason.description',
+                    'insurance_policy.policy_id',
+                    'insurance_policy.policy_number',
+                    'private_notes.id',
+                    'private_notes.note',
+                    'private_notes.billing_company_id',
+                    'private_notes.publishable_type',
+                    'private_notes.publishable_id',
+                    'claim.code',
+                ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
+            ],
+            DenialTracking::class => [
+                'filterableAttributes' => [
+                    'interface_type',
+                    'is_reprocess_claim',
+                    'is_contact_to_patient',
+                    'contact_through',
+                    'claim_number',
+                    'rep_name',
+                    'ref_number',
+                    'claim_status',
+                    'claim_sub_status',
+                    'created_at',
+                    'updated_at',
+                    'tracking_date',
+                    'resolution_time',
+                    'past_due_date',
+                    'follow_up',
+                    'department_responsible',
+                    'policy_responsible',
+                    'response_details',
+                    'private_note_id',
+                    'claim_id',
+                    'policy_id',
+                ],
+                'sortableAttributes' => [
+                    'interface_type',
+                    'is_reprocess_claim',
+                    'is_contact_to_patient',
+                    'contact_through',
+                    'claim_number',
+                    'rep_name',
+                    'ref_number',
+                    'claim_status',
+                    'claim_sub_status',
+                    'created_at',
+                    'updated_at',
+                    'tracking_date',
+                    'resolution_time',
+                    'past_due_date',
+                    'follow_up',
+                    'department_responsible',
+                    'policy_responsible',
+                    'response_details',
+                    'private_note_id',
+                    'claim_id',
+                    'policy_id',
+                ],
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
         ],
     ],

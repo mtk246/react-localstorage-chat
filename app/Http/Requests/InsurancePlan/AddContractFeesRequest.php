@@ -8,6 +8,8 @@ use App\Http\Casts\InsurancePlan\ContractFeesRequestCast;
 use App\Http\Requests\Traits\HasCastedClass;
 use App\Models\Modifier;
 use App\Models\Procedure;
+use App\Rules\InsurancePlan\CustomValidateExist;
+use App\Rules\InsurancePlan\DuplicityContractValidation;
 use App\Rules\IntegerOrArrayKeyExists;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -26,7 +28,7 @@ class AddContractFeesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'contract_fees' => ['nullable', 'array'],
+            'contract_fees' => ['nullable', 'array',  new DuplicityContractValidation()],
             'contract_fees.*.billing_company_id' => [
                 'nullable',
                 'integer',
@@ -35,7 +37,7 @@ class AddContractFeesRequest extends FormRequest
             'contract_fees.*.id' => [
                 'nullable',
                 'integer',
-                'exists:\App\Models\ContractFee,id',
+                new CustomValidateExist(),
             ],
             'contract_fees.*.company_id' => [
                 'nullable',
@@ -55,12 +57,10 @@ class AddContractFeesRequest extends FormRequest
             'contract_fees.*.start_date' => [
                 'nullable',
                 'date',
-                'before:contract_fees.*.end_date',
             ],
             'contract_fees.*.end_date' => [
                 'nullable',
                 'date',
-                'after:contract_fees.*.start_date',
             ],
             'contract_fees.*.mac' => ['nullable', 'string'],
             'contract_fees.*.locality_number' => ['nullable', 'numeric'],

@@ -33,7 +33,7 @@ class ClaimSubStatusRepository
                     $claimSubStatus->billingCompanies()->sync($data['billing_companies']);
                 }
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()?->billingCompanies->first();
                 $claimSubStatus->billingCompanies()->attach($billingCompany->id);
             }
 
@@ -53,7 +53,7 @@ class ClaimSubStatusRepository
             if (auth()->user()->hasRole('superuser')) {
                 $billingCompany = $id;
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()?->billingCompanies->first();
             }
             /**return getList(ClaimSubStatus::class, 'name', ['relationship' => 'billingCompanies', 'where' => ['billing_company_id' => $billingCompany->id ?? $billingCompany]]);*/
             return getList(ClaimSubStatus::class, 'name', ['relationship' => 'claimStatuses', 'where' => ['claim_status_id' => $status_id]], [$current_id]);
@@ -169,7 +169,7 @@ class ClaimSubStatusRepository
                     $claimSubStatus->billingCompanies()->sync($data['billing_companies']);
                 }
             } else {
-                $billingCompany = auth()->user()->billingCompanies->first();
+                $billingCompany = auth()->user()?->billingCompanies->first();
                 $claimSubStatus->billingCompanies()->attach($billingCompany->id);
             }
 
@@ -190,7 +190,7 @@ class ClaimSubStatusRepository
      */
     public function changeStatus(bool $status, int $id)
     {
-        $billingCompany = auth()->user()->billingCompanies->first();
+        $billingCompany = auth()->user()?->billingCompanies->first();
         if (is_null($billingCompany)) {
             return null;
         }
