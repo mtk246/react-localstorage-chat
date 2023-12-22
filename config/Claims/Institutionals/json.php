@@ -53,9 +53,8 @@ return [
             'name' => 'Submitter organization name',
         ],
         'values' => [
-            [
-                'id' => 'claim:submitter.organizationName',
-                'name' => 'Submitter organization name',
+            'common' => [
+                ['id' => 'claim:submitter.organizationName', 'name' => 'Submitter organization name'],
             ],
         ],
     ],
@@ -85,9 +84,8 @@ return [
             'name' => 'Submitter contact information name',
         ],
         'values' => [
-            [
-                'id' => 'claim:submitter.contactInformation.name',
-                'name' => 'Submitter contact information name',
+            'common' => [
+                ['id' => 'claim:submitter.contactInformation.name', 'name' => 'Submitter contact information name'],
             ],
         ],
     ],
@@ -99,9 +97,8 @@ return [
             'name' => 'Submitter contact information phone number',
         ],
         'values' => [
-            [
-                'id' => 'claim:submitter.contactInformation.phoneNumber',
-                'name' => 'Submitter contact information phone number',
+            'common' => [
+                ['id' => 'claim:submitter.contactInformation.phoneNumber', 'name' => 'Submitter contact information phone number'],
             ],
         ],
     ],
@@ -113,9 +110,8 @@ return [
             'name' => 'Submitter contact information fax number',
         ],
         'values' => [
-            [
-                'id' => 'claim:submitter.contactInformation.faxNumber',
-                'name' => 'Submitter contact information fax number',
+            'common' => [
+                ['id' => 'claim:submitter.contactInformation.faxNumber', 'name' => 'Submitter contact information fax number'],
             ],
         ],
     ],
@@ -127,9 +123,8 @@ return [
             'name' => 'Submitter contact information email',
         ],
         'values' => [
-            [
-                'id' => 'claim:submitter.contactInformation.email',
-                'name' => 'Submitter contact information email',
+            'common' => [
+                ['id' => 'claim:submitter.contactInformation.email', 'name' => 'Submitter contact information email'],
             ],
         ],
     ],
@@ -147,9 +142,8 @@ return [
             'name' => 'Receiver organization name',
         ],
         'values' => [
-            [
-                'id' => 'claim:receiver.organizationName',
-                'name' => 'Receiver organization name',
+            'common' => [
+                ['id' => 'claim:receiver.organizationName', 'name' => 'Receiver organization name'],
             ],
         ],
     ],
@@ -161,9 +155,8 @@ return [
             'name' => 'Subscriber member ID',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.memberId',
-                'name' => 'Subscriber member ID',
+            'common' => [
+                ['id' => 'claim:subscriber.memberId', 'name' => 'Subscriber member ID'],
             ],
         ],
     ],
@@ -175,9 +168,8 @@ return [
             'name' => 'Subscriber ssn',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.ssn',
-                'name' => 'Subscriber ssn',
+            'common' => [
+                ['id' => 'claim:subscriber.ssn',  'name' => 'Subscriber ssn'],
             ],
         ],
     ],
@@ -189,9 +181,8 @@ return [
             'name' => 'Subscriber payment responsibility level code',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.paymentResponsibilityLevelCode',
-                'name' => 'Subscriber payment responsibility level code',
+            'common' => [
+                ['id' => 'claim:subscriber.paymentResponsibilityLevelCode',  'name' => 'Subscriber payment responsibility level code'],
             ],
         ],
     ],
@@ -221,9 +212,8 @@ return [
             'name' => 'Subscriber first name',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.firstName',
-                'name' => 'Subscriber first name',
+            'common' => [
+                ['id' => 'claim:subscriber.firstName',  'name' => 'Subscriber first name'],
             ],
         ],
     ],
@@ -235,9 +225,8 @@ return [
             'name' => 'Subscriber last name',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.lastName',
-                'name' => 'Subscriber last name',
+            'common' => [
+                ['id' => 'claim:subscriber.lastName',  'name' => 'Subscriber last name'],
             ],
         ],
     ],
@@ -249,9 +238,8 @@ return [
             'name' => 'Subscriber middle name',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.middleName',
-                'name' => 'Subscriber middle name',
+            'common' => [
+                ['id' => 'claim:subscriber.middleName',  'name' => 'Subscriber middle name'],
             ],
         ],
     ],
@@ -263,9 +251,8 @@ return [
             'name' => 'Subscriber name suffix',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.suffix',
-                'name' => 'Subscriber name suffix',
+            'common' => [
+                ['id' => 'claim:subscriber.suffix',  'name' => 'Subscriber name suffix'],
             ],
         ],
     ],
@@ -277,9 +264,8 @@ return [
             'name' => 'Subscriber gender',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.gender',
-                'name' => 'Subscriber gender',
+            'common' => [
+                ['id' => 'claim:subscriber.gender',  'name' => 'Subscriber gender'],
             ],
         ],
     ],
@@ -291,9 +277,8 @@ return [
             'name' => 'Subscriber date of birth',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.dateOfBirth',
-                'name' => 'Subscriber date of birth',
+            'common' => [
+                ['id' => 'claim:subscriber.dateOfBirth',  'name' => 'Subscriber date of birth'],
             ],
         ],
     ],
@@ -305,9 +290,8 @@ return [
             'name' => 'Subscriber policy number',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.policyNumber',
-                'name' => 'Subscriber policy number',
+            'common' => [
+                ['id' => 'claim:subscriber.policyNumber',  'name' => 'Subscriber policy number'],
             ],
         ],
     ],
@@ -325,9 +309,8 @@ return [
             'name' => 'Subscriber contact information name',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.contactInformation.name',
-                'name' => 'Subscriber contact information name',
+            'common' => [
+                ['id' => 'claim:subscriber.contactInformation.name',  'name' => 'Subscriber contact information name'],
             ],
         ],
     ],
@@ -339,9 +322,8 @@ return [
             'name' => 'Subscriber contact information phone number',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.contactInformation.phoneNumber',
-                'name' => 'Subscriber contact information phone number',
+            'common' => [
+                ['id' => 'claim:subscriber.contactInformation.phoneNumber',  'name' => 'Subscriber contact information phone number'],
             ],
         ],
     ],
@@ -353,9 +335,8 @@ return [
             'name' => 'Subscriber contact information fax number',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.contactInformation.faxNumber',
-                'name' => 'Subscriber contact information fax number',
+            'common' => [
+                ['id' => 'claim:subscriber.contactInformation.faxNumber',  'name' => 'Subscriber contact information fax number'],
             ],
         ],
     ],
@@ -367,9 +348,8 @@ return [
             'name' => 'Subscriber contact information email',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.contactInformation.email',
-                'name' => 'Subscriber contact information email',
+            'common' => [
+                ['id' => 'claim:subscriber.contactInformation.email',  'name' => 'Subscriber contact information email'],
             ],
         ],
     ],
@@ -387,9 +367,8 @@ return [
             'name' => 'Subscriber contact information address1',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.address.address1',
-                'name' => 'Subscriber contact information address1',
+            'common' => [
+                ['id' => 'claim:subscriber.address.address1',  'name' => 'Subscriber contact information address1'],
             ],
         ],
     ],
@@ -401,9 +380,8 @@ return [
             'name' => 'Subscriber contact information address2',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.address.address2',
-                'name' => 'Subscriber contact information address2',
+            'common' => [
+                ['id' => 'claim:subscriber.address.address2',  'name' => 'Subscriber contact information address2'],
             ],
         ],
     ],
@@ -415,9 +393,8 @@ return [
             'name' => 'Subscriber contact information city',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.address.city',
-                'name' => 'Subscriber contact information city',
+            'common' => [
+                ['id' => 'claim:subscriber.address.city',  'name' => 'Subscriber contact information city'],
             ],
         ],
     ],
@@ -429,9 +406,8 @@ return [
             'name' => 'Subscriber contact information state',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.address.state',
-                'name' => 'Subscriber contact information state',
+            'common' => [
+                ['id' => 'claim:subscriber.address.state',  'name' => 'Subscriber contact information state'],
             ],
         ],
     ],
@@ -443,9 +419,8 @@ return [
             'name' => 'Subscriber contact information postal code',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.address.postalCode',
-                'name' => 'Subscriber contact information postal code',
+            'common' => [
+                ['id' => 'claim:subscriber.address.postalCode',  'name' => 'Subscriber contact information postal code'],
             ],
         ],
     ],
@@ -457,9 +432,8 @@ return [
             'name' => 'Subscriber contact information country code',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.address.countryCode',
-                'name' => 'Subscriber contact information country code',
+            'common' => [
+                ['id' => 'claim:subscriber.address.countryCode',  'name' => 'Subscriber contact information country code'],
             ],
         ],
     ],
@@ -471,9 +445,8 @@ return [
             'name' => 'Subscriber contact information country subdivision code',
         ],
         'values' => [
-            [
-                'id' => 'claim:subscriber.address.countrySubDivisionCode',
-                'name' => 'Subscriber contact information country subdivision code',
+            'common' => [
+                ['id' => 'claim:subscriber.address.countrySubDivisionCode',  'name' => 'Subscriber contact information country subdivision code'],
             ],
         ],
     ],
@@ -485,9 +458,8 @@ return [
             'name' => 'Dependent first name',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.firstName',
-                'name' => 'Dependent first name',
+            'common' => [
+                ['id' => 'claim:dependent.firstName',  'name' => 'Dependent first name'],
             ],
         ],
     ],
@@ -499,9 +471,8 @@ return [
             'name' => 'Dependent last name',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.lastName',
-                'name' => 'Dependent last name',
+            'common' => [
+                ['id' => 'claim:dependent.lastName',  'name' => 'Dependent last name'],
             ],
         ],
     ],
@@ -513,9 +484,8 @@ return [
             'name' => 'Dependent middle name',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.middleName',
-                'name' => 'Dependent middle name',
+            'common' => [
+                ['id' => 'claim:dependent.middleName',  'name' => 'Dependent middle name'],
             ],
         ],
     ],
@@ -527,9 +497,8 @@ return [
             'name' => 'Dependent name suffix',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.suffix',
-                'name' => 'Dependent name suffix',
+            'common' => [
+                ['id' => 'claim:dependent.suffix',  'name' => 'Dependent name suffix'],
             ],
         ],
     ],
@@ -541,9 +510,8 @@ return [
             'name' => 'Dependent gender',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.gender',
-                'name' => 'Dependent gender',
+            'common' => [
+                ['id' => 'claim:dependent.gender',  'name' => 'Dependent gender'],
             ],
         ],
     ],
@@ -555,9 +523,8 @@ return [
             'name' => 'Dependent date of birth',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.dateOfBirth',
-                'name' => 'Dependent date of birth',
+            'common' => [
+                ['id' => 'claim:dependent.dateOfBirth',  'name' => 'Dependent date of birth'],
             ],
         ],
     ],
@@ -569,9 +536,8 @@ return [
             'name' => 'Dependent ssn',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.ssn',
-                'name' => 'Dependent ssn',
+            'common' => [
+                ['id' => 'claim:dependent.ssn',  'name' => 'Dependent ssn'],
             ],
         ],
     ],
@@ -583,9 +549,8 @@ return [
             'name' => 'Dependent member id',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.memberId',
-                'name' => 'Dependent member id',
+            'common' => [
+                ['id' => 'claim:dependent.memberId',  'name' => 'Dependent member id'],
             ],
         ],
     ],
@@ -597,9 +562,8 @@ return [
             'name' => 'Dependent relationship to subscriber code',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.relationshipToSubscriberCode',
-                'name' => 'Dependent relationship to subscriber code',
+            'common' => [
+                ['id' => 'claim:dependent.relationshipToSubscriberCode',  'name' => 'Dependent relationship to subscriber code'],
             ],
         ],
     ],
@@ -611,9 +575,8 @@ return [
             'name' => 'Dependent contact information name',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.contactInformation.name',
-                'name' => 'Dependent contact information name',
+            'common' => [
+                ['id' => 'claim:dependent.contactInformation.name',  'name' => 'Dependent contact information name'],
             ],
         ],
     ],
@@ -625,9 +588,8 @@ return [
             'name' => 'Dependent contact information phone number',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.contactInformation.phoneNumber',
-                'name' => 'Dependent contact information phone number',
+            'common' => [
+                ['id' => 'claim:dependent.contactInformation.phoneNumber',  'name' => 'Dependent contact information phone number'],
             ],
         ],
     ],
@@ -639,9 +601,8 @@ return [
             'name' => 'Dependent contact information fax number',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.contactInformation.faxNumber',
-                'name' => 'Dependent contact information fax number',
+            'common' => [
+                ['id' => 'claim:dependent.contactInformation.faxNumber',  'name' => 'Dependent contact information fax number'],
             ],
         ],
     ],
@@ -653,9 +614,8 @@ return [
             'name' => 'Dependent contact information email',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.contactInformation.email',
-                'name' => 'Dependent contact information email',
+            'common' => [
+                ['id' => 'claim:dependent.contactInformation.email',  'name' => 'Dependent contact information email'],
             ],
         ],
     ],
@@ -673,9 +633,8 @@ return [
             'name' => 'Dependent contact information address1',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.address.address1',
-                'name' => 'Dependent contact information address1',
+            'common' => [
+                ['id' => 'claim:dependent.address.address1',  'name' => 'Dependent contact information address1'],
             ],
         ],
     ],
@@ -687,9 +646,8 @@ return [
             'name' => 'Dependent contact information address2',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.address.address2',
-                'name' => 'Dependent contact information address2',
+            'common' => [
+                ['id' => 'claim:dependent.address.address2',  'name' => 'Dependent contact information address2'],
             ],
         ],
     ],
@@ -701,9 +659,8 @@ return [
             'name' => 'Dependent contact information city',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.address.city',
-                'name' => 'Dependent contact information city',
+            'common' => [
+                ['id' => 'claim:dependent.address.city',  'name' => 'Dependent contact information city'],
             ],
         ],
     ],
@@ -715,9 +672,8 @@ return [
             'name' => 'Dependent contact information state',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.address.state',
-                'name' => 'Dependent contact information state',
+            'common' => [
+                ['id' => 'claim:dependent.address.state',  'name' => 'Dependent contact information state'],
             ],
         ],
     ],
@@ -729,9 +685,8 @@ return [
             'name' => 'Dependent contact information postal code',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.address.postalCode',
-                'name' => 'Dependent contact information postal code',
+            'common' => [
+                ['id' => 'claim:dependent.address.postalCode',  'name' => 'Dependent contact information postal code'],
             ],
         ],
     ],
@@ -743,9 +698,8 @@ return [
             'name' => 'Dependent contact information country code',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.address.countryCode',
-                'name' => 'Dependent contact information country code',
+            'common' => [
+                ['id' => 'claim:dependent.address.countryCode',  'name' => 'Dependent contact information country code'],
             ],
         ],
     ],
@@ -757,9 +711,8 @@ return [
             'name' => 'Dependent contact information country subdivision code',
         ],
         'values' => [
-            [
-                'id' => 'claim:dependent.address.countrySubDivisionCode',
-                'name' => 'Dependent contact information country subdivision code',
+            'common' => [
+                ['id' => 'claim:dependent.address.countrySubDivisionCode',  'name' => 'Dependent contact information country subdivision code'],
             ],
         ],
     ],
@@ -791,9 +744,8 @@ return [
             'name' => 'Claim information filing code',
         ],
         'values' => [
-            [
-                'id' => 'claim:claimInformation.claimFilingCode',
-                'name' => 'Claim information filing code',
+            'common' => [
+                ['id' => 'claim:claimInformation.claimFilingCode',  'name' => 'Claim information filing code'],
             ],
         ],
     ],
@@ -829,9 +781,8 @@ return [
             'name' => 'Claim information patient control number',
         ],
         'values' => [
-            [
-                'id' => 'claim:claimInformation.patientControlNumber',
-                'name' => 'Claim information patient control number',
+            'common' => [
+                ['id' => 'claim:claimInformation.patientControlNumber',  'name' => 'Claim information patient control number'],
             ],
         ],
     ],
@@ -843,9 +794,8 @@ return [
             'name' => 'Claim information claim charge amount',
         ],
         'values' => [
-            [
-                'id' => 'claim:claimInformation.claimChargeAmount',
-                'name' => 'Claim information claim charge amount',
+            'common' => [
+                ['id' => 'claim:claimInformation.claimChargeAmount',  'name' => 'Claim information claim charge amount'],
             ],
         ],
     ],
@@ -857,9 +807,8 @@ return [
             'name' => 'Claim information place of service code',
         ],
         'values' => [
-            [
-                'id' => 'claim:claimInformation.placeOfServiceCode',
-                'name' => 'Claim information place of service code',
+            'common' => [
+                ['id' => 'claim:claimInformation.placeOfServiceCode',  'name' => 'Claim information place of service code'],
             ],
         ],
     ],
@@ -871,9 +820,8 @@ return [
             'name' => 'Claim information claim frequency code',
         ],
         'values' => [
-            [
-                'id' => 'claim:claimInformation.claimFrequencyCode',
-                'name' => 'Claim information claim frequency code',
+            'common' => [
+                ['id' => 'claim:claimInformation.claimFrequencyCode',  'name' => 'Claim information claim frequency code'],
             ],
         ],
     ],
@@ -885,9 +833,8 @@ return [
             'name' => 'Claim information signature indicator',
         ],
         'values' => [
-            [
-                'id' => 'claim:claimInformation.signatureIndicator',
-                'name' => 'Claim information signature indicator',
+            'common' => [
+                ['id' => 'claim:claimInformation.signatureIndicator',  'name' => 'Claim information signature indicator'],
             ],
         ],
     ],
@@ -899,9 +846,8 @@ return [
             'name' => 'Claim information plan participation code',
         ],
         'values' => [
-            [
-                'id' => 'claim:claimInformation.planParticipationCode',
-                'name' => 'Claim information plan participation code',
+            'common' => [
+                ['id' => 'claim:claimInformation.planParticipationCode',  'name' => 'Claim information plan participation code'],
             ],
         ],
     ],
@@ -913,9 +859,8 @@ return [
             'name' => 'Claim information benefits assignment certification indicator',
         ],
         'values' => [
-            [
-                'id' => 'claim:claimInformation.benefitsAssignmentCertificationIndicator',
-                'name' => 'Claim information benefits assignment certification indicator',
+            'common' => [
+                ['id' => 'claim:claimInformation.benefitsAssignmentCertificationIndicator',  'name' => 'Claim information benefits assignment certification indicator'],
             ],
         ],
     ],
@@ -927,9 +872,8 @@ return [
             'name' => 'Claim information release information code',
         ],
         'values' => [
-            [
-                'id' => 'claim:claimInformation.releaseInformationCode',
-                'name' => 'Claim information release information code',
+            'common' => [
+                ['id' => 'claim:claimInformation.releaseInformationCode',  'name' => 'Claim information release information code'],
             ],
         ],
     ],
@@ -947,9 +891,8 @@ return [
             'name' => 'Claim information related causes code',
         ],
         'values' => [
-            [
-                'id' => 'claim:claimInformation.relatedCausesCode',
-                'name' => 'Claim information related causes code',
+            'common' => [
+                ['id' => 'claim:claimInformation.relatedCausesCode',  'name' => 'Claim information related causes code'],
             ],
         ],
     ],
@@ -961,9 +904,8 @@ return [
             'name' => 'Claim information auto accident state code',
         ],
         'values' => [
-            [
-                'id' => 'claim:claimInformation.autoAccidentStateCode',
-                'name' => 'Claim information auto accident state code',
+            'common' => [
+                ['id' => 'claim:claimInformation.autoAccidentStateCode',  'name' => 'Claim information auto accident state code'],
             ],
         ],
     ],
@@ -975,9 +917,8 @@ return [
             'name' => 'Claim information auto accident country code',
         ],
         'values' => [
-            [
-                'id' => 'claim:claimInformation.autoAccidentCountryCode',
-                'name' => 'Claim information auto accident country code',
+            'common' => [
+                ['id' => 'claim:claimInformation.autoAccidentCountryCode',  'name' => 'Claim information auto accident country code'],
             ],
         ],
     ],

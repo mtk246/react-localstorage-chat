@@ -17,14 +17,18 @@ use Illuminate\Support\Collection;
  *
  * @property int $id
  * @property string $name
- * @property \Illuminate\Support\Carbon $date
+ * @property \Illuminate\Support\Carbon|null $date
  * @property string $file_name
  * @property int $payment_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \App\Models\Payments\Batch|null $batch
+ * @property \Illuminate\Database\Eloquent\Collection<int, Claim> $claimsMany
+ * @property int|null $claims_many_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, Claim> $claimsThrough
+ * @property int|null $claims_through_count
+ * @property \Illuminate\Support\Collection|null $claims
  * @property string|null $file_url
- * @property \App\Models\Payments\Payment|null $payments
+ * @property \App\Models\Payments\Payment $payment
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Eob newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Eob newQuery()
@@ -64,7 +68,7 @@ final class Eob extends Model
     public function getFileUrlAttribute(): ?string
     {
         return $this->file_name && !empty($this->file_name)
-            ? route('payments.eob.show', ['eob_file' => $this->file_name])
+            ? route('payments.eobs.show', ['eob_file' => $this->file_name])
             : null;
     }
 
@@ -75,7 +79,7 @@ final class Eob extends Model
             : $this->claimsMany()?->get();
     }
 
-    public function payments(): BelongsTo
+    public function payment(): BelongsTo
     {
         return $this->belongsTo(Payment::class);
     }
