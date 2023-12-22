@@ -113,7 +113,8 @@
     "file": {
       "1a":["demographicInformation.company.name"]
     }
-  }
+  },
+  "active": false
 }
 ```
 
@@ -166,7 +167,8 @@
       "user": "Console",
       "roles": []
     }
-  },
+  },,
+  "active": false,
   "format": "institutional",
   "rules": {
     "file": {
