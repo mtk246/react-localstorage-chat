@@ -98,7 +98,7 @@ final class Batch extends Model implements Auditable
 
     public function eobs(): HasManyThrough
     {
-        return $this->hasManyThrough(Eob::class, Payment::class);
+        return $this->hasManyThrough(Eob::class, Payment::class, 'payment_batch_id');
     }
 
     public function close(): self
