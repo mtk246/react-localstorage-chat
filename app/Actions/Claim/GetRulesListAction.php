@@ -5,36 +5,20 @@ declare(strict_types=1);
 namespace App\Actions\Claim;
 
 use App\Enums\Claim\ClaimType;
+use App\Http\Requests\Claim\GetRulesListRequest;
+use App\Http\Resources\Claim\RuleListResource;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 final class GetRulesListAction
 {
-    public function invoke(): Collection
+    public function invoke(GetRulesListRequest $request): Collection
     {
-        return collect(config('claim.formats'))->mapWithKeys(function ($item, $key) {
-            $name = ClaimType::tryFrom($key)->getName();
-            $formated = collect($item)->map(function ($item) use ($name) {
-                return collect($item)
-                    ->mapToGroups(function ($item, $key) {
-                        $group = Str::onlyNumbers($key);
-                        $item['code'] = $key;
+        return collect(config('claim.formats'))
+            ->when($type = $request->get('type'), fn (Collection $collection) => $collection->only($type))
+            ->mapWithKeys(function (array $items, $key) {
+                $name = ClaimType::tryFrom($key)->getName();
 
-                        return [$group => $item];
-                    })
-                    ->map(function ($item, $key) use ($name) {
-                        return count($item) > 1
-                            ? [
-                                'code' => $key,
-                                'type' => 'group',
-                                'description' => __("claim.rules.{$name}.group.{$key}"),
-                                'values' => $item->values(),
-                            ]
-                            : $item->first();
-                    })->values();
+                return [$name => collect($items)->map(fn ($format, $formatKey) => new RuleListResource($format, $formatKey))];
             });
-
-            return [$name => $formated];
-        });
     }
 }
