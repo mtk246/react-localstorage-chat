@@ -22,7 +22,7 @@ final class EobResource extends Controller
         $this->authorize('view', $batch);
 
         return response()->json(EobApiResource::collection(
-            $payment->eobs()->orderBy(Pagination::sortBy(), Pagination::sortDesc())->paginate(Pagination::itemsPerPage())
+            $payment->eobs()->orderBy(Pagination::sortBy(), Pagination::sortDesc())->get()
         ));
     }
 
