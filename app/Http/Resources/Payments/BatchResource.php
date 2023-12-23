@@ -32,6 +32,7 @@ final class BatchResource extends JsonResource
             'updated_at' => $this->resource->updated_at,
             'company' => new CompanyResource($this->resource->company),
             'billing_company' => $this->resource->billingCompany,
+            'close_date' => $this->resource->close_date,
         ];
     }
 }
