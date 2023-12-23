@@ -97,9 +97,9 @@ final class BatchResource extends Controller
         return response()->file(storage_path('app/eobs/'.$eobFile->file_name))->setAutoEtag();
     }
 
-    public function close(Batch $batch): JsonResponse
+    public function close(Request $request, Batch $batch): JsonResponse
     {
-        return response()->json(new BatchApiResource($batch->close()));
+        return response()->json(new BatchApiResource($batch->close($request->get('date', now()->toString()))));
     }
 
     public function storeClaims(AddClaimToBatchRequest $request, AddClaimsToBachAction $add, Batch $batch): JsonResponse
