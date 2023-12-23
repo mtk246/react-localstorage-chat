@@ -6,7 +6,6 @@ namespace Database\Factories\Claims;
 
 use App\Models\BillingCompany;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Claims\Claim>
@@ -21,12 +20,12 @@ final class ClaimFactory extends Factory
     public function definition()
     {
         return [
-            'code' => $this->faker->uuid(),
+            'code' => "12345tre",
             'type' => $this->faker->randomElement([1, 2]),
             'submitter_name' => $this->faker->name,
             'submitter_contact' => $this->faker->name,
             'submitter_phone' => $this->faker->phoneNumber,
-            'aditional_information' => $this->faker->text,
+            'aditional_information' => json_encode($this->faker->text),
         ];
     }
 

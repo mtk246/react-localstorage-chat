@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Database\Factories\HealthProfessional;
+namespace Database\Factories;
 
 use App\Models\Company;
+use App\Models\HealthProfessional;
 use App\Models\Profile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 final class HealthProfessionalFactory extends Factory
 {
+
     /**
      * Define the model's default state.
      *

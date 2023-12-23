@@ -24,6 +24,7 @@ final class PatientPrivateFactory extends Factory
             'reference_num' => $this->faker->randomDigit(),
             'patient_num' => $this->faker->randomDigit(),
             'med_num' => $this->faker->randomDigit(),
+            'billing_company_id' => BillingCompany::factory()
         ];
     }
 
@@ -31,13 +32,6 @@ final class PatientPrivateFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'patient_id' => Patient::factory(),
-        ]);
-    }
-
-    private function withBillingCompany(): self
-    {
-        return $this->state(fn (array $attributes) => [
-            'billing_company_id' => BillingCompany::factory(),
         ]);
     }
 }

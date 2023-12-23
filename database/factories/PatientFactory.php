@@ -21,10 +21,10 @@ final class PatientFactory extends Factory
     public function definition()
     {
         return [
-            'drivers_license' => $this->faker->text,
+            'driver_license' => $this->faker->text,
             'created_at' => $this->faker->dateTime,
             'updated_at' => $this->faker->dateTime,
-            'code' => Str::uuid(),``
+            'code' => $this->faker->uuid(),
         ];
     }
 

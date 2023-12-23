@@ -21,10 +21,10 @@ final class InsurancePolicyFactory extends Factory
     {
         return [
             'policy_number' => $this->faker->uuid,
-            'release_info' => $this->faker->text,
-            'assign_benefits' => $this->faker->text,
+            'release_info' => $this->faker->randomElement([true, false]),
+            'assign_benefits' => $this->faker->randomElement([true, false]),
             'status' => $this->faker->randomElement([true, false]),
-            'owner' => $this->faker->randomElement([true, false]),
+            'own' => $this->faker->randomElement([true, false]),
             'dual_plan' => $this->faker->randomElement([true, false]),
         ];
     }
