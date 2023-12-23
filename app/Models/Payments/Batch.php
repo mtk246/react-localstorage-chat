@@ -33,6 +33,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $close_date
+ * @property string $code
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property BillingCompany $billingCompany
@@ -49,6 +50,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Batch whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Batch whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Batch whereCloseDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Batch whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Batch whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Batch whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Batch whereCurrency($value)
@@ -69,6 +71,7 @@ final class Batch extends Model implements Auditable
     protected $table = 'payment_batches';
 
     protected $fillable = [
+        'code',
         'name',
         'posting_date',
         'currency',
@@ -139,6 +142,7 @@ final class Batch extends Model implements Auditable
     public function toSearchableArray()
     {
         return [
+            'code' => $this->code,
             'name' => $this->name,
             'posting_date' => $this->posting_date,
             'currency' => $this->currency,
