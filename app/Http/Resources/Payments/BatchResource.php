@@ -22,6 +22,7 @@ final class BatchResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
+            'code' => $this->code,
             'name' => $this->resource->name,
             'posting_date' => $this->resource->posting_date,
             'currency' => $this->resource->currency,
