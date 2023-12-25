@@ -61,12 +61,25 @@ final class SubmitToClearingHouseAction
                 }
             );
 
+            $bodyFormatted = array_reduce(array_keys($body), function ($carry, $key) use ($body) {
+                $temp = &$carry;
+                foreach (explode('.', $key) ?? [] as $segment) {
+                    if (!isset($temp[$segment])) {
+                        $temp[$segment] = [];
+                    }
+                    $temp = &$temp[$segment];
+                }
+                $temp = $body[$key];
+
+                return $carry;
+            }, []);
+
             $response = Http::withToken($token)->acceptJson()->post(
                 config("claim.connections.{$claim->type->value}.url_submission"),
-                $body
+                $bodyFormatted
             );
             $responseData['response'] = $response->json();
-            $responseData['request'] = $body;
+            $responseData['request'] = $bodyFormatted;
 
             if ($response->successful()) {
                 $claimTransmissionStatus = ClaimTransmissionStatus::whereStatus('Success')->first();
