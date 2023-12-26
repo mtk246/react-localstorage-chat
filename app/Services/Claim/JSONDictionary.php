@@ -49,6 +49,9 @@ final class JSONDictionary extends Dictionary
             'receiver' => $this->getReceiver($property),
             'subscriber' => $this->getSubscriber($property),
             'dependent' => $this->getDependent($property),
+            'payToAddress' => $this->getPayToAddress($property),
+            'payToPlan' => $this->getPayToPlan($property),
+            'payerAddress' => $this->getPayerAddress($property),
             default => collect($this->{'get'.Str::ucfirst(Str::camel($key))}()),
         };
     }
@@ -1867,6 +1870,86 @@ final class JSONDictionary extends Dictionary
                 'patientEstimatedAmountDue' => '',
                 'billingNote' => '',
             ]
+        };
+    }
+
+    protected function getPayToAddress($key): string
+    {
+        $billingProviderPaymentAddress = $this->claim
+            ?->demographicInformation
+            ?->company
+            ->addresses()
+            ->where('billing_company_id', $this->claim->billing_company_id)
+            ->where('address_type_id', '3')
+            ?->first() ?? null;
+
+        if (!isset($billingProviderPaymentAddress)) {
+            return '';
+        }
+
+        return match ($key) {
+            'address1' => $billingProviderPaymentAddress?->address ?? '',
+            'address2' => '',
+            'city' => $billingProviderPaymentAddress?->city ?? '',
+            'state' => substr($billingProviderPaymentAddress?->state ?? '', 0, 2) ?? '',
+            'postalCode' => str_replace('-', '', $billingProviderPaymentAddress?->zip) ?? '',
+            'countryCode' => ('US' !== $billingProviderPaymentAddress?->country) ? $billingProviderPaymentAddress?->country : '',
+            'countrySubDivisionCode' => ('US' !== $billingProviderPaymentAddress?->country) ? $billingProviderPaymentAddress?->country_subdivision_code : '',
+            default => '',
+        };
+    }
+
+    protected function getPayToPlan($key): string
+    {
+        /* @todo Se emplea cuando el pago se hace a otra compañia de seguro
+         * Esta es la data del insurance al que hay que hacerle el pago
+         * Actualmente no esta considerado en el sistema
+         */
+        $segments = explode('.', $key);
+        $accesorKey = $segments[0] ?? null;
+        $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
+
+        return match ($accesorKey) {
+            'organizationName' => '',
+            'primaryIdentifierTypeCode' => '',
+            'primaryIdentifier' => '',
+            'address' => $this->getPayToPlanAddress($property),
+            'secondaryIdentifierTypeCode' => '',
+            'secondaryIdentifier' => '',
+            'taxIdentificationNumber' => '',
+            default => '',
+        };
+    }
+
+    protected function getPayToPlanAddress($key): string
+    {
+        return match ($key) {
+            'address1' => '',
+            'address2' => '',
+            'city' => '',
+            'state' => '',
+            'postalCode' => '',
+            'countryCode' => '',
+            'countrySubDivisionCode' => '',
+            default => '',
+        };
+    }
+
+    protected function getPayerAddress($key): string
+    {
+        /* @todo Se emplea cuando el pago se hace a otra compañia de seguro
+         * Esta es la data del insurance al que hay que hacerle el pago
+         * Actualmente no esta considerado en el sistema
+         */
+        return match ($key) {
+            'address1' => '',
+            'address2' => '',
+            'city' => '',
+            'state' => '',
+            'postalCode' => '',
+            'countryCode' => '',
+            'countrySubDivisionCode' => '',
+            default => '',
         };
     }
 
