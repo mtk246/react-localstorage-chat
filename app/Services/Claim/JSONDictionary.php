@@ -2353,4 +2353,20 @@ final class JSONDictionary extends Dictionary
             default => (string) $value?->{$key} ?? '',
         };
     }
+
+    public function toArray(): array
+    {
+        $keys = array_keys(
+            array_filter($this->config, function ($value) {
+                return $value['default'] ?? false;
+            })
+        );
+
+        return array_combine(
+            $keys,
+            array_map(function ($key) {
+                return $this->translate((string) $key);
+            }, $keys)
+        );
+    }
 }
