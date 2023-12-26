@@ -128,7 +128,7 @@ final class JSONDictionary extends Dictionary
             'name' => $subscriberContact->contact_name ?? $subscriber->first_name,
             'phoneNumber' => str_replace('-', '', $subscriberContact?->phone ?? '') ?? '',
             'faxNumber' => str_replace('-', '', $subscriberContact?->fax ?? '') ?? '',
-            'email' => $subscriberContact?->email,
+            'email' => $subscriberContact?->email ?? '',
             'phoneExtension' => '',
             default => '',
         };
@@ -140,9 +140,9 @@ final class JSONDictionary extends Dictionary
         $subscriberAddress = $subscriber?->addresses()?->first() ?? null;
 
         return match ($key) {
-            'address1' => $subscriberAddress?->address,
-            'address2' => null,
-            'city' => $subscriberAddress?->city,
+            'address1' => $subscriberAddress?->address ?? '',
+            'address2' => '',
+            'city' => $subscriberAddress?->city ?? '',
             'state' => substr($subscriberAddress?->state ?? '', 0, 2) ?? '',
             'postalCode' => str_replace('-', '', $subscriberAddress?->zip ?? '') ?? '',
             'countryCode' => ('US' !== $subscriberAddress?->country) ? $subscriberAddress?->country : '',
