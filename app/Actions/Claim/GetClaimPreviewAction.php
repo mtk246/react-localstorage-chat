@@ -23,7 +23,7 @@ final class GetClaimPreviewAction
     public function single(array $data, User $user): array
     {
         return DB::transaction(function () use ($data, $user): array {
-            $claim = $data['default'] ?? false
+            $claim = isset($data['rule_id'])
                 ? Claim::query()
                     ->with(['demographicInformation', 'insurancePolicies'])
                     ->where('type', $data['type'] ?? ClaimType::INSTITUTIONAL->value)
@@ -44,7 +44,6 @@ final class GetClaimPreviewAction
                     ->wherePivot('order', 1)
                     ?->first()
                     ?->insurancePlan ?? null,
-                default: $data['default'] ?? false,
                 rule: $data['rule_id'] ?? null,
             )->toArray();
         });
