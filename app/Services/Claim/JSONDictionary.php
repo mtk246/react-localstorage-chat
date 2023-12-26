@@ -52,6 +52,13 @@ final class JSONDictionary extends Dictionary
             'payToAddress' => $this->getPayToAddress($property),
             'payToPlan' => $this->getPayToPlan($property),
             'payerAddress' => $this->getPayerAddress($property),
+            'billing' => $this->getBilling($property),
+            'referring' => $this->getReferring($property),
+            'rendering' => $this->getRendering($property),
+            'ordering' => $this->getOrdering($property),
+            'supervising' => $this->getSupervising($property),
+            'attending' => $this->getAttending($property),
+
             default => collect($this->{'get'.Str::ucfirst(Str::camel($key))}()),
         };
     }
@@ -1949,6 +1956,562 @@ final class JSONDictionary extends Dictionary
             'postalCode' => '',
             'countryCode' => '',
             'countrySubDivisionCode' => '',
+            default => '',
+        };
+    }
+
+    protected function getBilling($key): string
+    {
+        $segments = explode('.', $key);
+        $accesorKey = $segments[0] ?? null;
+        $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
+
+        $healthProfessional = match ($this->claim->type) {
+            ClaimType::PROFESSIONAL => $this->claim->demographicInformation
+                ?->healthProfessionals()
+                ?->wherePivot('field_id', 5)
+                ?->first(),
+            ClaimType::INSTITUTIONAL => $this->claim->demographicInformation
+                ?->healthProfessionals()
+                ?->wherePivot('field_id', 1)
+                ?->orWherePivot('field_id', 76)
+                ?->first(),
+        };
+
+        $contractFeeSpecification = $this->claim?->demographicInformation->company->contractFees()
+            ->whereHas('insurancePlans', function ($query) {
+                $query->where('insurance_plans.id', $this->claim?->higherInsurancePlan()?->id);
+            })
+            ?->first()
+            ?->contractFeeSpecifications()
+            ?->whereNull('health_professional_id')
+            ?->orWhere('health_professional_id', $healthProfessional?->id)
+            ?->first();
+
+        if (HealthProfessional::class === $contractFeeSpecification?->billing_provider_type) {
+            return $this->getBillingByHeatlhProfessional($key);
+        }
+
+        $billingProvider = $this->claim
+            ?->demographicInformation
+            ?->company;
+
+        return match ($accesorKey) {
+            'providerType' => 'BillingProvider',
+            'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? null,
+            'ssn' => str_replace('-', '', $billingProvider?->ssn ?? ''),
+            'employerId' => str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi),
+            'commercialNumber' => '',
+            'locationNumber' => '',
+            'payerIdentificationNumber' => '',
+            'employerIdentificationNumber' => '',
+            'claimOfficeNumber' => '',
+            'naic' => '',
+            'stateLicenseNumber' => '',
+            'providerUpinNumber' => '',
+            'taxonomyCode' => '',
+            'firstName' => '',
+            'lastName' => '',
+            'middleName' => '',
+            'suffix' => '',
+            'organizationName' => $billingProvider?->name,
+            'contactInformation' => $this->getBillingContactInformation($property),
+            'address' => $this->getBillingAddress($property),
+            default => '',
+        };
+    }
+
+    protected function getBillingContactInformation($key): string
+    {
+        $billingProvider = $this->claim
+            ?->demographicInformation
+            ?->company;
+        $billingProviderContact = $billingProvider
+            ->contacts()
+            ->where('billing_company_id', $this->claim->billing_company_id ?? null)
+            ?->first() ?? null;
+
+        return match ($key) {
+            'name' => ('' === $billingProviderContact->phone ?? '')
+                ? $this->claim->billingCompany->contact?->contact_name ?? $this->claim->billingCompany->name
+                : $billingProviderContact->contact_name ?? $billingProvider->name,
+            'phoneNumber' => str_replace(
+                '-',
+                '',
+                $billingProviderContact->phone ?? $this->claim->billingCompany->contact?->phone ?? ''
+            ) ?? null,
+            'faxNumber' => '',
+            'email' => '',
+            'phoneExtension' => '',
+            default => '',
+        };
+    }
+
+    protected function getBillingAddress($key): string
+    {
+        $billingProvider = $this->claim
+            ?->demographicInformation
+            ?->company;
+        $billingProviderAddress = $billingProvider
+            ->addresses()
+            ->where('billing_company_id', $this->claim->billing_company_id ?? null)
+            ->where('address_type_id', 1)
+            ?->first() ?? null;
+
+        return match ($key) {
+            'address1' => $billingProviderAddress?->address ?? '',
+            'address2' => '',
+            'city' => $billingProviderAddress?->city ?? '',
+            'state' => substr($billingProviderAddress?->state ?? '', 0, 2) ?? '',
+            'postalCode' => str_replace('-', '', $billingProviderAddress?->zip) ?? '',
+            'countryCode' => ('US' !== $billingProviderAddress?->country)
+                ? $billingProviderAddress?->country
+                : '',
+            'countrySubDivisionCode' => ('US' !== $billingProviderAddress?->country)
+                ? $billingProviderAddress?->country_subdivision_code
+                : '',
+            default => '',
+        };
+    }
+
+    protected function getBillingByHeatlhProfessional($key): string
+    {
+        $segments = explode('.', $key);
+        $accesorKey = $segments[0] ?? null;
+        $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
+
+        $healthProfessional = match ($this->claim->type) {
+            ClaimType::PROFESSIONAL => $this->claim->demographicInformation
+                ?->healthProfessionals()
+                ?->wherePivot('field_id', 5)
+                ?->first(),
+            ClaimType::INSTITUTIONAL => $this->claim->demographicInformation
+                ?->healthProfessionals()
+                ?->wherePivot('field_id', 1)
+                ?->orWherePivot('field_id', 76)
+                ?->first(),
+        };
+
+        $contractFeeSpecification = $this->claim?->demographicInformation->company->contractFees()
+            ->whereHas('insurancePlans', function ($query) {
+                $query->where('insurance_plans.id', $this->claim?->higherInsurancePlan()?->id);
+            })
+            ?->first()
+            ?->contractFeeSpecifications()
+            ?->whereNull('health_professional_id')
+            ?->orWhere('health_professional_id', $healthProfessional?->id)
+            ?->first();
+
+        $billingProvider = $contractFeeSpecification->billingProvider;
+
+        return match ($accesorKey) {
+            'providerType' => 'BillingProvider',
+            'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? null,
+            'ssn' => str_replace('-', '', $billingProvider?->profile?->ssn ?? ''),
+            'employerId' => str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi),
+            'firstName' => $billingProvider?->profile?->first_name,
+            'lastName' => $billingProvider?->profile?->last_name,
+            'middleName' => $billingProvider?->profile?->middle_name,
+            'suffix' => $billingProvider?->profile?->nameSuffix?->code,
+            'contactInformation' => $this->getBillingByHeatlhProfessionalContactInformation($property),
+            'address' => $this->getBillingByHeatlhProfessionalAddress($property),
+            default => '',
+        };
+    }
+
+    protected function getBillingByHeatlhProfessionalContactInformation($key): string
+    {
+        $healthProfessional = match ($this->claim->type) {
+            ClaimType::PROFESSIONAL => $this->claim->demographicInformation
+                ?->healthProfessionals()
+                ?->wherePivot('field_id', 5)
+                ?->first(),
+            ClaimType::INSTITUTIONAL => $this->claim->demographicInformation
+                ?->healthProfessionals()
+                ?->wherePivot('field_id', 1)
+                ?->orWherePivot('field_id', 76)
+                ?->first(),
+        };
+
+        $contractFeeSpecification = $this->claim?->demographicInformation->company->contractFees()
+            ->whereHas('insurancePlans', function ($query) {
+                $query->where('insurance_plans.id', $this->claim?->higherInsurancePlan()?->id);
+            })
+            ?->first()
+            ?->contractFeeSpecifications()
+            ?->whereNull('health_professional_id')
+            ?->orWhere('health_professional_id', $healthProfessional?->id)
+            ?->first();
+
+        $billingProvider = $contractFeeSpecification->billingProvider;
+        $billingProviderContact = $billingProvider->profile->contacts
+            ->where('billing_company_id', $this->claim->billing_company_id ?? null)
+            ->first();
+
+        return match ($key) {
+            'name' => $billingProvider->profile?->last_name.', '.$billingProvider->profile?->first_name
+                .(!empty($billingProvider->profile?->nameSuffix?->code)
+                    ? ' '.$billingProvider->profile?->nameSuffix?->code
+                    : '')
+                .(!empty($billingProvider->profile?->middle_name)
+                    ? ', '.substr($billingProvider->profile?->middle_name, 0, 1)
+                    : ''),
+            'phoneNumber' => str_replace(
+                '-',
+                '',
+                $billingProviderContact->phone ?? $this->claim->billingCompany->contact?->phone ?? ''
+            ) ?? '',
+            default => '',
+        };
+    }
+
+    protected function getBillingByHeatlhProfessionalAddress($key): string
+    {
+        $healthProfessional = match ($this->claim->type) {
+            ClaimType::PROFESSIONAL => $this->claim->demographicInformation
+                ?->healthProfessionals()
+                ?->wherePivot('field_id', 5)
+                ?->first(),
+            ClaimType::INSTITUTIONAL => $this->claim->demographicInformation
+                ?->healthProfessionals()
+                ?->wherePivot('field_id', 1)
+                ?->orWherePivot('field_id', 76)
+                ?->first(),
+        };
+
+        $contractFeeSpecification = $this->claim?->demographicInformation->company->contractFees()
+            ->whereHas('insurancePlans', function ($query) {
+                $query->where('insurance_plans.id', $this->claim?->higherInsurancePlan()?->id);
+            })
+            ?->first()
+            ?->contractFeeSpecifications()
+            ?->whereNull('health_professional_id')
+            ?->orWhere('health_professional_id', $healthProfessional?->id)
+            ?->first();
+
+        $billingProvider = $contractFeeSpecification->billingProvider;
+        $billingProviderAddress = $billingProvider->profile->addresses
+            ->where('billing_company_id', $this->claim->billing_company_id ?? null)
+            ->first();
+
+        return match ($key) {
+            'address1' => $billingProviderAddress?->address ?? '',
+            'address2' => '',
+            'city' => $billingProviderAddress?->city ?? '',
+            'state' => substr($billingProviderAddress?->state ?? '', 0, 2) ?? '',
+            'postalCode' => str_replace('-', '', $billingProviderAddress?->zip) ?? '',
+            'countryCode' => ('US' !== $billingProviderAddress?->country)
+                ? $billingProviderAddress?->country
+                : '',
+            'countrySubDivisionCode' => ('US' !== $billingProviderAddress?->country)
+                ? $billingProviderAddress?->country_subdivision_code
+                : '',
+            default => '',
+        };
+    }
+
+    protected function getReferring($key): string
+    {
+        $referringProvider = $this->claim->provider();
+        if (!isset($referringProvider)) {
+            return '';
+        }
+
+        $segments = explode('.', $key);
+        $accesorKey = $segments[0] ?? null;
+        $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
+
+        return match ($accesorKey) {
+            'providerType' => 'ReferringProvider',
+            'npi' => str_replace('-', '', $referringProvider->npi ?? ''),
+            'ssn' => str_replace('-', '', $referringProvider->ssn ?? ''),
+            'employerId' => str_replace('-', '', $referringProvider->ein ?? $referringProvider->npi ?? ''),
+            'commercialNumber' => '',
+            'locationNumber' => '',
+            'payerIdentificationNumber' => '',
+            'employerIdentificationNumber' => '',
+            'claimOfficeNumber' => '',
+            'naic' => '',
+            'stateLicenseNumber' => '',
+            'providerUpinNumber' => str_replace('-', '', $referringProvider->upin ?? ''),
+            'taxonomyCode' => '',
+            'firstName' => $referringProvider?->profile?->first_name ?? '',
+            'lastName' => $referringProvider?->profile?->last_name ?? '',
+            'middleName' => $referringProvider?->profile?->middle_name ?? '',
+            'suffix' => $referringProvider?->profile?->nameSuffix?->code ?? '',
+            'organizationName' => '',
+            'contactInformation' => $this->getReferringContactInformation($property),
+            'address' => $this->getReferringAddress($property),
+            default => '',
+        };
+    }
+
+    protected function getReferringContactInformation($key): string
+    {
+        $referringProvider = $this->claim->provider();
+        $referringProviderContact = $referringProvider?->profile?->contacts()?->first();
+
+        return match ($key) {
+            'name' => $referringProviderContact->contact_name ?? $referringProvider?->profile?->first_name ?? '',
+            'phoneNumber' => str_replace('-', '', $referringProviderContact?->phone ?? '') ?? '',
+            'faxNumber' => str_replace('-', '', $referringProviderContact?->fax ?? '') ?? '',
+            'email' => $referringProviderContact?->email ?? '',
+            'phoneExtension' => '',
+            default => '',
+        };
+    }
+
+    protected function getReferringAddress($key): string
+    {
+        $referringProvider = $this->claim->provider();
+        $referringProviderAddress = $referringProvider?->profile?->addresses()?->first();
+
+        return match ($key) {
+            'address1' => $referringProviderAddress?->address ?? '',
+            'address2' => '',
+            'city' => $referringProviderAddress?->city ?? '',
+            'state' => substr($referringProviderAddress?->state ?? '', 0, 2) ?? '',
+            'postalCode' => str_replace('-', '', $referringProviderAddress?->zip ?? '') ?? '',
+            'countryCode' => $referringProviderAddress?->country ?? '',
+            'countrySubDivisionCode' => $referringProviderAddress?->country_subdivision_code ?? '',
+            default => '',
+        };
+    }
+
+    protected function getRendering($key): string
+    {
+        $segments = explode('.', $key);
+        $accesorKey = $segments[0] ?? null;
+        $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
+
+        return match ($accesorKey) {
+            'providerType' => 'BillingProvider',
+            'npi' => '',
+            'ssn' => '',
+            'employerId' => '',
+            'commercialNumber' => '',
+            'locationNumber' => '',
+            'payerIdentificationNumber' => '',
+            'employerIdentificationNumber' => '',
+            'claimOfficeNumber' => '',
+            'naic' => '',
+            'stateLicenseNumber' => '',
+            'providerUpinNumber' => '',
+            'taxonomyCode' => '',
+            'firstName' => '',
+            'lastName' => '',
+            'middleName' => '',
+            'suffix' => '',
+            'organizationName' => '',
+            'contactInformation' => $this->getRenderingContactInformation($property),
+            'address' => $this->getRenderingAddress($property),
+            default => '',
+        };
+    }
+
+    protected function getRenderingContactInformation($key): string
+    {
+        return match ($key) {
+            'name' => '',
+            'phoneNumber' => '',
+            'faxNumber' => '',
+            'email' => '',
+            'phoneExtension' => '',
+            default => '',
+        };
+    }
+
+    protected function getRenderingAddress($key): string
+    {
+        return match ($key) {
+            'address1' => '',
+            'address2' => '',
+            'city' => '',
+            'state' => '',
+            'postalCode' => '',
+            'countryCode' => '',
+            'countrySubDivisionCode' => '',
+            default => '',
+        };
+    }
+
+    protected function getOrdering($key): string
+    {
+        $segments = explode('.', $key);
+        $accesorKey = $segments[0] ?? null;
+        $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
+
+        return match ($accesorKey) {
+            'providerType' => 'BillingProvider',
+            'npi' => '',
+            'ssn' => '',
+            'employerId' => '',
+            'commercialNumber' => '',
+            'locationNumber' => '',
+            'payerIdentificationNumber' => '',
+            'employerIdentificationNumber' => '',
+            'claimOfficeNumber' => '',
+            'naic' => '',
+            'stateLicenseNumber' => '',
+            'providerUpinNumber' => '',
+            'taxonomyCode' => '',
+            'firstName' => '',
+            'lastName' => '',
+            'middleName' => '',
+            'suffix' => '',
+            'organizationName' => '',
+            'contactInformation' => $this->getOrderingContactInformation($property),
+            'address' => $this->getOrderingAddress($property),
+            default => '',
+        };
+    }
+
+    protected function getOrderingContactInformation($key): string
+    {
+        return match ($key) {
+            'name' => '',
+            'phoneNumber' => '',
+            'faxNumber' => '',
+            'email' => '',
+            'phoneExtension' => '',
+            default => '',
+        };
+    }
+
+    protected function getOrderingAddress($key): string
+    {
+        return match ($key) {
+            'address1' => '',
+            'address2' => '',
+            'city' => '',
+            'state' => '',
+            'postalCode' => '',
+            'countryCode' => '',
+            'countrySubDivisionCode' => '',
+            default => '',
+        };
+    }
+
+    protected function getSupervising($key): string
+    {
+        $segments = explode('.', $key);
+        $accesorKey = $segments[0] ?? null;
+        $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
+
+        return match ($accesorKey) {
+            'providerType' => 'BillingProvider',
+            'npi' => '',
+            'ssn' => '',
+            'employerId' => '',
+            'commercialNumber' => '',
+            'locationNumber' => '',
+            'payerIdentificationNumber' => '',
+            'employerIdentificationNumber' => '',
+            'claimOfficeNumber' => '',
+            'naic' => '',
+            'stateLicenseNumber' => '',
+            'providerUpinNumber' => '',
+            'taxonomyCode' => '',
+            'firstName' => '',
+            'lastName' => '',
+            'middleName' => '',
+            'suffix' => '',
+            'organizationName' => '',
+            'contactInformation' => $this->getSupervisingContactInformation($property),
+            'address' => $this->getSupervisingAddress($property),
+            default => '',
+        };
+    }
+
+    protected function getSupervisingContactInformation($key): string
+    {
+        return match ($key) {
+            'name' => '',
+            'phoneNumber' => '',
+            'faxNumber' => '',
+            'email' => '',
+            'phoneExtension' => '',
+            default => '',
+        };
+    }
+
+    protected function getSupervisingAddress($key): string
+    {
+        return match ($key) {
+            'address1' => '',
+            'address2' => '',
+            'city' => '',
+            'state' => '',
+            'postalCode' => '',
+            'countryCode' => '',
+            'countrySubDivisionCode' => '',
+            default => '',
+        };
+    }
+
+    protected function getAttending($key): string
+    {
+        $attending = $this->claim->attending();
+
+        $segments = explode('.', $key);
+        $accesorKey = $segments[0] ?? null;
+        $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
+
+        return match ($accesorKey) {
+            'providerType' => 'AttendingProvider',
+            'npi' => str_replace('-', '', $attending->npi ?? '') ?? '',
+            'secondaryIdentificationQualifierCode' => '',
+            'secondaryIdentifier' => '',
+            'employerId' => str_replace('-', '', $attending->ein ?? '') ?? '',
+            'taxonomyCode' => '',
+            'firstName' => $attending->profile->first_name,
+            'lastName' => $attending->profile->last_name,
+            'middleName' => $attending->profile->middle_name,
+            'suffix' => $attending->profile?->nameSuffix?->code ?? '',
+            'organizationName' => '',
+            'contactInformation' => $this->getAttendingContactInformation($property),
+            'address' => $this->getAttendingAddress($property),
+            default => '',
+        };
+    }
+
+    protected function getAttendingContactInformation($key): string
+    {
+        $attending = $this->claim->attending();
+        $attendingContact = $attending?->profile->contacts()
+            ?->first() ?? null;
+        if (
+            empty($attendingContact?->phone)
+            || empty($attendingContact?->email)
+            || empty($attendingContact?->fax)
+        ) {
+            return '';
+        }
+
+        return match ($key) {
+            'name' => $attendingContact?->contact_name ?? $attending->profile->first_name,
+            'phoneNumber' => str_replace('-', '', $attendingContact?->phone ?? '') ?? '',
+            'faxNumber' => str_replace('-', '', $attendingContact?->fax ?? '') ?? '',
+            'email' => $attendingContact?->email ?? '',
+            'validContact' => true,
+            default => '',
+        };
+    }
+
+    protected function getAttendingAddress($key): string
+    {
+        $attending = $this->claim->attending();
+        $attendingAddress = $attending?->profile?->addresses()
+            ?->first() ?? null;
+
+        return match ($key) {
+            'address1' => $attendingAddress?->address ?? '',
+            'address2' => '',
+            'city' => $attendingAddress?->city ?? '',
+            'state' => substr($attendingAddress?->state ?? '', 0, 2) ?? '',
+            'postalCode' => str_replace('-', '', $attendingAddress?->zip ?? '') ?? '',
+            'countryCode' => ('US' !== $attendingAddress?->country) ? $attendingAddress?->country : '',
+            'countrySubDivisionCode' => ('US' !== $attendingAddress?->country) ? $attendingAddress?->country_subdivision_code : '',
             default => '',
         };
     }
