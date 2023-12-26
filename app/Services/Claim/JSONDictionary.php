@@ -37,43 +37,45 @@ final class JSONDictionary extends Dictionary
 
     protected function getClaimAttribute(string $key): string|Collection|null
     {
-        return match ($key) {
+        $segments = explode('.', $key);
+        $accesorKey = $segments[0] ?? null;
+        $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
+
+        return match ($accesorKey) {
             'controlNumber' => str_pad((string) $this->claim->id, 9, '0', STR_PAD_LEFT),
             'tradingPartnerServiceId' => $this->getByApi('cpid'),
             'tradingPartnerName' => $this->getByApi('name'),
             'usageIndicator' => ('production' == config('app.env')) ? '' : 'T',
+            'submitter' => $this->getSubmitter($property),
             default => collect($this->{'get'.Str::ucfirst(Str::camel($key))}()),
         };
     }
 
-    protected function getSubmitter(): array
+    protected function getSubmitter($key): string
     {
-        return match ($this->claim->type) {
-            ClaimType::PROFESSIONAL => [
-                'organizationName' => $this->claim->billingCompany->name,
-                // 'lastName' => 'doeOne',
-                // 'firstName' => 'janeone',
-                // 'middleName' => 'middleone',
-                'contactInformation' => [
-                    'name' => $this->claim->billingCompany->contact?->contact_name ?? $this->claim->billingCompany->name ?? 'Contact Billing',
-                    'phoneNumber' => str_replace('-', '', $this->claim->billingCompany->contact?->phone ?? ''),
-                    'faxNumber' => str_replace('-', '', $this->claim->billingCompany->contact?->fax ?? ''),
-                    'email' => $this->claim->billingCompany->contact?->email ?? '',
-                    // 'phoneExtension' => '1234'
-                ],
-            ],
-            ClaimType::INSTITUTIONAL => [
-                'organizationName' => $this->claim->billingCompany->name,
-                'taxId' => $this->claim->billingCompany?->tax_id,
-                'contactInformation' => [
-                    'name' => $this->claim->billingCompany->contact?->contact_name ?? $this->claim->billingCompany->name ?? 'Contact Billing',
-                    'phoneNumber' => str_replace('-', '', $this->claim->billingCompany->contact?->phone ?? ''),
-                    'faxNumber' => str_replace('-', '', $this->claim->billingCompany->contact?->fax ?? ''),
-                    'email' => $this->claim->billingCompany->contact?->email ?? '',
-                    'validContact' => true,
-                ],
-            ],
-            default => [],
+        $segments = explode('.', $key);
+        $accesorKey = $segments[0] ?? null;
+        $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
+
+        return match ($accesorKey) {
+            'organizationName' => $this->claim->billingCompany->name,
+            'taxId' => $this->claim->billingCompany?->tax_id,
+            'lastName' => '',
+            'firstName' => '',
+            'middleName' => '',
+            'contactInformation' => $this->getSubmitterContactInformation($property),
+        };
+    }
+
+    protected function getSubmitterContactInformation($key): string
+    {
+        return match ($key) {
+            'name' => $this->claim->billingCompany->contact?->contact_name ?? $this->claim->billingCompany->name ?? 'Contact Billing',
+            'phoneNumber' => str_replace('-', '', $this->claim->billingCompany->contact?->phone ?? ''),
+            'faxNumber' => str_replace('-', '', $this->claim->billingCompany->contact?->fax ?? ''),
+            'email' => $this->claim->billingCompany->contact?->email ?? '',
+            'validContact' => true,
+            default => '',
         };
     }
 
