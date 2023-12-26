@@ -20,7 +20,7 @@ final class ClaimPreviewController extends Controller
     public function show(Request $request, ClaimPreviewService $preview, GetClaimPreviewAction $claimPreview)
     {
         $id = $request->id ?? null;
-        $claim = $request->get('default', true)
+        $claim = $request->get('default', false)
             ? Claim::query()->with(['insurancePolicies'])->where('type', $request->get('type', ClaimType::INSTITUTIONAL->value))->first()
             : Claim::query()->with(['insurancePolicies'])->find($id);
     
