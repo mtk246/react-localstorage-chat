@@ -47,6 +47,7 @@ final class JSONDictionary extends Dictionary
             'tradingPartnerName' => $this->getByApi('name'),
             'usageIndicator' => ('production' == config('app.env')) ? '' : 'T',
             'submitter' => $this->getSubmitter($property),
+            'receiver' => $this->getReceiver($property),
             default => collect($this->{'get'.Str::ucfirst(Str::camel($key))}()),
         };
     }
@@ -79,11 +80,12 @@ final class JSONDictionary extends Dictionary
         };
     }
 
-    protected function getReceiver(): array
+    protected function getReceiver($key): string
     {
-        return [
+        return match ($key) {
             'organizationName' => $this->claim->higherInsurancePlan()?->insuranceCompany?->name ?? null,
-        ];
+            default => '',
+        };
     }
 
     protected function getSubscriber(): array
