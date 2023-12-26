@@ -334,7 +334,7 @@ class Claim extends Model implements Auditable
 
     public function getBilledAmountAttribute()
     {
-        $billed = $this->service->services->reduce(function ($carry, $service) {
+        $billed = $this->service?->services->reduce(function ($carry, $service) {
             return $carry + ($service['days_or_units'] ?? 1) * ((float) $service['price'] ?? 0);
         }, 0);
 
@@ -343,7 +343,7 @@ class Claim extends Model implements Auditable
 
     public function getAmountPaidAttribute()
     {
-        $paid = $this->service->services->reduce(function ($carry, $service) {
+        $paid = $this->service?->services->reduce(function ($carry, $service) {
             return $carry + ((float) $service['copay'] ?? 0);
         }, 0);
 
@@ -591,7 +591,7 @@ class Claim extends Model implements Auditable
                 ->where('billing_company_id', $this->billing_company_id)
                 ->first()
                 ?->abbreviation,
-            'patient' => $this->demographicInformation->patient->profile->only(['first_name', 'last_name', 'ssn']),
+            'patient' => $this->demographicInformation->patient?->profile->only(['first_name', 'last_name', 'ssn']),
             'health_professionals' => $this->demographicInformation->healthProfessionals,
             'insurance_plan' => $this->higherInsurancePlan(),
             'transmitted' => $this->claimTransmissionResponses->count() > 0,
