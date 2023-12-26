@@ -48,6 +48,7 @@ final class JSONDictionary extends Dictionary
             'usageIndicator' => ('production' == config('app.env')) ? '' : 'T',
             'submitter' => $this->getSubmitter($property),
             'receiver' => $this->getReceiver($property),
+            'subscriber' => $this->getSubscriber($property),
             default => collect($this->{'get'.Str::ucfirst(Str::camel($key))}()),
         };
     }
@@ -88,70 +89,65 @@ final class JSONDictionary extends Dictionary
         };
     }
 
-    protected function getSubscriber(): array
+    protected function getSubscriber($key): string
     {
         $subscriber = $this->claim->subscriber();
-        $subscriberAddress = $subscriber?->addresses()
-            ?->first() ?? null;
-        $subscriberContact = $subscriber?->contacts()
-            ->first() ?? null;
 
-        return match ($this->claim->type) {
-            ClaimType::PROFESSIONAL => [
-                'memberId' => $this->claim->higherOrderPolicy()?->policy_number,
-                'ssn' => str_replace('-', '', $subscriber->ssn ?? ''),
-                'paymentResponsibilityLevelCode' => $this->claim->higherOrderPolicy()?->typeResponsibility?->code ?? 'U',
-                // 'organizationName' => '',
-                // 'insuranceTypeCode' => '12',
-                // 'subscriberGroupName' => 'Subscriber Group Name',
-                'firstName' => $subscriber->first_name,
-                'lastName' => $subscriber->last_name,
-                'middleName' => $subscriber->middle_name ?? null,
-                'suffix' => $subscriber->nameSuffix?->code ?? null,
-                'gender' => strtoupper($subscriber->sex ?? 'U'),
-                'dateOfBirth' => str_replace('-', '', $subscriber->date_of_birth),
-                'policyNumber' => $this->claim->higherOrderPolicy()->policy_number ?? null,
-                // 'groupNumber' => '',
+        $segments = explode('.', $key);
+        $accesorKey = $segments[0] ?? null;
+        $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
 
-                'contactInformation' => [
-                    'name' => $subscriberContact->contact_name ?? $subscriber->first_name,
-                    'phoneNumber' => str_replace('-', '', $subscriberContact?->phone ?? '') ?? null,
-                    'faxNumber' => str_replace('-', '', $subscriberContact?->fax ?? '') ?? null,
-                    'email' => $subscriberContact?->email,
-                    // 'phoneExtension' => '1234'
-                ],
-                'address' => [
-                    'address1' => $subscriberAddress?->address,
-                    'address2' => null,
-                    'city' => $subscriberAddress?->city,
-                    'state' => substr($subscriberAddress?->state ?? '', 0, 2) ?? null,
-                    'postalCode' => str_replace('-', '', $subscriberAddress?->zip ?? '') ?? null,
-                    'countryCode' => $subscriberAddress?->country,
-                    'countrySubDivisionCode' => $subscriberAddress?->country_subdivision_code,
-                ],
-            ],
-            ClaimType::INSTITUTIONAL => [
-                'memberId' => $this->claim->higherOrderPolicy()?->policy_number,
-                'standardHealthId' => '', /* Identificador sanitario, se envia si no se envia el memberId */
-                'ssn' => str_replace('-', '', $subscriber->ssn ?? ''),
-                'firstName' => $subscriber->first_name,
-                'lastName' => $subscriber->last_name,
-                'middleName' => $subscriber->middle_name ?? null,
-                'suffix' => $subscriber->nameSuffix?->code ?? null,
-                'gender' => strtoupper($subscriber->sex ?? 'U'),
-                'dateOfBirth' => str_replace('-', '', $subscriber->date_of_birth),
-                // 'groupNumber' => '',
-                'paymentResponsibilityLevelCode' => $this->claim->higherOrderPolicy()?->typeResponsibility?->code ?? 'U',
-                'address' => [
-                    'address1' => $subscriberAddress?->address,
-                    'address2' => null,
-                    'city' => $subscriberAddress?->city,
-                    'state' => substr($subscriberAddress?->state ?? '', 0, 2) ?? null,
-                    'postalCode' => str_replace('-', '', $subscriberAddress?->zip ?? '') ?? null,
-                    'countryCode' => ('US' !== $subscriberAddress?->country) ? $subscriberAddress?->country : '',
-                    'countrySubDivisionCode' => ('US' !== $subscriberAddress?->country) ? $subscriberAddress?->country_subdivision_code : '',
-                ],
-            ],
+        return match ($accesorKey) {
+            'memberId' => $this->claim->higherOrderPolicy()?->policy_number,
+            'standardHealthId' => '', /* Identificador sanitario, se envia si no se envia el memberId */
+            'ssn' => str_replace('-', '', $subscriber->ssn ?? ''),
+            'paymentResponsibilityLevelCode' => $this->claim->higherOrderPolicy()?->typeResponsibility?->code ?? 'U',
+            'organizationName' => '',
+            'insuranceTypeCode' => '',
+            'subscriberGroupName' => '',
+            'firstName' => $subscriber->first_name,
+            'lastName' => $subscriber->last_name,
+            'middleName' => $subscriber->middle_name ?? '',
+            'suffix' => $subscriber->nameSuffix?->code ?? '',
+            'gender' => strtoupper($subscriber->sex ?? 'U'),
+            'dateOfBirth' => str_replace('-', '', $subscriber->date_of_birth),
+            'policyNumber' => $this->claim->higherOrderPolicy()->policy_number ?? '',
+            'groupNumber' => '',
+            'contactInformation' => $this->getSubscriberContactInformation($property),
+            'address' => $this->getSubscriberAddress($property),
+            default => '',
+        };
+    }
+
+    protected function getSubscriberContactInformation($key): string
+    {
+        $subscriber = $this->claim->subscriber();
+        $subscriberContact = $subscriber?->contacts()->first() ?? null;
+
+        return match ($key) {
+            'name' => $subscriberContact->contact_name ?? $subscriber->first_name,
+            'phoneNumber' => str_replace('-', '', $subscriberContact?->phone ?? '') ?? '',
+            'faxNumber' => str_replace('-', '', $subscriberContact?->fax ?? '') ?? '',
+            'email' => $subscriberContact?->email,
+            'phoneExtension' => '',
+            default => '',
+        };
+    }
+
+    protected function getSubscriberAddress($key): string
+    {
+        $subscriber = $this->claim->subscriber();
+        $subscriberAddress = $subscriber?->addresses()?->first() ?? null;
+
+        return match ($key) {
+            'address1' => $subscriberAddress?->address,
+            'address2' => null,
+            'city' => $subscriberAddress?->city,
+            'state' => substr($subscriberAddress?->state ?? '', 0, 2) ?? '',
+            'postalCode' => str_replace('-', '', $subscriberAddress?->zip ?? '') ?? '',
+            'countryCode' => ('US' !== $subscriberAddress?->country) ? $subscriberAddress?->country : '',
+            'countrySubDivisionCode' => ('US' !== $subscriberAddress?->country) ? $subscriberAddress?->country_subdivision_code : '',
+            default => '',
         };
     }
 
