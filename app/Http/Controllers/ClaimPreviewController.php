@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Claim\GetClaimPreviewAction;
 use App\Actions\Claim\GetClaimTransmissionReportAction;
+use App\Enums\Claim\ClaimType;
 use App\Models\Claims\Claim;
 use App\Models\Claims\ClaimBatch;
 use App\Services\Claim\ClaimPreviewService;
@@ -20,7 +21,7 @@ final class ClaimPreviewController extends Controller
     {
         $id = $request->id ?? null;
         $claim = $request->get('default', true)
-            ? Claim::query()->with(['insurancePolicies'])->first()
+            ? Claim::query()->with(['insurancePolicies'])->where('type', $request->get('type', ClaimType::INSTITUTIONAL->value))->first()
             : Claim::query()->with(['insurancePolicies'])->find($id);
     
         $preview->setConfig([
