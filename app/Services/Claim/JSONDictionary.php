@@ -6,7 +6,6 @@ namespace App\Services\Claim;
 
 use App\Enums\Claim\ClaimType;
 use App\Enums\Claim\FormatType;
-use App\Models\Company;
 use App\Models\HealthProfessional;
 use App\Services\ClearingHouse\ClearingHouseAPI;
 use Carbon\Carbon;
@@ -49,6 +48,7 @@ final class JSONDictionary extends Dictionary
             'submitter' => $this->getSubmitter($property),
             'receiver' => $this->getReceiver($property),
             'subscriber' => $this->getSubscriber($property),
+            'dependent' => $this->getDependent($property),
             default => collect($this->{'get'.Str::ucfirst(Str::camel($key))}()),
         };
     }
@@ -151,67 +151,79 @@ final class JSONDictionary extends Dictionary
         };
     }
 
-    protected function getDependent(): ?array
+    protected function getDependent($key): string
+    {
+        $patient = $this->claim
+            ?->demographicInformation
+            ?->patient;
+
+        if (true == ($this->claim->higherOrderPolicy()?->own ?? false)) {
+            return '';
+        }
+
+        $segments = explode('.', $key);
+        $accesorKey = $segments[0] ?? null;
+        $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
+
+        return match ($accesorKey) {
+            'firstName' => $patient->profile->first_name,
+            'lastName' => $patient->profile->last_name,
+            'middleName' => $patient->profile->middle_name ?? '',
+            'suffix' => $patient->profile?->nameSuffix?->code ?? '',
+            'gender' => strtoupper($patient->profile?->sex ?? 'U'),
+            'dateOfBirth' => str_replace('-', '', $patient->profile?->date_of_birth ?? ''),
+            'ssn' => str_replace('-', '', $patient->profile?->ssn ?? ''),
+            'memberId' => $patient->code,
+            'relationshipToSubscriberCode' => $this->claim->subscriber()->relationship->code ?? '21',
+            'contactInformation' => $this->getDependentContactInformation($property),
+            'address' => $this->getDependentAddress($property),
+            default => '',
+        };
+    }
+
+    protected function getDependentContactInformation($key): string
+    {
+        $patient = $this->claim
+            ?->demographicInformation
+            ?->patient;
+        $patientContact = $patient?->profile->contacts()
+            ->first() ?? null;
+
+        if (true == ($this->claim->higherOrderPolicy()?->own ?? false)) {
+            return '';
+        }
+
+        return match ($key) {
+            'name' => $patientContact?->contact_name ?? $patient->profile->first_name,
+            'phoneNumber' => str_replace('-', '', $patientContact?->phone ?? '') ?? '',
+            'faxNumber' => str_replace('-', '', $patientContact?->fax ?? '') ?? '',
+            'email' => $patientContact?->email ?? '',
+            'phoneExtension' => '',
+            default => '',
+        };
+    }
+
+    protected function getDependentAddress($key): string
     {
         $patient = $this->claim
             ?->demographicInformation
             ?->patient;
         $patientAddress = $patient?->profile?->addresses()
             ?->first() ?? null;
-        $patientContact = $patient?->profile->contacts()
-            ->first() ?? null;
 
         if (true == ($this->claim->higherOrderPolicy()?->own ?? false)) {
-            return null;
+            return '';
         }
 
-        return match ($this->claim->type) {
-            ClaimType::PROFESSIONAL => [
-                'firstName' => $patient->profile->first_name,
-                'lastName' => $patient->profile->last_name,
-                'middleName' => $patient->profile->middle_name ?? null,
-                'suffix' => $patient->profile?->nameSuffix?->code,
-                'gender' => strtoupper($patient->profile?->sex ?? 'U'),
-                'dateOfBirth' => str_replace('-', '', $patient->profile?->date_of_birth ?? ''),
-                'ssn' => str_replace('-', '', $patient->profile?->ssn ?? ''),
-                'memberId' => $patient->code,
-                'relationshipToSubscriberCode' => $this->claim->subscriber()->relationship->code ?? '21',
-                'contactInformation' => [
-                    'name' => $patientContact?->contact_name ?? $patient->profile->first_name,
-                    'phoneNumber' => str_replace('-', '', $patientContact?->phone ?? '') ?? null,
-                    'faxNumber' => str_replace('-', '', $patientContact?->fax ?? '') ?? null,
-                    'email' => $patientContact?->email,
-                    'phoneExtension' => null,
-                ],
-                'address' => [
-                    'address1' => $patientAddress?->address,
-                    'address2' => null,
-                    'city' => $patientAddress?->city,
-                    'state' => substr($patientAddress?->state ?? '', 0, 2) ?? null,
-                    'postalCode' => str_replace('-', '', $patientAddress?->zip ?? '') ?? null,
-                    'countryCode' => $patientAddress?->country,
-                    'countrySubDivisionCode' => $patientAddress?->country_subdivision_code,
-                ],
-            ],
-            ClaimType::INSTITUTIONAL => [
-                'firstName' => $patient->profile->first_name,
-                'lastName' => $patient->profile->last_name,
-                'middleName' => $patient->profile->middle_name ?? null,
-                'suffix' => $patient->profile?->nameSuffix?->code,
-                'gender' => strtoupper($patient->profile?->sex ?? 'U'),
-                'dateOfBirth' => str_replace('-', '', $patient->profile?->date_of_birth ?? ''),
-                'ssn' => str_replace('-', '', $patient->profile?->ssn ?? ''),
-                'relationshipToSubscriberCode' => $this->claim->subscriber()->relationship->code ?? '21',
-                'address' => [
-                    'address1' => $patientAddress?->address,
-                    'address2' => null,
-                    'city' => $patientAddress?->city,
-                    'state' => substr($patientAddress?->state ?? '', 0, 2) ?? null,
-                    'postalCode' => str_replace('-', '', $patientAddress?->zip ?? '') ?? null,
-                    'countryCode' => $patientAddress?->country,
-                    'countrySubDivisionCode' => $patientAddress?->country_subdivision_code,
-                ],
-            ],
+        return match ($key) {
+            'address1' => $patientAddress?->address ?? '',
+            'address2' => '',
+            'city' => $patientAddress?->city ?? '',
+            'state' => substr($patientAddress?->state ?? '', 0, 2) ?? '',
+            'postalCode' => str_replace('-', '', $patientAddress?->zip ?? '') ?? '',
+            'countryCode' => $patientAddress?->country ?? '',
+            'countrySubDivisionCode' => $patientAddress?->country_subdivision_code ?? '',
+            default => '',
         };
     }
 
@@ -1858,462 +1870,6 @@ final class JSONDictionary extends Dictionary
         };
     }
 
-    protected function getPayToAddress(): ?array
-    {
-        $billingProviderPaymentAddress = $this->claim
-            ?->demographicInformation
-            ?->company
-            ->addresses()
-            ->where('billing_company_id', $this->claim->billing_company_id)
-            ->where('address_type_id', '3')
-            ?->first() ?? null;
-
-        return isset($billingProviderPaymentAddress)
-            ? [
-                'address1' => $billingProviderPaymentAddress?->address,
-                'address2' => null,
-                'city' => $billingProviderPaymentAddress?->city,
-                'state' => substr($billingProviderPaymentAddress?->state ?? '', 0, 2) ?? null,
-                'postalCode' => str_replace('-', '', $billingProviderPaymentAddress?->zip) ?? null,
-                'countryCode' => ('US' !== $billingProviderPaymentAddress?->country) ? $billingProviderPaymentAddress?->country : '',
-                'countrySubDivisionCode' => ('US' !== $billingProviderPaymentAddress?->country) ? $billingProviderPaymentAddress?->country_subdivision_code : '',
-            ]
-            : null;
-    }
-
-    protected function getPayToPlan(): ?array
-    {
-        return null;
-
-        /* @todo Se emplea cuando el pago se hace a otra compañia de seguro
-         * Esta es la data del insurance al que hay que hacerle el pago
-         * Actualmente no esta considerado en el sistema
-         */
-        return [
-            'organizationName' => 'Example Org',
-            'primaryIdentifierTypeCode' => 'PI',
-            'primaryIdentifier' => '',
-            'address' => [
-                'address1' => '123 address1',
-                'address2' => 'apt 000',
-                'city' => 'city1',
-                'state' => 'wa',
-                'postalCode' => '981010000',
-                'countryCode' => '',
-                'countrySubDivisionCode' => '',
-            ],
-            'secondaryIdentifierTypeCode' => '2U',
-            'secondaryIdentifier' => '11',
-            'taxIdentificationNumber' => '',
-        ];
-    }
-
-    protected function getPayerAddress(): ?array
-    {
-        return null;
-
-        /* @todo Se emplea cuando el pago se hace a otra compañia de seguro
-         * Esta es la data del insurance al que hay que hacerle el pago
-         * Actualmente no esta considerado en el sistema
-         */
-        return [
-            'address1' => '123 address1',
-            'address2' => 'apt 000',
-            'city' => 'city1',
-            'state' => 'wa',
-            'postalCode' => '981010000',
-            'countryCode' => '',
-            'countrySubDivisionCode' => '',
-        ];
-    }
-
-    protected function getBilling(): array
-    {
-        $healthProfessional = match ($this->claim->type) {
-            ClaimType::PROFESSIONAL => $this->claim->demographicInformation
-                ?->healthProfessionals()
-                ?->wherePivot('field_id', 5)
-                ?->first(),
-            ClaimType::INSTITUTIONAL => $this->claim->demographicInformation
-                ?->healthProfessionals()
-                ?->wherePivot('field_id', 1)
-                ?->orWherePivot('field_id', 76)
-                ?->first(),
-        };
-
-        $contractFeeSpecification = $this->claim?->demographicInformation->company->contractFees()
-            ->whereHas('insurancePlans', function ($query) {
-                $query->where('insurance_plans.id', $this->claim?->higherInsurancePlan()?->id);
-            })
-            ?->first()
-            ?->contractFeeSpecifications()
-            ?->whereNull('health_professional_id')
-            ?->orWhere('health_professional_id', $healthProfessional?->id)
-            ?->first();
-
-        if (is_null($contractFeeSpecification)) {
-            $billingProvider = $this->claim
-                ?->demographicInformation
-                ?->company;
-            $billingProviderAddress = $billingProvider
-                ->addresses()
-                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
-                ->where('address_type_id', 1)
-                ?->first() ?? null;
-            $billingProviderContact = $billingProvider
-                ->contacts()
-                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
-                ?->first() ?? null;
-
-            return [
-                'providerType' => 'BillingProvider',
-                'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? null,
-                'ssn' => str_replace('-', '', $billingProvider?->ssn ?? ''),
-                'employerId' => str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi),
-                // 'commercialNumber' => '',
-                // 'locationNumber' => '',
-                // 'payerIdentificationNumber' => '',
-                // 'employerIdentificationNumber' => '',
-                // 'claimOfficeNumber' => '',
-                // 'naic' => '',
-                // 'stateLicenseNumber' => '',
-                // 'providerUpinNumber' => '',
-                // 'taxonomyCode' => '',
-                // 'firstName' => 'johnone',
-                // 'lastName' => 'doeone',
-                // 'middleName' => 'middleone',
-                // 'suffix' => 'Jr',
-                'organizationName' => $billingProvider?->name,
-                'address' => [
-                    'address1' => $billingProviderAddress?->address,
-                    'address2' => null,
-                    'city' => $billingProviderAddress?->city,
-                    'state' => substr($billingProviderAddress?->state ?? '', 0, 2) ?? null,
-                    'postalCode' => str_replace('-', '', $billingProviderAddress?->zip) ?? null,
-                    'countryCode' => ('US' !== $billingProviderAddress?->country)
-                        ? $billingProviderAddress?->country
-                        : '',
-                    'countrySubDivisionCode' => ('US' !== $billingProviderAddress?->country)
-                        ? $billingProviderAddress?->country_subdivision_code
-                        : '',
-                ],
-                'contactInformation' => [
-                    'name' => ('' === $billingProviderContact->phone ?? '')
-                        ? $this->claim->billingCompany->contact?->contact_name ?? $this->claim->billingCompany->name
-                        : $billingProviderContact->contact_name ?? $billingProvider->name,
-                    'phoneNumber' => str_replace(
-                        '-',
-                        '',
-                        $billingProviderContact->phone ?? $this->claim->billingCompany->contact?->phone ?? ''
-                    ) ?? null,
-                    // 'faxNumber' => str_replace('-', '', $billingProviderContact->fax ?? '') ?? null,
-                    // 'email' => $billingProviderContact->email,
-                    // 'phoneExtension' => ''
-                ],
-            ];
-        }
-        $billingProvider = $contractFeeSpecification->billingProvider;
-
-        if (Company::class === $contractFeeSpecification->billing_provider_type) {
-            $billingProviderAddress = $billingProvider
-                ->addresses()
-                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
-                ->where('address_type_id', 1)
-                ?->first() ?? null;
-            $billingProviderContact = $billingProvider
-                ->contacts()
-                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
-                ?->first() ?? null;
-
-            return [
-                'providerType' => 'BillingProvider',
-                'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? null,
-                'ssn' => str_replace('-', '', $billingProvider?->ssn ?? ''),
-                'employerId' => str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi),
-                'organizationName' => $billingProvider?->name,
-                'address' => [
-                    'address1' => $billingProviderAddress?->address,
-                    'address2' => null,
-                    'city' => $billingProviderAddress?->city,
-                    'state' => substr($billingProviderAddress?->state ?? '', 0, 2) ?? null,
-                    'postalCode' => str_replace('-', '', $billingProviderAddress?->zip) ?? null,
-                    'countryCode' => ('US' !== $billingProviderAddress?->country)
-                        ? $billingProviderAddress?->country
-                        : '',
-                    'countrySubDivisionCode' => ('US' !== $billingProviderAddress?->country)
-                        ? $billingProviderAddress?->country_subdivision_code
-                        : '',
-                ],
-                'contactInformation' => [
-                    'name' => ('' === $billingProviderContact->phone ?? '')
-                        ? $this->claim->billingCompany->contact?->contact_name ?? $this->claim->billingCompany->name
-                        : $billingProviderContact->contact_name ?? $billingProvider->name,
-                    'phoneNumber' => str_replace(
-                        '-',
-                        '',
-                        $billingProviderContact->phone ?? $this->claim->billingCompany->contact?->phone ?? ''
-                    ) ?? null,
-                ],
-            ];
-        } elseif (HealthProfessional::class === $contractFeeSpecification->billing_provider_type) {
-            $billingProviderAddress = $billingProvider->profile->addresses
-                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
-                ->first();
-            $billingProviderContact = $billingProvider->profile->contacts
-                ->where('billing_company_id', $this->claim->billing_company_id ?? null)
-                ->first();
-
-            return [
-                'providerType' => 'BillingProvider',
-                'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? null,
-                'ssn' => str_replace('-', '', $billingProvider?->profile?->ssn ?? ''),
-                'employerId' => str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi),
-                'firstName' => $billingProvider?->profile?->first_name,
-                'lastName' => $billingProvider?->profile?->last_name,
-                'middleName' => $billingProvider?->profile?->middle_name,
-                'suffix' => $billingProvider?->profile?->nameSuffix?->code,
-                'address' => [
-                    'address1' => $billingProviderAddress?->address,
-                    'address2' => null,
-                    'city' => $billingProviderAddress?->city,
-                    'state' => substr($billingProviderAddress?->state ?? '', 0, 2) ?? null,
-                    'postalCode' => str_replace('-', '', $billingProviderAddress?->zip) ?? null,
-                    'countryCode' => ('US' !== $billingProviderAddress?->country)
-                        ? $billingProviderAddress?->country
-                        : '',
-                    'countrySubDivisionCode' => ('US' !== $billingProviderAddress?->country)
-                        ? $billingProviderAddress?->country_subdivision_code
-                        : '',
-                ],
-                'contactInformation' => [
-                    'name' => $billingProvider->profile?->last_name.', '.$billingProvider->profile?->first_name
-                        .(!empty($billingProvider->profile?->nameSuffix?->code)
-                            ? ' '.$billingProvider->profile?->nameSuffix?->code
-                            : '')
-                        .(!empty($billingProvider->profile?->middle_name)
-                            ? ', '.substr($billingProvider->profile?->middle_name, 0, 1)
-                            : ''),
-                    'phoneNumber' => str_replace(
-                        '-',
-                        '',
-                        $billingProviderContact->phone ?? $this->claim->billingCompany->contact?->phone ?? ''
-                    ) ?? null,
-                ],
-            ];
-        }
-    }
-
-    protected function getReferring(): ?array
-    {
-        $referringProvider = $this->claim->provider();
-        $referringProviderAddress = $referringProvider?->profile?->addresses()?->first();
-        $referringProviderContact = $referringProvider?->profile?->contacts()?->first();
-
-        return !isset($referringProvider)
-        ? null
-        : [
-            'providerType' => 'ReferringProvider',
-            'npi' => str_replace('-', '', $referringProvider->npi ?? ''),
-            'ssn' => str_replace('-', '', $referringProvider->ssn ?? ''),
-            'employerId' => str_replace('-', '', $referringProvider->ein ?? $referringProvider->npi ?? ''),
-            // 'commercialNumber' => '',
-            // 'locationNumber' => '',
-            // 'payerIdentificationNumber' => '',
-            // 'employerIdentificationNumber' => '',
-            // 'claimOfficeNumber' => '',
-            // 'naic' => '',
-            // 'stateLicenseNumber' => '',
-            'providerUpinNumber' => str_replace('-', '', $referringProvider->upin ?? ''),
-            // 'taxonomyCode' => '',
-            'firstName' => $referringProvider?->profile?->first_name,
-            'lastName' => $referringProvider?->profile?->last_name,
-            'middleName' => $referringProvider?->profile?->middle_name,
-            'suffix' => $referringProvider?->profile?->nameSuffix?->code,
-            // 'organizationName' => $referringProvider?->profile?->last_name,
-            'address' => [
-                'address1' => $referringProviderAddress?->address,
-                'address2' => null,
-                'city' => $referringProviderAddress?->city,
-                'state' => substr($referringProviderAddress?->state ?? '', 0, 2) ?? null,
-                'postalCode' => str_replace('-', '', $referringProviderAddress?->zip ?? '') ?? null,
-                'countryCode' => $referringProviderAddress?->country,
-                'countrySubDivisionCode' => $referringProviderAddress?->country_subdivision_code,
-            ],
-            'contactInformation' => [
-                'name' => $referringProviderContact->contact_name ?? $referringProvider?->profile?->first_name,
-                'phoneNumber' => str_replace('-', '', $referringProviderContact?->phone ?? '') ?? null,
-                'faxNumber' => str_replace('-', '', $referringProviderContact?->fax ?? '') ?? null,
-                'email' => $referringProviderContact?->email,
-                'phoneExtension' => '',
-            ],
-        ];
-    }
-
-    protected function getRendering(): ?array
-    {
-        return [
-            'providerType' => 'BillingProvider',
-            'npi' => '1760854442',
-            'ssn' => '000000000',
-            'employerId' => '123456789',
-            'commercialNumber' => '',
-            'locationNumber' => '',
-            'payerIdentificationNumber' => '',
-            'employerIdentificationNumber' => '',
-            'claimOfficeNumber' => '',
-            'naic' => '',
-            'stateLicenseNumber' => '',
-            'providerUpinNumber' => '',
-            'taxonomyCode' => '',
-            'firstName' => 'johnone',
-            'lastName' => 'doeone',
-            'middleName' => 'middleone',
-            'suffix' => 'Jr',
-            'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
-            'address' => [
-                'address1' => '123 address1',
-                'address2' => 'apt 000',
-                'city' => 'city1',
-                'state' => 'wa',
-                'postalCode' => '981010000',
-                'countryCode' => '',
-                'countrySubDivisionCode' => '',
-            ],
-            'contactInformation' => [
-                'name' => 'SUBMITTER CONTACT INFO',
-                'phoneNumber' => '5554567890',
-                'faxNumber' => '5551234567',
-                'email' => 'email@email.com',
-                'phoneExtension' => '1234',
-            ],
-        ];
-    }
-
-    protected function getOrdering(): ?array
-    {
-        return [
-            'providerType' => 'BillingProvider',
-            'npi' => '1760854442',
-            'ssn' => '000000000',
-            'employerId' => '123456789',
-            'commercialNumber' => '',
-            'locationNumber' => '',
-            'payerIdentificationNumber' => '',
-            'employerIdentificationNumber' => '',
-            'claimOfficeNumber' => '',
-            'naic' => '',
-            'stateLicenseNumber' => '',
-            'providerUpinNumber' => '',
-            'taxonomyCode' => '',
-            'firstName' => 'johnone',
-            'lastName' => 'doeone',
-            'middleName' => 'middleone',
-            'suffix' => 'Jr',
-            'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
-            'address' => [
-                'address1' => '123 address1',
-                'address2' => 'apt 000',
-                'city' => 'city1',
-                'state' => 'wa',
-                'postalCode' => '981010000',
-                'countryCode' => '',
-                'countrySubDivisionCode' => '',
-            ],
-            'contactInformation' => [
-                'name' => 'SUBMITTER CONTACT INFO',
-                'phoneNumber' => '5554567890',
-                'faxNumber' => '5551234567',
-                'email' => 'email@email.com',
-                'phoneExtension' => '1234',
-            ],
-        ];
-    }
-
-    protected function getSupervising(): ?array
-    {
-        return [
-            'providerType' => 'BillingProvider',
-            'npi' => '1760854442',
-            'ssn' => '000000000',
-            'employerId' => '123456789',
-            'commercialNumber' => '',
-            'locationNumber' => '',
-            'payerIdentificationNumber' => '',
-            'employerIdentificationNumber' => '',
-            'claimOfficeNumber' => '',
-            'naic' => '',
-            'stateLicenseNumber' => '',
-            'providerUpinNumber' => '',
-            'taxonomyCode' => '',
-            'firstName' => 'johnone',
-            'lastName' => 'doeone',
-            'middleName' => 'middleone',
-            'suffix' => 'Jr',
-            'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
-            'address' => [
-                'address1' => '123 address1',
-                'address2' => 'apt 000',
-                'city' => 'city1',
-                'state' => 'wa',
-                'postalCode' => '981010000',
-                'countryCode' => '',
-                'countrySubDivisionCode' => '',
-            ],
-            'contactInformation' => [
-                'name' => 'SUBMITTER CONTACT INFO',
-                'phoneNumber' => '5554567890',
-                'faxNumber' => '5551234567',
-                'email' => 'email@email.com',
-                'phoneExtension' => '1234',
-            ],
-        ];
-    }
-
-    protected function getAttending(): ?array
-    {
-        $attending = $this->claim->attending();
-        $attendingAddress = $attending?->profile?->addresses()
-            ?->first() ?? null;
-        $attendingContact = $attending?->profile->contacts()
-            ?->first() ?? null;
-
-        return [
-            'providerType' => 'AttendingProvider',
-            'npi' => str_replace('-', '', $attending->npi ?? '') ?? null,
-            // 'secondaryIdentificationQualifierCode' => '0B',
-            // 'secondaryIdentifier' => 'string',
-            'employerId' => str_replace('-', '', $attending->ein ?? '') ?? null,
-            // 'taxonomyCode' => 'string',
-            'firstName' => $attending->profile->first_name,
-            'lastName' => $attending->profile->last_name,
-            'middleName' => $attending->profile->middle_name,
-            'suffix' => $attending->profile?->nameSuffix?->code,
-            // 'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
-            'address' => [
-                'address1' => $attendingAddress?->address,
-                'address2' => null,
-                'city' => $attendingAddress?->city,
-                'state' => substr($attendingAddress?->state ?? '', 0, 2) ?? null,
-                'postalCode' => str_replace('-', '', $attendingAddress?->zip ?? '') ?? null,
-                'countryCode' => ('US' !== $attendingAddress?->country) ? $attendingAddress?->country : '',
-                'countrySubDivisionCode' => ('US' !== $attendingAddress?->country) ? $attendingAddress?->country_subdivision_code : '',
-            ],
-            'contactInformation' => (
-                !empty($attendingContact?->phone)
-                || !empty($attendingContact?->email)
-                || !empty($attendingContact?->fax)
-            )
-                ? [
-                    'name' => $attendingContact?->contact_name ?? $attending->profile->first_name,
-                    'phoneNumber' => str_replace('-', '', $attendingContact?->phone ?? '') ?? null,
-                    'faxNumber' => str_replace('-', '', $attendingContact?->fax ?? '') ?? null,
-                    'email' => $attendingContact?->email,
-                    'validContact' => true,
-                ]
-                : null,
-        ];
-    }
-
     protected function getFacilityAttribute(string $key): string
     {
         return (string) $this->claim
@@ -2322,7 +1878,7 @@ final class JSONDictionary extends Dictionary
         ?->{$key} ?? '';
     }
 
-    public function getFacilityAddressAttribute(string $key, string $entry): ?string
+    public function getFacilityAddressAttribute(string $key, string $entry): string
     {
         $value = (string) $this->claim
             ->demographicInformation
@@ -2336,7 +1892,7 @@ final class JSONDictionary extends Dictionary
             'city' => substr($value ?? '', 0, 30),
             'state' => substr($value ?? '', 0, 2),
             'zip' => substr(str_replace('-', '', $value ?? ''), 0, 12),
-            default => !empty($value) ? $value : null,
+            default => !empty($value) ? $value : '',
         };
     }
 
@@ -2349,7 +1905,7 @@ final class JSONDictionary extends Dictionary
             ->get((int) $entry);
 
         return match ($key) {
-            'phone' => str_replace('-', '', $value?->phone ?? '') ?? null,
+            'phone' => str_replace('-', '', $value?->phone ?? '') ?? '',
             default => (string) $value?->{$key} ?? '',
         };
     }
