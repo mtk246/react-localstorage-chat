@@ -32,11 +32,11 @@ final class StoreRulesRequest extends FormRequest
             'responsibilities.*' => 'required|integer|exists:type_catalogs,id',
             'rules.file' => 'required|array',
             'rules.file.*' => [
-                'required',
+                'nullable',
                 new RuleFormatRule($this->get('format', '')),
             ],
             'rules.digital.*' => [
-                'required',
+                'nullable',
                 'array',
                 new RuleFormatRule($this->get('format', '')),
             ],
