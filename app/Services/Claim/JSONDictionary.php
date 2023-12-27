@@ -9,7 +9,6 @@ use App\Enums\Claim\FormatType;
 use App\Models\HealthProfessional;
 use App\Services\ClearingHouse\ClearingHouseAPI;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 final class JSONDictionary extends Dictionary
@@ -34,7 +33,16 @@ final class JSONDictionary extends Dictionary
         return array_filter_recursive($this->getSingleFormat($value->id)->toArray());
     }
 
-    protected function getClaimAttribute(string $key): string|Collection|null
+    protected function getMultipleFormat(array $values, string $glue, string $key): array
+    {
+        $segments = explode('.', $key);
+        $accesorKey = $segments[0] ?? null;
+        $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
+
+        return $this->{'get'.Str::ucfirst(Str::camel($accesorKey))}($property);
+    }
+
+    protected function getClaimAttribute(string $key): bool|string|array|null
     {
         $segments = explode('.', $key);
         $accesorKey = $segments[0] ?? null;
@@ -58,8 +66,8 @@ final class JSONDictionary extends Dictionary
             'ordering' => $this->getOrdering($property),
             'supervising' => $this->getSupervising($property),
             'attending' => $this->getAttending($property),
-
-            default => collect($this->{'get'.Str::ucfirst(Str::camel($key))}()),
+            'claimInformation' => $this->getClaimInformation($property),
+            default => $this->{'get'.Str::ucfirst(Str::camel($key))}($property),
         };
     }
 
@@ -237,8 +245,69 @@ final class JSONDictionary extends Dictionary
         };
     }
 
-    protected function getClaimInformation(): array
+    protected function getClaimDateInformation($key): string
     {
+        $qualifierFields = [
+            '431' => 'symptomDate',
+            '304' => 'lastSeenDate',
+            '444' => 'firstContactDate',
+            '453' => 'acuteManifestationDate',
+            '439' => 'accidentDate',
+            '455' => 'lastXRayDate',
+            '090' => 'assumedAndRelinquishedCareBeginDate',
+            '091' => 'assumedAndRelinquishedCareEndDate',
+            '454' => 'initialTreatmentDate',
+            '471' => 'hearingAndVisionPrescriptionDate',
+        ];
+        $claimDateInfo = [];
+        foreach ($this->claim->dateInformations ?? [] as $dateInfo) {
+            $qualifier = $dateInfo?->qualifier?->code ?? '';
+            if (isset($qualifierFields[$qualifier])) {
+                if ((1 == $dateInfo->field_id->value) || (2 == $dateInfo->field_id->value)) {
+                    $claimDateInfo[$qualifierFields[$qualifier]] = str_replace('-', '', $dateInfo?->from_date ?? '');
+                } elseif (3 == $dateInfo->field_id->value) {
+                    $claimDateInfo['lastWorkedDate'] = str_replace('-', '', $dateInfo?->from_date ?? '');
+                    $claimDateInfo['authorizedReturnToWorkDate'] = str_replace('-', '', $dateInfo->to_date ?? '');
+                }
+            }
+            if (4 == $dateInfo->field_id->value) {
+                $claimDateInfo['admissionDate'] = str_replace('-', '', $dateInfo?->from_date ?? '');
+                $claimDateInfo['dischargeDate'] = str_replace('-', '', $dateInfo->to_date ?? '');
+            }
+        }
+
+        return $claimDateInfo[$key] ?? '';
+    }
+
+    protected function getClaimEpsdtReferral($key): string|array
+    {
+        $claimServiceLinePrincipal = $this->claim->service->services->first();
+
+        return match ($key) {
+            'certificationConditionCodeAppliesIndicator' => isset($claimServiceLinePrincipal?->epsdt?->code) ? 'Y' : 'N',
+            'conditionCodes' => [
+                $claimServiceLinePrincipal?->epsdt?->code ?? 'NU',
+            ],
+            default => '',
+        };
+    }
+
+    protected function getclaimHealthCareCodeInformation(): array
+    {
+        return $this->claim->service->diagnoses
+            ->map(fn ($diagnosis, $index) => [
+                    'diagnosisTypeCode' => (0 == $index) ? 'ABK' : 'ABF',
+                    'diagnosisCode' => $diagnosis->code,
+            ]
+            )->toArray();
+    }
+
+    protected function getClaimInformation($key): array|string|bool
+    {
+        $segments = explode('.', $key);
+        $accesorKey = $segments[0] ?? null;
+        $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
+
         $claimServiceLinePrincipal = $this->claim->service->services->first();
         $diagnosisPrincipal = $this->claim->service->diagnoses->first();
         $admittingDiagnosis = $this->claim->service->diagnoses->first(function ($diagnosis) {
@@ -263,42 +332,6 @@ final class JSONDictionary extends Dictionary
             'K' => 11,
             'L' => 12,
         ];
-        $qualifierFields = [
-            // '' => 'lastMenstrualPeriodDate',
-            // '' => 'disabilityBeginDate',
-            // '' => 'disabilityEndDate',
-            // '' => 'lastWorkedDate',
-            // '' => 'authorizedReturnToWorkDate',
-            // '' => 'admissionDate',
-            // '' => 'dischargeDate',
-            // '' => 'repricerReceivedDate',
-            '431' => 'symptomDate',
-            '304' => 'lastSeenDate',
-            '444' => 'firstContactDate',
-            '453' => 'acuteManifestationDate',
-            '439' => 'accidentDate',
-            '455' => 'lastXRayDate',
-            '090' => 'assumedAndRelinquishedCareBeginDate',
-            '091' => 'assumedAndRelinquishedCareEndDate',
-            '454' => 'initialTreatmentDate',
-            '471' => 'hearingAndVisionPrescriptionDate',
-        ];
-        $claimDateInfo = [];
-        foreach ($this->claim->dateInformations ?? [] as $dateInfo) {
-            $qualifier = $dateInfo?->qualifier?->code ?? '';
-            if (isset($qualifierFields[$qualifier])) {
-                if ((1 == $dateInfo->field_id->value) || (2 == $dateInfo->field_id->value)) {
-                    $claimDateInfo[$qualifierFields[$qualifier]] = $dateInfo->from_date;
-                } elseif (3 == $dateInfo->field_id->value) {
-                    $claimDateInfo['lastWorkedDate'] = $dateInfo->from_date;
-                    $claimDateInfo['authorizedReturnToWorkDate'] = $dateInfo->to_date;
-                }
-            }
-            if (4 == $dateInfo->field_id->value) {
-                $claimDateInfo['admissionDate'] = str_replace('-', '', $dateInfo?->from_date ?? '');
-                $claimDateInfo['dischargeDate'] = str_replace('-', '', $dateInfo->to_date ?? '');
-            }
-        }
         $serviceLines = [];
         foreach ($this->claim->service->services ?? [] as $service) {
             $valuesPoint = [];
@@ -336,76 +369,6 @@ final class JSONDictionary extends Dictionary
                     ],
                 ],
                 ClaimType::INSTITUTIONAL => [
-                    /*'renderingProvider' => [
-                        'providerType' => 'BillingProvider',
-                        'address' => [
-                            'address1' => '000 address1',
-                            'address2' => '',
-                            'city' => 'city1',
-                            'state' => 'tn',
-                            'postalCode' => '372030000',
-                            'countryCode' => '',
-                            'countrySubDivisionCode' => '',
-                        ],
-                        'contactInformation' => [
-                            'name' => 'janetwo doetwo',
-                            'phoneNumber' => '0000000001',
-                            'faxNumber' => '0000000002',
-                            'email' => 'email@email.com',
-                            'validContact' => true,
-                        ],
-                        'referenceIdentification' => [
-                            [
-                                'qualifier' => '',
-                                'identifier' => '',
-                            ],
-                        ],
-                        'npi' => '1760854442',
-                        'secondaryIdentificationQualifierCode' => '0B',
-                        'secondaryIdentifier' => '',
-                        'employerId' => '',
-                        'taxonomyCode' => '',
-                        'firstName' => 'johntwo',
-                        'lastName' => 'doetwo',
-                        'middleName' => 'middletwo',
-                        'suffix' => '',
-                        'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
-                    ],
-                    'referringProvider' => [
-                        'providerType' => 'BillingProvider',
-                        'address' => [
-                            'address1' => '000 address1',
-                            'address2' => '',
-                            'city' => 'city1',
-                            'state' => 'tn',
-                            'postalCode' => '372030000',
-                            'countryCode' => '',
-                            'countrySubDivisionCode' => '',
-                        ],
-                        'contactInformation' => [
-                            'name' => 'janetwo doetwo',
-                            'phoneNumber' => '0000000001',
-                            'faxNumber' => '0000000002',
-                            'email' => 'email@email.com',
-                            'validContact' => true,
-                        ],
-                        'referenceIdentification' => [
-                            [
-                                'qualifier' => '',
-                                'identifier' => '',
-                            ],
-                        ],
-                        'npi' => '1760854442',
-                        'secondaryIdentificationQualifierCode' => '0B',
-                        'secondaryIdentifier' => '',
-                        'employerId' => '',
-                        'taxonomyCode' => '',
-                        'firstName' => 'johntwo',
-                        'lastName' => 'doetwo',
-                        'middleName' => 'middletwo',
-                        'suffix' => '',
-                        'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
-                    ],*/
                     'lineSupplementInformation' => [
                         'priorAuthorizationNumber' => '',
                         'referralNumber' => '',
@@ -440,33 +403,6 @@ final class JSONDictionary extends Dictionary
                         'serviceUnitCount' => $service->days_or_units ?? '1',
                         'nonCoveredChargeAmount' => '',
                     ],
-                    /*'drugIdentification' => [
-                        'measurementUnitCode' => 'F2',
-                        'nationalDrugCode' => '',
-                        'nationalDrugUnitCount' => '',
-                        'linkSequenceNumber' => '',
-                        'pharmacyPrescriptionNumber' => '',
-                    ],
-                    'operatingPhysician' => [
-                        'organizationName' => '',
-                        'identificationQualifierCode' => '0B',
-                        'secondaryIdentifier' => '',
-                        'firstName' => '',
-                        'lastName' => '',
-                        'middleName' => '',
-                        'suffix' => '',
-                        'npi' => '',
-                    ],*/
-                    /*'otherOperatingPhysician' => [
-                        'organizationName' => '',
-                        'identificationQualifierCode' => '0B',
-                        'secondaryIdentifier' => '',
-                        'firstName' => '',
-                        'lastName' => '',
-                        'middleName' => '',
-                        'suffix' => '',
-                        'npi' => '',
-                    ],*/
                     'assignedNumber' => $service->id,
                     'serviceDate' => '',
                     'serviceDateEnd' => '',
@@ -481,15 +417,14 @@ final class JSONDictionary extends Dictionary
             };
             array_push($serviceLines, $serviceLine);
         }
-
-        return match ($this->claim->type) {
-            ClaimType::PROFESSIONAL => [
+        if (ClaimType::PROFESSIONAL === $this->claim->type) {
+            return match ($accesorKey) {
                 'claimFilingCode' => 'CI',
-                // 'propertyCasualtyClaimNumber' => '',
-                // 'deathDate' => '',
-                // 'patientWeight' => '',
-                // 'pregnancyIndicator' => 'Y',
-                'patientControlNumber' => $this->claim->demographicInformation?->patient?->code,
+                'propertyCasualtyClaimNumber' => '',
+                'deathDate' => '',
+                'patientWeight' => '',
+                'pregnancyIndicator' => '',
+                'patientControlNumber' => $this->claim->demographicInformation?->patient?->code ?? '',
                 'claimChargeAmount' => str_replace(',', '', $this->claim->billed_amount ?? '0.00'),
                 'placeOfServiceCode' => $claimServiceLinePrincipal?->placeOfService?->code ?? '11',
                 'claimFrequencyCode' => '1',
@@ -509,33 +444,18 @@ final class JSONDictionary extends Dictionary
                     : 'N',
                 'releaseInformationCode' => 'Y', /* Código que indica si el proveedor tiene archivada una declaración firmada por el paciente autorizando la divulgación de datos médicos a otras organizaciones.
                 * Informado = I, Sí = Y */
-                // 'patientSignatureSourceCode' => false,
+                'patientSignatureSourceCode' => '',
                 'relatedCausesCode' => $relatedCausesCode,
-                'autoAccidentStateCode' => in_array('AA', $relatedCausesCode) ? 'AA' : null,
-                'autoAccidentCountryCode' => $this->claim->demographicInformation?->auto_accident_place_state,
-                // 'specialProgramCode' => '02', /** Servicios especiales solo para medicaid */
-                // 'delayReasonCode' => '1', /** Código de retraso */
-                // 'patientAmountPaid' => '', /** Monto pagado por el paciente AMT02 */
-                // 'fileInformation' => '', /** El segmento K3 sólo se utiliza para cumplir un requisito de datos inesperado de una autoridad legislativa. */
-                /* 'fileInformationList' => [
-                    ''
-                ],*/
+                'autoAccidentStateCode' => in_array('AA', $relatedCausesCode) ? 'AA' : '',
+                'autoAccidentCountryCode' => $this->claim->demographicInformation?->auto_accident_place_state ?? '',
+                'specialProgramCode' => '', /* 02 .. Servicios especiales solo para medicaid */
+                'delayReasonCode' => '', /* 1 .. Código de retraso */
+                'patientAmountPaid' => '', /* Monto pagado por el paciente AMT02 */
+                'fileInformation' => '', /* El segmento K3 sólo se utiliza para cumplir un requisito de datos inesperado de una autoridad legislativa. */
+                'fileInformationList' => [],
 
-                'claimDateInformation' => !empty($claimDateInfo) ? $claimDateInfo : null,
-                /**'claimContractInformation' => [
-                    'contractTypeCode' => '01', // Código que identifica un tipo de contrato. 02 -> Por dia
-                    'contractAmount' => '',
-                    'contractPercentage' => '',
-                    'contractCode' => '',
-                    'termsDiscountPercentage' => '',
-                    'contractVersionIdentifier' => ''
-                ],*/
+                'claimDateInformation' => $this->getClaimDateInformation($property),
                 'claimSupplementalInformation' => [
-                    /*'reportInformation' => [
-                        'attachmentReportTypeCode' => '93',
-                        'attachmentTransmissionCode' => 'AA',
-                        'attachmentControlNumber' => ''
-                    ],*/
                     'priorAuthorizationNumber' => $this->claim->demographicInformation?->prior_authorization_number ?? '',
                     'referralNumber' => '',
                     'claimControlNumber' => '',
@@ -551,714 +471,16 @@ final class JSONDictionary extends Dictionary
                     'medicareCrossoverReferenceId' => '',
                     'serviceAuthorizationExceptionCode' => '',
                 ],
-                /**'claimNote' => [
-                    'additionalInformation' => '',
-                    'certificationNarrative' => '',
-                    'goalRehabOrDischargePlans' => '',
-                    'diagnosisDescription' => '',
-                    'thirdPartOrgNotes' => ''
-                ],*/
-                /**'ambulanceTransportInformation' => [
-                    'patientWeightInPounds' => '',
-                    'ambulanceTransportReasonCode' => 'A',
-                    'transportDistanceInMiles' => '',
-                    'roundTripPurposeDescription' => '',
-                    'stretcherPurposeDescription' => ''
-                ],*/
-                /**'spinalManipulationServiceInformation' => [
-                    'patientConditionCode' => '',
-                    'patientConditionDescription1' => 'A',
-                    'patientConditionDescription2' => ''
-                ],*/
-                /**'ambulanceCertification' => [
-                    [
-                        'certificationConditionIndicator' => 'N',
-                        'conditionCodes' => [
-                            '01'
-                        ]
-                    ]
-                ],*/
-                /**'patientConditionInformationVision' => [
-                    [
-                        'codeCategory' => 'E1',
-                        'certificationConditionIndicator' => 'N',
-                        'conditionCodes' => [
-                            'L1'
-                        ]
-                    ]
-                ],*/
                 'homeboundIndicator' => true,
-                'epsdtReferral' => [
-                    'certificationConditionCodeAppliesIndicator' => isset($claimServiceLinePrincipal?->epsdt?->code) ? 'Y' : 'N',
-                    'conditionCodes' => [
-                        $claimServiceLinePrincipal?->epsdt?->code ?? 'NU',
-                    ],
-                ],
-                'healthCareCodeInformation' => $this->claim->service->diagnoses
-                    ->map(fn ($diagnosis, $index) => [
-                        'diagnosisTypeCode' => (0 == $index) ? 'ABK' : 'ABF',
-                        'diagnosisCode' => $diagnosis->code,
-                    ]
-                    ),
-                /**'anesthesiaRelatedSurgicalProcedure' => [
-                            ''
-                        ],*/
-                /**'conditionInformation' => [
-                            [
-                                'conditionCodes' => [
-                                    ''
-                                ]
-                            ]
-                        ],*/
-                /**'claimPricingRepricingInformation' => [
-                            'pricingMethodologyCode' => '01',
-                            'repricedAllowedAmount' => '1',
-                            'repricedSavingAmount' => '',
-                            'repricingOrganizationIdentifier' => '',
-                            'repricingPerDiemOrFlatRateAmoung' => '',
-                            'repricedApprovedAmbulatoryPatientGroupCode' => '',
-                            'repricedApprovedAmbulatoryPatientGroupAmount' => '',
-                            'rejectReasonCode' => 'T1',
-                            'policyComplianceCode' => '1',
-                            'exceptionCode' => '1'
-                        ],*/
-                'serviceFacilityLocation' => [
-                    'organizationName' => $this->getFacilityAttribute('name'),
-                    'address' => [
-                        'address1' => $this->getFacilityAddressAttribute('address', '1'),
-                        'address2' => null,
-                        'city' => $this->getFacilityAddressAttribute('city', '1'),
-                        'state' => $this->getFacilityAddressAttribute('state', '1'),
-                        'postalCode' => $this->getFacilityAddressAttribute('zip', '1'),
-                        'countryCode' => ('US' !== $this->getFacilityAddressAttribute('country', '1'))
-                            ? $this->getFacilityAddressAttribute('country', '1')
-                            : '',
-                        'countrySubDivisionCode' => ('US' !== $this->getFacilityAddressAttribute('country', '1'))
-                            ? $this->getFacilityAddressAttribute('country_subdivision_code', '1')
-                            : '',
-                    ],
-                    'npi' => $this->getFacilityAttribute('npi'),
-                    /**'secondaryIdentifier' => [
-                                [
-                                    'qualifier' => '',
-                                    'identifier' => '',
-                                    'otherIdentifier' => ''
-                                ]
-                            ],*/
-                    'phoneName' => $this->getFacilityContactAttribute('contact_name', '1'),
-                    'phoneNumber' => $this->getFacilityContactAttribute('phone', '1'),
-                    // 'phoneExtension' => ''
-                ],
-                /**'ambulancePickUpLocation' => [
-                            'address1' => '123 address1',
-                            'address2' => 'apt 000',
-                            'city' => 'city1',
-                            'state' => 'wa',
-                            'postalCode' => '981010000',
-                            'countryCode' => '',
-                            'countrySubDivisionCode' => ''
-                        ],*/
-                /**'ambulanceDropOffLocation' => [
-                            'address1' => '123 address1',
-                            'address2' => 'apt 000',
-                            'city' => 'city1',
-                            'state' => 'wa',
-                            'postalCode' => '981010000',
-                            'countryCode' => '',
-                            'countrySubDivisionCode' => ''
-                        ],*/
-                /*'otherSubscriberInformation' => [
-                            [
-                                'paymentResponsibilityLevelCode' => 'A',
-                                'individualRelationshipCode' => '01',
-                                'insuranceGroupOrPolicyNumber' => '',
-                                'otherInsuredGroupName' => '',
-                                'insuranceTypeCode' => '12',
-                                'claimFilingIndicatorCode' => '11',
-                                'claimLevelAdjustments' => [
-                                    [
-                                        'adjustmentGroupCode' => 'CO',
-                                        'adjustmentDetails' => [
-                                            [
-                                                'adjustmentReasonCode' => '',
-                                                'adjustmentAmount' => '',
-                                                'adjustmentQuantity' => ''
-                                            ]
-                                        ]
-                                    ]
-                                ],
-                                'payerPaidAmount' => '',
-                                'nonCoveredChargeAmount' => '',
-                                'remainingPatientLiability' => '',
-                                'benefitsAssignmentCertificationIndicator' => 'N',
-                                'patientSignatureGeneratedForPatient' => true,
-                                'releaseOfInformationCode' => 'I',
-                                'medicareOutpatientAdjudication' => [
-                                    'reimbursementRate' => '',
-                                    'hcpcsPayableAmount' => '',
-                                    'claimPaymentRemarkCode' => [
-                                        ''
-                                    ],
-                                    'endStageRenalDiseasePaymentAmount' => '',
-                                    'nonPayableProfessionalComponentBilledAmount' => ''
-                                ],
-                                'otherSubscriberName' => [
-                                    'otherInsuredQualifier' => '1',
-                                    'otherInsuredLastName' => '',
-                                    'otherInsuredFirstName' => '',
-                                    'otherInsuredMiddleName' => '',
-                                    'otherInsuredNameSuffix' => '',
-                                    'otherInsuredIdentifierTypeCode' => 'II',
-                                    'otherInsuredIdentifier' => '',
-                                    'otherInsuredAddress' => [
-                                        'address1' => '123 address1',
-                                        'address2' => 'apt 000',
-                                        'city' => 'city1',
-                                        'state' => 'wa',
-                                        'postalCode' => '981010000',
-                                        'countryCode' => '',
-                                        'countrySubDivisionCode' => ''
-                                    ],
-                                    'otherInsuredAdditionalIdentifier' => ''
-                                ],
-                                'otherPayerName' => [
-                                    'otherInsuredAdditionalIdentifier' => '',
-                                    'otherPayerOrganizationName' => '',
-                                    'otherPayerIdentifierTypeCode' => 'PI',
-                                    'otherPayerIdentifier' => '',
-                                    'otherPayerAddress' => [
-                                        'address1' => '123 address1',
-                                        'address2' => 'apt 000',
-                                        'city' => 'city1',
-                                        'state' => 'wa',
-                                        'postalCode' => '981010000',
-                                        'countryCode' => '',
-                                        'countrySubDivisionCode' => ''
-                                    ],
-                                    'otherPayerAdjudicationOrPaymentDate' => '',
-                                    'otherPayerSecondaryIdentifier' => [
-                                        [
-                                            'qualifier' => '',
-                                            'identifier' => '',
-                                            'otherIdentifier' => ''
-                                        ]
-                                    ],
-                                    'otherPayerPriorAuthorizationNumber' => '',
-                                    'otherPayerPriorAuthorizationOrReferralNumber' => '',
-                                    'otherPayerClaimAdjustmentIndicator' => true,
-                                    'otherPayerClaimControlNumber' => ''
-                                ],
-                                'otherPayerReferringProvider' => [
-                                    [
-                                        'otherPayerReferringProviderIdentifier' => [
-                                            [
-                                                'qualifier' => '',
-                                                'identifier' => '',
-                                                'otherIdentifier' => ''
-                                            ]
-                                        ]
-                                    ]
-                                ],
-                                'otherPayerRenderingProvider' => [
-                                    [
-                                        'entityTypeQualifier' => '1',
-                                        'otherPayerRenderingProviderSecondaryIdentifier' => [
-                                            [
-                                                'qualifier' => '',
-                                                'identifier' => '',
-                                                'otherIdentifier' => ''
-                                            ]
-                                        ]
-                                    ]
-                                ],
-                                'otherPayerServiceFacilityLocation' => [
-                                    [
-                                        'otherPayerServiceFacilityLocationSecondaryIdentifier' => [
-                                            [
-                                                'qualifier' => '',
-                                                'identifier' => '',
-                                                'otherIdentifier' => ''
-                                            ]
-                                        ]
-                                    ]
-                                ],
-                                'otherPayerSupervisingProvider' => [
-                                    [
-                                        'otherPayerSupervisingProviderIdentifier' => [
-                                            [
-                                                'qualifier' => '',
-                                                'identifier' => '',
-                                                'otherIdentifier' => ''
-                                            ]
-                                        ]
-                                    ]
-                                ],
-                                'otherPayerBillingProvider' => [
-                                    [
-                                        'entityTypeQualifier' => '1',
-                                        'otherPayerBillingProviderIdentifier' => [
-                                            [
-                                                'qualifier' => '',
-                                                'identifier' => '',
-                                                'otherIdentifier' => ''
-                                            ]
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ],*/
-                'serviceLines' => $serviceLines, /* [
-                    [
-                        'assignedNumber' => '',
-                        'serviceDate' => '20050514',
-                        'serviceDateEnd' => '',
-                        'providerControlNumber' => '',
-                        'professionalService' => [
-                            'procedureIdentifier' => 'HC',
-                            'procedureCode' => 'E0570',
-                            'procedureModifiers' => [
-                                ''
-                            ],
-                            'description' => '',
-                            'lineItemChargeAmount' => '25',
-                            'measurementUnit' => 'UN',
-                            'serviceUnitCount' => '1',
-                            'placeOfServiceCode' => '',
-                            'compositeDiagnosisCodePointers' => [
-                                'diagnosisCodePointers' => 1
-                            ],
-                            'emergencyIndicator' => 'Y',
-                            'epsdtIndicator' => 'Y',
-                            'familyPlanningIndicator' => 'Y',
-                            'copayStatusCode' => '0'
-                        ],
-                        'durableMedicalEquipmentService' => [
-                            'days' => '',
-                            'rentalPrice' => '',
-                            'purchasePrice' => '',
-                            'frequencyCode' => '1'
-                        ],
-                        'serviceLineSupplementalInformation' => [
-                            [
-                                'attachmentReportTypeCode' => '93',
-                                'attachmentTransmissionCode' => 'AA',
-                                'attachmentControlNumber' => ''
-                            ]
-                        ],
-                        'durableMedicalEquipmentCertificateOfMedicalNecessity' => [
-                            'attachmentTransmissionCode' => 'AB'
-                        ],
-                        'ambulanceTransportInformation' => [
-                            'patientWeightInPounds' => '',
-                            'ambulanceTransportReasonCode' => 'A',
-                            'transportDistanceInMiles' => '',
-                            'roundTripPurposeDescription' => '',
-                            'stretcherPurposeDescription' => ''
-                        ],
-                        'durableMedicalEquipmentCertification' => [
-                            'certificationTypeCode' => 'I',
-                            'durableMedicalEquipmentDurationInMonths' => ''
-                        ],
-                        'ambulanceCertification' => [
-                            [
-                                'certificationConditionIndicator' => 'N',
-                                'conditionCodes' => [
-                                    '01'
-                                ]
-                            ]
-                        ],
-                        'hospiceEmployeeIndicator' => true,
-                        'conditionIndicatorDurableMedicalEquipment' => [
-                            'certificationConditionIndicator' => 'Y',
-                            'conditionIndicator' => '38',
-                            'conditionIndicatorCode' => '38'
-                        ],
-                        'serviceLineDateInformation' => [
-                            'prescriptionDate' => '',
-                            'certificationRevisionOrRecertificationDate' => '',
-                            'beginTherapyDate' => '',
-                            'lastCertificationDate' => '',
-                            'treatmentOrTherapyDate' => '',
-                            'hemoglobinTestDate' => '',
-                            'serumCreatineTestDate' => '',
-                            'shippedDate' => '',
-                            'lastXRayDate' => '',
-                            'initialTreatmentDate' => ''
-                        ],
-                        'ambulancePatientCount' => 0,
-                        'obstetricAnesthesiaAdditionalUnits' => 0,
-                        'testResults' => [
-                            [
-                                'measurementReferenceIdentificationCode' => 'OG',
-                                'measurementQualifier' => 'HT',
-                                'testResults' => ''
-                            ]
-                        ],
-                        'contractInformation' => [
-                            'contractTypeCode' => '01',
-                            'contractAmount' => '',
-                            'contractPercentage' => '',
-                            'contractCode' => '',
-                            'termsDiscountPercentage' => '',
-                            'contractVersionIdentifier' => ''
-                        ],
-                        'serviceLineReferenceInformation' => [
-                            'repricedLineItemReferenceNumber' => '',
-                            'adjustedRepricedLineItemReferenceNumber' => '',
-                            'priorAuthorization' => [
-                                [
-                                    'priorAuthorizationOrReferralNumber' => '',
-                                    'otherPayerPrimaryIdentifier' => ''
-                                ]
-                            ],
-                            'mammographyCertificationNumber' => '',
-                            'clinicalLaboratoryImprovementAmendmentNumber' => '',
-                            'referringCliaNumber' => '',
-                            'immunizationBatchNumber' => '',
-                            'referralNumber' => [
-                                ''
-                            ]
-                        ],
-                        'salesTaxAmount' => '',
-                        'postageTaxAmount' => '',
-                        'fileInformation' => [
-                            ''
-                        ],
-                        'additionalNotes' => '',
-                        'goalRehabOrDischargePlans' => '',
-                        'thirdPartyOrganizationNotes' => '',
-                        'purchasedServiceInformation' => [
-                            'purchasedServiceProviderIdentifier' => '01',
-                            'purchasedServiceChargeAmount' => '10'
-                        ],
-                        'linePricingRepricingInformation' => [
-                            'pricingMethodologyCode' => '01',
-                            'repricedAllowedAmount' => '1',
-                            'repricedSavingAmount' => '',
-                            'repricingOrganizationIdentifier' => '',
-                            'repricingPerDiemOrFlatRateAmoung' => '',
-                            'repricedApprovedAmbulatoryPatientGroupCode' => '',
-                            'repricedApprovedAmbulatoryPatientGroupAmount' => '',
-                            'rejectReasonCode' => 'T1',
-                            'policyComplianceCode' => '1',
-                            'exceptionCode' => '1'
-                        ],
-                        'drugIdentification' => [
-                            'serviceIdQualifier' => 'EN',
-                            'nationalDrugCode' => '',
-                            'nationalDrugUnitCount' => '',
-                            'measurementUnitCode' => 'F2',
-                            'linkSequenceNumber' => '',
-                            'pharmacyPrescriptionNumber' => ''
-                        ],
-                        'renderingProvider' => [
-                            'providerType' => 'BillingProvider',
-                            'npi' => '1760854442',
-                            'ssn' => '000000000',
-                            'employerId' => '123456789',
-                            'commercialNumber' => '',
-                            'locationNumber' => '',
-                            'payerIdentificationNumber' => '',
-                            'employerIdentificationNumber' => '',
-                            'claimOfficeNumber' => '',
-                            'naic' => '',
-                            'stateLicenseNumber' => '',
-                            'providerUpinNumber' => '',
-                            'taxonomyCode' => '',
-                            'firstName' => 'johnone',
-                            'lastName' => 'doeone',
-                            'middleName' => 'middleone',
-                            'suffix' => 'Jr',
-                            'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
-                            'address' => [
-                                'address1' => '123 address1',
-                                'address2' => 'apt 000',
-                                'city' => 'city1',
-                                'state' => 'wa',
-                                'postalCode' => '981010000',
-                                'countryCode' => '',
-                                'countrySubDivisionCode' => ''
-                            ],
-                            'contactInformation' => [
-                                'name' => 'SUBMITTER CONTACT INFO',
-                                'phoneNumber' => '5554567890',
-                                'faxNumber' => '5551234567',
-                                'email' => 'email@email.com',
-                                'phoneExtension' => '1234'
-                            ],
-                            'otherIdentifier' => '',
-                            'secondaryIdentifier' => [
-                                [
-                                    'qualifier' => '',
-                                    'identifier' => '',
-                                    'otherIdentifier' => ''
-                                ]
-                            ]
-                        ],
-                        'purchasedServiceProvider' => [
-                            'providerType' => 'BillingProvider',
-                            'npi' => '1760854442',
-                            'ssn' => '000000000',
-                            'employerId' => '123456789',
-                            'commercialNumber' => '',
-                            'locationNumber' => '',
-                            'payerIdentificationNumber' => '',
-                            'employerIdentificationNumber' => '',
-                            'claimOfficeNumber' => '',
-                            'naic' => '',
-                            'stateLicenseNumber' => '',
-                            'providerUpinNumber' => '',
-                            'taxonomyCode' => '',
-                            'firstName' => 'johnone',
-                            'lastName' => 'doeone',
-                            'middleName' => 'middleone',
-                            'suffix' => 'Jr',
-                            'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
-                            'address' => [
-                                'address1' => '123 address1',
-                                'address2' => 'apt 000',
-                                'city' => 'city1',
-                                'state' => 'wa',
-                                'postalCode' => '981010000',
-                                'countryCode' => '',
-                                'countrySubDivisionCode' => ''
-                            ],
-                            'contactInformation' => [
-                                'name' => 'SUBMITTER CONTACT INFO',
-                                'phoneNumber' => '5554567890',
-                                'faxNumber' => '5551234567',
-                                'email' => 'email@email.com',
-                                'phoneExtension' => '1234'
-                            ],
-                            'otherIdentifier' => '',
-                            'secondaryIdentifier' => [
-                                [
-                                    'qualifier' => '',
-                                    'identifier' => '',
-                                    'otherIdentifier' => ''
-                                ]
-                            ]
-                        ],
-                        'serviceFacilityLocation' => [
-                            'organizationName' => 'HAPPY DOCTORS GROUP',
-                            'address' => [
-                                'address1' => '123 address1',
-                                'address2' => 'apt 000',
-                                'city' => 'city1',
-                                'state' => 'wa',
-                                'postalCode' => '981010000',
-                                'countryCode' => '',
-                                'countrySubDivisionCode' => ''
-                            ],
-                            'npi' => '',
-                            'secondaryIdentifier' => [
-                                [
-                                    'qualifier' => '',
-                                    'identifier' => '',
-                                    'otherIdentifier' => ''
-                                ]
-                            ],
-                            'phoneName' => '',
-                            'phoneNumber' => '',
-                            'phoneExtension' => ''
-                        ],
-                        'supervisingProvider' => [
-                            'providerType' => 'BillingProvider',
-                            'npi' => '1760854442',
-                            'ssn' => '000000000',
-                            'employerId' => '123456789',
-                            'commercialNumber' => '',
-                            'locationNumber' => '',
-                            'payerIdentificationNumber' => '',
-                            'employerIdentificationNumber' => '',
-                            'claimOfficeNumber' => '',
-                            'naic' => '',
-                            'stateLicenseNumber' => '',
-                            'providerUpinNumber' => '',
-                            'taxonomyCode' => '',
-                            'firstName' => 'johnone',
-                            'lastName' => 'doeone',
-                            'middleName' => 'middleone',
-                            'suffix' => 'Jr',
-                            'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
-                            'address' => [
-                                'address1' => '123 address1',
-                                'address2' => 'apt 000',
-                                'city' => 'city1',
-                                'state' => 'wa',
-                                'postalCode' => '981010000',
-                                'countryCode' => '',
-                                'countrySubDivisionCode' => ''
-                            ],
-                            'contactInformation' => [
-                                'name' => 'SUBMITTER CONTACT INFO',
-                                'phoneNumber' => '5554567890',
-                                'faxNumber' => '5551234567',
-                                'email' => 'email@email.com',
-                                'phoneExtension' => '1234'
-                            ],
-                            'otherIdentifier' => '',
-                            'secondaryIdentifier' => [
-                                [
-                                    'qualifier' => '',
-                                    'identifier' => '',
-                                    'otherIdentifier' => ''
-                                ]
-                            ]
-                        ],
-                        'orderingProvider' => [
-                            'providerType' => 'BillingProvider',
-                            'npi' => '1760854442',
-                            'ssn' => '000000000',
-                            'employerId' => '123456789',
-                            'commercialNumber' => '',
-                            'locationNumber' => '',
-                            'payerIdentificationNumber' => '',
-                            'employerIdentificationNumber' => '',
-                            'claimOfficeNumber' => '',
-                            'naic' => '',
-                            'stateLicenseNumber' => '',
-                            'providerUpinNumber' => '',
-                            'taxonomyCode' => '',
-                            'firstName' => 'johnone',
-                            'lastName' => 'doeone',
-                            'middleName' => 'middleone',
-                            'suffix' => 'Jr',
-                            'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
-                            'address' => [
-                                'address1' => '123 address1',
-                                'address2' => 'apt 000',
-                                'city' => 'city1',
-                                'state' => 'wa',
-                                'postalCode' => '981010000',
-                                'countryCode' => '',
-                                'countrySubDivisionCode' => ''
-                            ],
-                            'contactInformation' => [
-                                'name' => 'SUBMITTER CONTACT INFO',
-                                'phoneNumber' => '5554567890',
-                                'faxNumber' => '5551234567',
-                                'email' => 'email@email.com',
-                                'phoneExtension' => '1234'
-                            ],
-                            'otherIdentifier' => '',
-                            'secondaryIdentifier' => [
-                                [
-                                    'qualifier' => '',
-                                    'identifier' => '',
-                                    'otherIdentifier' => ''
-                                ]
-                            ]
-                        ],
-                        'referringProvider' => [
-                            'providerType' => 'BillingProvider',
-                            'npi' => '1760854442',
-                            'ssn' => '000000000',
-                            'employerId' => '123456789',
-                            'commercialNumber' => '',
-                            'locationNumber' => '',
-                            'payerIdentificationNumber' => '',
-                            'employerIdentificationNumber' => '',
-                            'claimOfficeNumber' => '',
-                            'naic' => '',
-                            'stateLicenseNumber' => '',
-                            'providerUpinNumber' => '',
-                            'taxonomyCode' => '',
-                            'firstName' => 'johnone',
-                            'lastName' => 'doeone',
-                            'middleName' => 'middleone',
-                            'suffix' => 'Jr',
-                            'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
-                            'address' => [
-                                'address1' => '123 address1',
-                                'address2' => 'apt 000',
-                                'city' => 'city1',
-                                'state' => 'wa',
-                                'postalCode' => '981010000',
-                                'countryCode' => '',
-                                'countrySubDivisionCode' => ''
-                            ],
-                            'contactInformation' => [
-                                'name' => 'SUBMITTER CONTACT INFO',
-                                'phoneNumber' => '5554567890',
-                                'faxNumber' => '5551234567',
-                                'email' => 'email@email.com',
-                                'phoneExtension' => '1234'
-                            ],
-                            'otherIdentifier' => '',
-                            'secondaryIdentifier' => [
-                                [
-                                    'qualifier' => '',
-                                    'identifier' => '',
-                                    'otherIdentifier' => ''
-                                ]
-                            ]
-                        ],
-                        'ambulancePickUpLocation' => [
-                            'address1' => '123 address1',
-                            'address2' => 'apt 000',
-                            'city' => 'city1',
-                            'state' => 'wa',
-                            'postalCode' => '981010000',
-                            'countryCode' => '',
-                            'countrySubDivisionCode' => ''
-                        ],
-                        'ambulanceDropOffLocation' => [
-                            'address1' => '123 address1',
-                            'address2' => 'apt 000',
-                            'city' => 'city1',
-                            'state' => 'wa',
-                            'postalCode' => '981010000',
-                            'countryCode' => '',
-                            'countrySubDivisionCode' => ''
-                        ],
-                        'lineAdjudicationInformation' => [
-                            [
-                                'otherPayerPrimaryIdentifier' => '',
-                                'serviceLinePaidAmount' => '',
-                                'serviceIdQualifier' => 'ER',
-                                'procedureCode' => '',
-                                'procedureModifier' => [
-                                    ''
-                                ],
-                                'procedureCodeDescription' => '',
-                                'paidServiceUnitCount' => '',
-                                'bundledOrUnbundledLineNumber' => '',
-                                'claimAdjustmentInformation' => [
-                                    [
-                                        'adjustmentGroupCode' => 'CO',
-                                        'adjustmentDetails' => [
-                                            [
-                                                'adjustmentReasonCode' => '',
-                                                'adjustmentAmount' => '',
-                                                'adjustmentQuantity' => ''
-                                            ]
-                                        ]
-                                    ]
-                                ],
-                                'adjudicationOrPaymentDate' => '',
-                                'remainingPatientLiability' => ''
-                            ]
-                        ],
-                        'formIdentification' => [
-                            [
-                                'formTypeCode' => 'AS',
-                                'formIdentifier' => '',
-                                'supportingDocumentation' => [
-                                    [
-                                        'questionNumber' => '',
-                                        'questionResponseCode' => 'N',
-                                        'questionResponse' => '',
-                                        'questionResponseAsDate' => '',
-                                        'questionResponseAsPercent' => ''
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]*/
-            ],
-            ClaimType::INSTITUTIONAL => [
+                'epsdtReferral' => $this->getClaimEpsdtReferral($property),
+                'healthCareCodeInformation' => $this->getclaimHealthCareCodeInformation(),
+                'serviceFacilityLocation' => $this->getFacility($property),
+                'serviceLines' => $serviceLines,
+                default => '',
+            };
+        }
+        if (ClaimType::INSTITUTIONAL === $this->claim->type) {
+            return match ($accesorKey) {
                 'claimFilingCode' => 'CI',
                 'patientControlNumber' => $this->claim->demographicInformation?->patient?->code,
                 'planParticipationCode' => 'A', /* Código que indica si el proveedor aceptó la asignación.
@@ -1272,56 +494,6 @@ final class JSONDictionary extends Dictionary
                     : 'N',
                 'releaseInformationCode' => 'Y', /* Código que indica si el proveedor tiene archivada una declaración firmada por el paciente autorizando la divulgación de datos médicos a otras organizaciones.
                 * Informado = I, Sí = Y */
-                /**'fileInformation' => [
-                    '',
-                ],
-                'claimNotes' => [
-                    'goalRehabOrDischargePlans' => [
-                        '',
-                    ],
-                    'diagnosisDescription' => [
-                        '',
-                    ],
-                    'allergies' => [
-                        '',
-                    ],
-                    'dme' => [
-                        '',
-                    ],
-                    'medications' => [
-                        '',
-                    ],
-                    'nutritionalRequirments' => [
-                        '',
-                    ],
-                    'ordersForDiscipLinesAndTreatments' => [
-                        '',
-                    ],
-                    'functionalLimitsOrReasonHomebound' => [
-                        '',
-                    ],
-                    'reasonsPatientLeavesHome' => [
-                        '',
-                    ],
-                    'timesAndReasonsPatientNotAtHome' => [
-                        '',
-                    ],
-                    'unusualHomeOrSocialEnv' => [
-                        '',
-                    ],
-                    'safetyMeasures' => [
-                        '',
-                    ],
-                    'supplementalPlanOfTreatment' => [
-                        '',
-                    ],
-                    'updatedInformation' => [
-                        '',
-                    ],
-                    'additionalInformation' => [
-                        '',
-                    ],
-                ],*/
                 'claimDateInformation' => [
                     'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '')
                         .substr(str_replace(
@@ -1338,20 +510,7 @@ final class JSONDictionary extends Dictionary
                     'dischargeHour' => substr(str_replace(':', '', $this->claim->patientInformation->discharge_time ?? ''), 0, 4),
                     'repricerReceivedDate' => Carbon::now()->format('Ymd'),
                 ],
-                /**'claimContractInformation' => [
-                    'contractTypeCode' => '01',
-                    'contractAmount' => '',
-                    'contractPercentage' => '',
-                    'contractCode' => '',
-                    'termsDiscountPercentage' => '',
-                    'contractVersionIdentifier' => ''
-                ],*/
                 'claimSupplementalInformation' => [
-                    /*'reportInformation' => [
-                        'attachmentReportTypeCode' => '03',
-                        'attachmentTransmissionCode' => 'AA',
-                        'attachmentControlNumber' => ''
-                    ],*/
                     'priorAuthorizationNumber' => $this->claim->demographicInformation?->prior_authorization_number ?? '',
                     'referralNumber' => '',
                     'claimControlNumber' => '',
@@ -1365,7 +524,6 @@ final class JSONDictionary extends Dictionary
                     'peerReviewAuthorizationNumber' => '',
                     'adjustedRepricedClaimRefNumber' => '',
                 ],
-                // 'conditionCodes' => '1',
                 'principalDiagnosis' => [
                     'qualifierCode' => 'ABK',
                     'principalDiagnosisCode' => $diagnosisPrincipal?->code,
@@ -1377,19 +535,6 @@ final class JSONDictionary extends Dictionary
                         'admittingDiagnosisCode' => $admittingDiagnosis->code,
                     ]
                     : null,
-                /*'patientReasonForVisits' => [
-                    [
-                        'qualifierCode' => 'APR',
-                        'patientReasonForVisitCode' => '',
-                    ],
-                ],
-                'externalCauseOfInjuries' => [
-                    [
-                        'qualifierCode' => 'ABN',
-                        'externalCauseOfInjury' => '',
-                        'presentOnAdmissionIndicator' => 'N',
-                    ],
-                ],*/
                 'diagnosisRelatedGroupInformation' => [
                     'drugRelatedGroupCode' => $this->claim->service?->diagnosisRelatedGroup?->code ?? null,
                 ],
@@ -1402,22 +547,6 @@ final class JSONDictionary extends Dictionary
                             'presentOnAdmissionIndicator' => (true === $diagnosis->pivot?->admission ?? false) ? 'Y' : 'N',
                         ])->values()->toArray(),
                 ],
-                /*'principalProcedureInformation' => isset($claimServiceLinePrincipal)
-                    ? [
-                        'qualifierCode' => 'BBR',
-                        'principalProcedureCode' => $claimServiceLinePrincipal->procedure?->code,
-                        'principalProcedureDate' => str_replace('-', '', $claimServiceLinePrincipal?->from_service ?? ''),
-                    ]
-                    : null,*/
-                /*'otherProcedureInformationList' => [
-                    $this->claim->service->services
-                        ->skip(1)
-                        ->map(fn ($service, $index) => [
-                            'qualifierCode' => 'BBQ',
-                            'otherProcedureCode' => $service->procedure?->code,
-                            'otherProcedureDate' => str_replace('-', '', $service->from_service),
-                        ])->toArray(),
-                ],*/
                 'occurrenceSpanInformations' => [
                     [
                         [
@@ -1455,407 +584,8 @@ final class JSONDictionary extends Dictionary
                         ],
                     ],
                 ],
-                /*'claimPricingInformation' => [
-                    'pricingMethodologyCode' => '00',
-                    'repricedAllowedAmount' => '',
-                    'repricedSavingAmount' => '',
-                    'repricedOrgIdentifier' => '',
-                    'repricedPerDiem' => '',
-                    'repricedApprovedDRGCode' => '',
-                    'repricedApprovedAmount' => '',
-                    'repricedApprovedRevenueCode' => '',
-                    'repricedApprovedServiceUnitCode' => 'DA',
-                    'repricedApprovedServiceUnitCount' => '',
-                    'rejectReasonCode' => 'T1',
-                    'policyComplianceCode' => '1',
-                    'exceptionCode' => '1',
-                    'productOrServiceIDQualifier' => 'ER',
-                    'repricedApprovedHCPCSCode' => '',
-                ],*/
-                'serviceFacilityLocation' => [
-                    'address' => [
-                        'address1' => $this->getFacilityAddressAttribute('address', '1'),
-                        'address2' => null,
-                        'city' => $this->getFacilityAddressAttribute('city', '1'),
-                        'state' => $this->getFacilityAddressAttribute('state', '1'),
-                        'postalCode' => $this->getFacilityAddressAttribute('zip', '1'),
-                        'countryCode' => ('US' !== $this->getFacilityAddressAttribute('country', '1'))
-                            ? $this->getFacilityAddressAttribute('country', '1')
-                            : '',
-                        'countrySubDivisionCode' => ('US' !== $this->getFacilityAddressAttribute('country', '1'))
-                            ? $this->getFacilityAddressAttribute('country_subdivision_code', '1')
-                            : '',
-                    ],
-                    'organizationName' => $this->getFacilityAttribute('name'),
-                    // 'secondaryIdentificationQualifierCode' => '0B',
-                    // 'secondaryIdentifier' => '',
-                    // 'identificationCode' => '',
-                ],
-                /*'otherSubscriberInformation' => [
-                    'paymentResponsibilityLevelCode' => 'A',
-                    'individualRelationshipCode' => '01',
-                    'claimFilingIndicatorCode' => '11',
-                    'benefitsAssignmentCertificationIndicator' => 'N',
-                    'releaseOfInformationCode' => 'I',
-                    'medicareInpatientAdjudication' => [
-                        'claimPaymentRemarkCode' => [
-                            '',
-                        ],
-                        'coveredDaysOrVisitsCount' => '',
-                        'lifetimePsychiatricDaysCount' => '',
-                        'claimDRGAmount' => '',
-                        'claimDisproportionateShareAmount' => '',
-                        'claimMspPassThroughAmount' => '',
-                        'claimPpsCapitalAmount' => '',
-                        'ppsCapitalHspDrgAmount' => '',
-                        'capitalHSPDRGAmount' => '',
-                        'ppsCapitalDshDrgAmount' => '',
-                        'oldCapitalAmount' => '',
-                        'ppsCapitalImeAmount' => '',
-                        'ppsOperatingHospitalSpecificDrgAmount' => '',
-                        'costReportDayCount' => '',
-                        'ppsOperatingFederalSpecificDrgAmount' => '',
-                        'claimPpsCapitalOutlierAmmount' => '',
-                        'claimIndirectTeachingAmount' => '',
-                        'nonPayableProfessionalComponentBilledAmount' => '',
-                        'capitalExceptionAmount' => '',
-                    ],
-                    'medicareOutpatientAdjudication' => [
-                        'claimPaymentRemarkCode' => [
-                            '',
-                        ],
-                        'reimbursementRate' => '',
-                        'hcpcsPayableAmount' => '',
-                        'endStageRenalDiseasePaymentAmount' => '',
-                        'nonPayableProfessionalComponentBilledAmount' => '',
-                    ],
-                    'otherSubscriberName' => [
-                        'otherInsuredQualifier' => '1',
-                        'otherInsuredIdentifierTypeCode' => 'II',
-                        'otherInsuredAdditionalIdentifier' => [
-                            '',
-                        ],
-                        'address' => [
-                            'address1' => '000 address1',
-                            'address2' => '',
-                            'city' => 'city1',
-                            'state' => 'tn',
-                            'postalCode' => '372030000',
-                            'countryCode' => '',
-                            'countrySubDivisionCode' => '',
-                        ],
-                        'otherInsuredLastName' => '',
-                        'otherInsuredFirstName' => '',
-                        'otherInsuredMiddleName' => '',
-                        'otherInsuredSuffix' => '',
-                        'otherInsuredIdentifier' => '',
-                        'firstName' => '',
-                    ],
-                    'claimLevelAdjustments' => [
-                        [
-                            'adjustmentGroupCode' => 'CO',
-                            'claimAdjustmentDetails' => [
-                                [
-                                    'adjustmentReasonCode' => '',
-                                    'adjustmentAmount' => '',
-                                    'adjustmentQuantity' => '',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'otherPayerName' => [
-                        'otherPayerIdentifierTypeCode' => 'PI',
-                        'otherPayerAddress' => [
-                            'address1' => '000 address1',
-                            'address2' => '',
-                            'city' => 'city1',
-                            'state' => 'tn',
-                            'postalCode' => '372030000',
-                            'countryCode' => '',
-                            'countrySubDivisionCode' => '',
-                        ],
-                        'otherPayerSecondaryIdentifier' => [
-                            [
-                                'qualifier' => '',
-                                'identifier' => '',
-                            ],
-                        ],
-                        'otherPayerClaimAdjustmentIndicator' => false,
-                        'otherInsuredAdditionalIdentifier' => '',
-                        'otherPayerOrganizationName' => '',
-                        'otherPayerIdentifier' => '',
-                        'otherPayerAdjudicationOrPaymentDate' => '',
-                        'otherPayerPriorAuthorizationNumber' => '',
-                        'otherPayerPriorAuthorizationOrReferralNumber' => '',
-                        'otherPayerClaimControlNumber' => '',
-                    ],
-                    'otherPayerAttendingProvider' => [
-                        'otherPayerAttendingProviderIdentifier' => [
-                            [
-                                'qualifier' => '',
-                                'identifier' => '',
-                            ],
-                        ],
-                    ],
-                    'otherPayerOperatingPhysician' => [
-                        'otherPayerOperatingPhysicianIdentifier' => [
-                            [
-                                'qualifier' => '',
-                                'identifier' => '',
-                            ],
-                        ],
-                    ],
-                    'otherPayerOtherOperatingPhysician' => [
-                        'otherPayerOtherOperatingPhysicianIdentifier' => [
-                            [
-                                'qualifier' => '',
-                                'identifier' => '',
-                            ],
-                        ],
-                    ],
-                    'otherPayerServiceFacilityLocation' => [
-                        'otherPayerServiceFacilityLocationIdentifier' => [
-                            [
-                                'qualifier' => '',
-                                'identifier' => '',
-                            ],
-                        ],
-                    ],
-                    'otherPayerRenderingProvider' => [
-                        'otherPayerRenderingProviderIdentifier' => [
-                            [
-                                'qualifier' => '',
-                                'identifier' => '',
-                            ],
-                        ],
-                    ],
-                    'otherPayerReferringProvider' => [
-                        'otherPayerReferringProviderIdentifier' => [
-                            [
-                                'qualifier' => '',
-                                'identifier' => '',
-                            ],
-                        ],
-                    ],
-                    'otherPayerBillingProvider' => [
-                        'otherPayerBillingProviderIdentifier' => [
-                            [
-                                'qualifier' => '',
-                                'identifier' => '',
-                            ],
-                        ],
-                    ],
-                    'policyNumber' => '',
-                    'groupNumber' => '',
-                    'otherInsuredGroupName' => '',
-                    'payerPaidAmount' => '',
-                    'remainingPatientLiability' => '',
-                    'nonCoveredChargeAmount' => '',
-                ],*/
-                'serviceLines' => $serviceLines, /*[
-                    [
-                        'lineAdjudicationInformation' => [
-                            [
-                                'procedureModifier' => [
-                                    '',
-                                ],
-                                'lineAdjustment' => [
-                                    [
-                                        'adjustmentGroupCode' => 'CO',
-                                        'claimAdjustmentDetails' => [
-                                            [
-                                                'adjustmentReasonCode' => '',
-                                                'adjustmentAmount' => '',
-                                                'adjustmentQuantity' => '',
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                                'otherPayerPrimaryIdentifier' => '',
-                                'serviceLinePaidAmount' => '',
-                                'productOrServiceIDQualifier' => 'ER',
-                                'procedureCode' => '',
-                                'serviceLineRevenueCode' => '',
-                                'procedureCodeDescription' => '',
-                                'paidServiceUnitCount' => '',
-                                'bundledLineNumber' => '',
-                                'adjudicationOrPaymentDate' => '',
-                                'remainingPatientLiability' => '',
-                            ],
-                        ],
-                        'renderingProvider' => [
-                            'providerType' => 'BillingProvider',
-                            'address' => [
-                                'address1' => '000 address1',
-                                'address2' => '',
-                                'city' => 'city1',
-                                'state' => 'tn',
-                                'postalCode' => '372030000',
-                                'countryCode' => '',
-                                'countrySubDivisionCode' => '',
-                            ],
-                            'contactInformation' => [
-                                'name' => 'janetwo doetwo',
-                                'phoneNumber' => '0000000001',
-                                'faxNumber' => '0000000002',
-                                'email' => 'email@email.com',
-                                'validContact' => true,
-                            ],
-                            'referenceIdentification' => [
-                                [
-                                    'qualifier' => '',
-                                    'identifier' => '',
-                                ],
-                            ],
-                            'npi' => '1760854442',
-                            'secondaryIdentificationQualifierCode' => '0B',
-                            'secondaryIdentifier' => '',
-                            'employerId' => '',
-                            'taxonomyCode' => '',
-                            'firstName' => 'johntwo',
-                            'lastName' => 'doetwo',
-                            'middleName' => 'middletwo',
-                            'suffix' => '',
-                            'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
-                        ],
-                        'referringProvider' => [
-                            'providerType' => 'BillingProvider',
-                            'address' => [
-                                'address1' => '000 address1',
-                                'address2' => '',
-                                'city' => 'city1',
-                                'state' => 'tn',
-                                'postalCode' => '372030000',
-                                'countryCode' => '',
-                                'countrySubDivisionCode' => '',
-                            ],
-                            'contactInformation' => [
-                                'name' => 'janetwo doetwo',
-                                'phoneNumber' => '0000000001',
-                                'faxNumber' => '0000000002',
-                                'email' => 'email@email.com',
-                                'validContact' => true,
-                            ],
-                            'referenceIdentification' => [
-                                [
-                                    'qualifier' => '',
-                                    'identifier' => '',
-                                ],
-                            ],
-                            'npi' => '1760854442',
-                            'secondaryIdentificationQualifierCode' => '0B',
-                            'secondaryIdentifier' => '',
-                            'employerId' => '',
-                            'taxonomyCode' => '',
-                            'firstName' => 'johntwo',
-                            'lastName' => 'doetwo',
-                            'middleName' => 'middletwo',
-                            'suffix' => '',
-                            'organizationName' => 'HAPPY DOCTORS GROUPPRACTICE',
-                        ],
-                        'lineSupplementInformation' => [
-                            'reportInformation' => [
-                                'attachmentReportTypeCode' => '03',
-                                'attachmentTransmissionCode' => 'AA',
-                                'attachmentControlNumber' => '',
-                            ],
-                            'priorAuthorizationNumber' => '',
-                            'referralNumber' => '',
-                            'claimControlNumber' => '',
-                            'repricedClaimNumber' => '',
-                            'investigationalDeviceExemptionNumber' => '',
-                            'claimNumber' => '',
-                            'medicalRecordNumber' => '',
-                            'demoProjectIdentifier' => '',
-                            'serviceAuthorizationExceptionCode' => '1',
-                            'autoAccidentState' => '',
-                            'peerReviewAuthorizationNumber' => '',
-                            'adjustedRepricedClaimRefNumber' => '',
-                        ],
-                        'institutionalService' => [
-                            'procedureModifiers' => [
-                                '1234',
-                            ],
-                            'measurementUnit' => 'DA, UN',
-                            'serviceLineRevenueCode' => '',
-                            'procedureIdentifier' => 'ER',
-                            'procedureCode' => '80199',
-                            'description' => 'Some description text about the procedure',
-                            'lineItemChargeAmount' => '',
-                            'serviceUnitCount' => '',
-                            'nonCoveredChargeAmount' => '',
-                        ],
-                        'serviceLineSupplementalInformation' => [
-                            'attachmentReportTypeCode' => '03',
-                            'attachmentTransmissionCode' => 'AA',
-                            'attachmentControlNumber' => '',
-                        ],
-                        'serviceLineReferenceInformation' => [
-                            'providerControlNumber' => '',
-                            'repricedLineItemRefNumber' => '',
-                            'adjustedRepricedLineItemRefNumber' => '',
-                        ],
-                        'drugIdentification' => [
-                            'measurementUnitCode' => 'F2',
-                            'nationalDrugCode' => '',
-                            'nationalDrugUnitCount' => '',
-                            'linkSequenceNumber' => '',
-                            'pharmacyPrescriptionNumber' => '',
-                        ],
-                        'lineAdjustmentInformation' => [
-                            'claimAdjustment' => [
-                                'adjustmentGroupCode' => 'CO',
-                            ],
-                        ],
-                        'operatingPhysician' => [
-                            'organizationName' => '',
-                            'identificationQualifierCode' => '0B',
-                            'secondaryIdentifier' => '',
-                            'firstName' => '',
-                            'lastName' => '',
-                            'middleName' => '',
-                            'suffix' => '',
-                            'npi' => '',
-                        ],
-                        'otherOperatingPhysician' => [
-                            'organizationName' => '',
-                            'identificationQualifierCode' => '0B',
-                            'secondaryIdentifier' => '',
-                            'firstName' => '',
-                            'lastName' => '',
-                            'middleName' => '',
-                            'suffix' => '',
-                            'npi' => '',
-                        ],
-                        'lineRepricingInformation' => [
-                            'pricingMethodologyCode' => '00',
-                            'repricedAllowedAmount' => '',
-                            'repricedSavingAmount' => '',
-                            'repricedOrgIdentifier' => '',
-                            'repricedPerDiem' => '',
-                            'repricedApprovedDRGCode' => '',
-                            'repricedApprovedAmount' => '',
-                            'repricedApprovedRevenueCode' => '',
-                            'repricedApprovedServiceUnitCode' => 'DA',
-                            'repricedApprovedServiceUnitCount' => '',
-                            'rejectReasonCode' => 'T1',
-                            'policyComplianceCode' => '1',
-                            'exceptionCode' => '1',
-                            'productOrServiceIDQualifier' => 'ER',
-                            'repricedApprovedHCPCSCode' => '',
-                        ],
-                        'assignedNumber' => '1',
-                        'serviceDate' => '',
-                        'serviceDateEnd' => '',
-                        'serviceTaxAmount' => '',
-                        'facilityTaxAmount' => '',
-                        'lineItemControlNumber' => '',
-                        'repricedLineItemReferenceNumber' => '',
-                        'description' => '',
-                        'adjustedRepricedLineItemReferenceNumber' => '',
-                        'lineNoteText' => '',
-                    ],
-                ],*/
+                'serviceFacilityLocation' => $this->getFacility($property),
+                'serviceLines' => $serviceLines,
                 'claimCodeInformation' => [
                     'admissionTypeCode' => $this->claim->patientInformation?->admissionType?->code,
                     'admissionSourceCode' => $this->claim->patientInformation?->admissionSource?->code,
@@ -1863,12 +593,7 @@ final class JSONDictionary extends Dictionary
                         ? str_pad((string) $this->claim->patientInformation->patientStatus->code, 2, '0', STR_PAD_LEFT)
                         : '',
                 ],
-                'epsdtReferral' => [
-                    'certificationConditionCodeAppliesIndicator' => isset($claimServiceLinePrincipal?->epsdt?->code) ? 'Y' : 'N',
-                    'conditionCodes' => [
-                        $claimServiceLinePrincipal?->epsdt?->code ?? 'NU',
-                    ],
-                ],
+                'epsdtReferral' => $this->getClaimEpsdtReferral($property),
                 'propertyCasualtyClaimNumber' => '',
                 'claimChargeAmount' => str_replace(',', '', $this->claim->billed_amount ?? '0.00'),
                 'placeOfServiceCode' => $this->claim->demographicInformation?->bill_classification,
@@ -1876,8 +601,11 @@ final class JSONDictionary extends Dictionary
                 'delayReasonCode' => '',
                 'patientEstimatedAmountDue' => '',
                 'billingNote' => '',
-            ]
-        };
+                default => '',
+            };
+        }
+
+        return '';
     }
 
     protected function getPayToAddress($key): string
@@ -2512,6 +1240,41 @@ final class JSONDictionary extends Dictionary
             'postalCode' => str_replace('-', '', $attendingAddress?->zip ?? '') ?? '',
             'countryCode' => ('US' !== $attendingAddress?->country) ? $attendingAddress?->country : '',
             'countrySubDivisionCode' => ('US' !== $attendingAddress?->country) ? $attendingAddress?->country_subdivision_code : '',
+            default => '',
+        };
+    }
+
+    protected function getFacility(string $key): string|array
+    {
+        $segments = explode('.', $key);
+        $accesorKey = $segments[0] ?? null;
+        $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
+
+        return match ($accesorKey) {
+            'organizationName' => $this->getFacilityAttribute('name'),
+            'address' => $this->getFacilityAddress($property),
+            'npi' => $this->getFacilityAttribute('npi'),
+            'phoneName' => $this->getFacilityContactAttribute('contact_name', '1'),
+            'phoneNumber' => $this->getFacilityContactAttribute('phone', '1'),
+            'phoneExtension' => '',
+            default => '',
+        };
+    }
+
+    protected function getFacilityAddress(string $key): string
+    {
+        return match ($key) {
+            'address1' => $this->getFacilityAddressAttribute('address', '1'),
+            'address2' => '',
+            'city' => $this->getFacilityAddressAttribute('city', '1'),
+            'state' => $this->getFacilityAddressAttribute('state', '1'),
+            'postalCode' => $this->getFacilityAddressAttribute('zip', '1'),
+            'countryCode' => ('US' !== $this->getFacilityAddressAttribute('country', '1'))
+                ? $this->getFacilityAddressAttribute('country', '1')
+                : '',
+            'countrySubDivisionCode' => ('US' !== $this->getFacilityAddressAttribute('country', '1'))
+                ? $this->getFacilityAddressAttribute('country_subdivision_code', '1')
+                : '',
             default => '',
         };
     }
