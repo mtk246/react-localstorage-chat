@@ -46,7 +46,7 @@ final class SubmitToClearingHouseAction
                 ->with(['demographicInformation', 'insurancePolicies'])
                 ->firstOrFail();
 
-            $body = array_filter(
+            $body = array_filter_recursive(
                 $this->claimService->create(
                     FormatType::JSON,
                     $claim,
@@ -55,10 +55,7 @@ final class SubmitToClearingHouseAction
                         ->wherePivot('order', 1)
                         ?->first()
                         ?->insurancePlan ?? null,
-                )->toArray(),
-                function ($innerValue) {
-                    return !empty($innerValue);
-                }
+                )->toArray()
             );
 
             $bodyFormatted = array_reduce(array_keys($body), function ($carry, $key) use ($body) {
