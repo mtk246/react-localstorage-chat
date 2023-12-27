@@ -26,6 +26,7 @@ abstract class Dictionary implements DictionaryInterface
         protected readonly ?Company $company,
         protected readonly ?InsurancePlan $insurancePlan,
         protected readonly ?ClaimBatch $batch = null,
+        protected readonly ?string $rule = null,
     ) {
         $this->setConfigFor();
     }
@@ -172,20 +173,24 @@ abstract class Dictionary implements DictionaryInterface
         $rules = config("claim.formats.{$this->claim->type->value}.{$this->format}");
 
         $customRules = Rules::query()
-            ->where('insurance_plan_id', $insurancePlan?->id ?? $this->insurancePlan?->id)
-            ->where('billing_company_id', $this->claim->billing_company_id)
-            ->where('format', $this->claim->format)
-            ->whereHas('typesOfResponsibilities', fn (Builder $query) => $query->whereIn('code', $this->insurancePlan
-                ?->insurancePolicies
-                ->where('billing_company_id', $this->claim->billing_company_id)
-                ->map(fn (InsurancePolicy $policy) => $policy
-                    ->typeResponsibility
-                    ?->code
-                )
-                ->unique()
-                ->filter() ?? []
-            ))
-            ->orDoesntHave('typesOfResponsibilities')
+            ->when(
+                $this->rule,
+                fn (Builder $query) => $query->where('id', $this->rule),
+                fn (Builder $query) => $query->where('insurance_plan_id', $insurancePlan?->id ?? $this->insurancePlan?->id)
+                    ->where('billing_company_id', $this->claim->billing_company_id)
+                    ->where('format', $this->claim->format)
+                    ->whereHas('typesOfResponsibilities', fn (Builder $query) => $query->whereIn('code', $this->insurancePlan
+                        ?->insurancePolicies
+                        ->where('billing_company_id', $this->claim->billing_company_id)
+                        ->map(fn (InsurancePolicy $policy) => $policy
+                            ->typeResponsibility
+                            ?->code
+                        )
+                        ->unique()
+                        ->filter() ?? []
+                    ))
+                    ->orDoesntHave('typesOfResponsibilities')
+            )
             ->first()
             ?->rules;
 
