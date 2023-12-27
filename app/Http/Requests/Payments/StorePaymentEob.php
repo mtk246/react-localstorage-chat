@@ -20,7 +20,7 @@ final class StorePaymentEob extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'date' => 'required|date',
+            'date' => 'nullable|date',
             'file_name' => 'required|string',
             'files' => 'nullable|array',
             'files.*' => 'file|mimes:pdf,jpg,jpeg,png',
