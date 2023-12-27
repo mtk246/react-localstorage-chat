@@ -176,9 +176,9 @@ abstract class Dictionary implements DictionaryInterface
             ->when(
                 $this->rule,
                 fn (Builder $query) => $query->where('id', $this->rule),
-                fn (Builder $query) => $query->where('insurance_plan_id', $insurancePlan?->id ?? $this->insurancePlan?->id)
-                    ->where('billing_company_id', $this->claim->billing_company_id)
+                fn (Builder $query) => $query->where('billing_company_id', $this->claim->billing_company_id)
                     ->where('format', $this->claim->format)
+                    ->whereHas('insurancePlans', fn (Builder $query) => $query->where('insurance_plans.id', $insurancePlan?->id ?? $this->insurancePlan?->id))
                     ->whereHas('typesOfResponsibilities', fn (Builder $query) => $query->whereIn('code', $this->insurancePlan
                         ?->insurancePolicies
                         ->where('billing_company_id', $this->claim->billing_company_id)
