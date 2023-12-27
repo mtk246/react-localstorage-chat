@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Enums\Claim\ClaimType;
-
 return [
     'denial' => [
         'refile' => [
@@ -13,28 +11,120 @@ return [
         ],
     ],
     'rules' => [
-        ClaimType::INSTITUTIONAL->getName() => [
+        'file' => [
             'group' => [
-                1 => 'Main Company',
-                2 => 'Secondary Company',
-                3 => 'Claim Information',
-                6 => 'Service Date',
-                8 => 'Patient',
-                9 => 'Admission Address',
-                31 => 'Occurrence',
-                32 => 'Occurrence',
-                33 => 'Occurrence',
-                34 => 'Occurrence',
-                35 => 'Occurrence Span',
-                36 => 'Occurrence Span',
-                38 => 'Higher Insurance Company',
-                39 => 'Value Codes',
-                40 => 'Value Codes',
-                41 => 'Value Codes',
-                76 => 'Health Professional Attending',
-                77 => 'Health Professional Operating',
-                78 => 'Health Professional Other',
-                79 => 'Health Professional Other',
+                1 => [
+                    'title' => 'Main Company',
+                    'a' => 'Company Name',
+                ],
+                2 => [
+                    'title' => 'Secondary Company',
+                ],
+                3 => [
+                    'title' => 'Claim Information',
+                ],
+                6 => [
+                    'title' => 'Service Date',
+                ],
+                8 => [
+                    'title' => 'Patient',
+                ],
+                9 => [
+                    'title' => 'Admission Address',
+                ],
+                20 => [
+                    'title' => 'Demographic Information',
+                ],
+                31 => [
+                    'title' => 'Occurrence',
+                ],
+                32 => [
+                    'title' => 'Occurrence',
+                ],
+                33 => [
+                    'title' => 'Occurrence',
+                ],
+                34 => [
+                    'title' => 'Occurrence',
+                ],
+                35 => [
+                    'title' => 'Occurrence Span',
+                ],
+                36 => [
+                    'title' => 'Occurrence Span',
+                ],
+                38 => [
+                    'title' => 'Higher Insurance Company',
+                ],
+                39 => [
+                    'title' => 'Value Codes',
+                ],
+                40 => [
+                    'title' => 'Value Codes',
+                ],
+                41 => [
+                    'title' => 'Value Codes',
+                ],
+                57 => [
+                    'title' => 'Company',
+                ],
+                76 => [
+                    'title' => 'Health Professional Attending',
+                ],
+                77 => [
+                    'title' => 'Health Professional Operating',
+                ],
+                78 => [
+                    'title' => 'Health Professional Other',
+                ],
+                79 => [
+                    'title' => 'Health Professional Other',
+                ],
+                't' => [
+                    'title' => 'Totals',
+                    'group' => [
+                        'b' => ['title' => 'page'],
+                    ],
+                ],
+            ],
+        ],
+        'json' => [
+            'group' => [
+                'submitter' => [
+                    'title' => 'Submitter',
+                    'group' => [
+                        'contactInformation' => ['title' => 'Contact Information'],
+                    ],
+                ],
+                'receiver' => [
+                    'title' => 'Receiver organization',
+                ],
+                'subscriber' => [
+                    'title' => 'Subscriber',
+                    'group' => [
+                        'contactInformation' => ['title' => 'Contact Information'],
+                        'address' => ['title' => 'Addresses'],
+                    ],
+                ],
+                'dependent' => [
+                    'title' => 'Dependent',
+                    'group' => [
+                        'contactInformation' => ['title' => 'Contact Information'],
+                        'address' => ['title' => 'Addresses'],
+                    ],
+                ],
+                'claimInformation' => [
+                    'title' => 'Claim Information',
+                    'group' => [
+                        'claimInformation' => ['title' => 'Claim Information'],
+                        'claimDates' => ['title' => 'Claim Dates'],
+                        'claimAmounts' => ['title' => 'Claim Amounts'],
+                        'claimSupplementalInformation' => ['title' => 'Claim Supplemental Information'],
+                    ],
+                ],
+                'payToAddress' => [
+                    'title' => 'Pay To Address',
+                ],
             ],
         ],
     ],
