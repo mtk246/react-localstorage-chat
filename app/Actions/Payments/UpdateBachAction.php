@@ -18,7 +18,7 @@ final class UpdateBachAction
     public function invoke(Batch $batch, StoreBatchWrapper $request): BatchResource
     {
         return DB::transaction(function () use ($batch, $request): BatchResource {
-            $batch->update($request->getBatchData());
+            $batch->update($request->getUpdateBatchData());
 
             $batch->payments()->whereNotIn('id', $request->getPaymentsData()->map(
                 fn (PaymentWrapper $paymentRequest) => $paymentRequest->getId()
