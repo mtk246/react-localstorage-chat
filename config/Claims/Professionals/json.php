@@ -1799,36 +1799,19 @@ return [
             ],
         ],
     ],
-    'claimInformation.healthCareCodeInformation.diagnosisTypeCode' => [
+    'claimInformation.healthCareCodeInformation' => [
         'type' => RuleType::SINGLE->value,
         'default' => true,
         'description' => 'Claim information healthCare diagnosis type code',
         'value' => [
-            'id' => 'claim:claimInformation.healthCareCodeInformation.diagnosisTypeCode',
+            'id' => 'claim:claimInformation.healthCareCodeInformation',
             'name' => 'Claim information healthCare diagnosis type code',
         ],
         'values' => [
             'common' => [
                 [
-                    'id' => 'claim:claimInformation.healthCareCodeInformation.diagnosisTypeCode',
+                    'id' => 'claim:claimInformation.healthCareCodeInformation',
                     'name' => 'Claim information healthCare diagnosis type code',
-                ],
-            ],
-        ],
-    ],
-    'claimInformation.healthCareCodeInformation.diagnosisCode' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information healthCare diagnosis code',
-        'value' => [
-            'id' => 'claim:claimInformation.healthCareCodeInformation.diagnosisCode',
-            'name' => 'Claim information healthCare diagnosis code',
-        ],
-        'values' => [
-            'common' => [
-                [
-                    'id' => 'claim:claimInformation.healthCareCodeInformation.diagnosisCode',
-                    'name' => 'Claim information healthCare diagnosis code',
                 ],
             ],
         ],
@@ -2676,13 +2659,81 @@ return [
         'value' => [],
         'values' => [],
     ],
-    'claimInformation.serviceLines.assignedNumber' => [
-        'type' => RuleType::SINGLE->value,
+    'claimInformation.serviceLines' => [
+        'type' => RuleType::MULTIPLE->value,
         'default' => true,
-        'description' => 'Claim information service lines assigned number',
+        'length' => 30,
+        'glue' => '',
+        'description' => 'Claim information service lines',
         'value' => [
-            'id' => 'claim:claimInformation.serviceLines.assignedNumber',
-            'name' => 'Claim information service lines assigned number',
+            [
+                'id' => 'claim:claimInformation.serviceLines.assignedNumber',
+                'name' => 'Claim information service lines assigned number',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.serviceDate',
+                'name' => 'Claim information service lines service date',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.serviceDateEnd',
+                'name' => 'Claim information service lines service date end',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.providerControlNumber',
+                'name' => 'Claim information service lines provider control number',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.procedureIdentifier',
+                'name' => 'Claim information service lines professional service procedure identifier',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.procedureCode',
+                'name' => 'Claim information service lines professional service procedure code',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.procedureModifiers',
+                'name' => 'Claim information service lines professional service procedure modifiers',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.description',
+                'name' => 'Claim information service lines professional service description',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.lineItemChargeAmount',
+                'name' => 'Claim information service lines professional service line item charge amount',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.measurementUnit',
+                'name' => 'Claim information service lines professional service measurement unit',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.serviceUnitCount',
+                'name' => 'Claim information service lines professional service service unit count',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.placeOfServiceCode',
+                'name' => 'Claim information service lines professional service place of service code',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.compositeDiagnosisCodePointers.diagnosisCodePointers',
+                'name' => 'Claim information service lines professional service composite  diagnosis code pointers',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.emergencyIndicator',
+                'name' => 'Claim information service lines professional service emergency indicator',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.epsdtIndicator',
+                'name' => 'Claim information service lines professional service epsdt indicator',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.familyPlanningIndicator',
+                'name' => 'Claim information service lines professional service family planning indicator',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.copayStatusCode',
+                'name' => 'Claim information service lines professional service copay status code',
+            ],
         ],
         'values' => [
             'common' => [
@@ -2690,274 +2741,66 @@ return [
                     'id' => 'claim:claimInformation.serviceLines.assignedNumber',
                     'name' => 'Claim information service lines assigned number',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.serviceDate' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines service date',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.serviceDate',
-            'name' => 'Claim information service lines service date',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.serviceDate',
                     'name' => 'Claim information service lines service date',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.serviceDateEnd' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines service date end',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.serviceDateEnd',
-            'name' => 'Claim information service lines service date end',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.serviceDateEnd',
                     'name' => 'Claim information service lines service date end',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.providerControlNumber' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines provider control number',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.providerControlNumber',
-            'name' => 'Claim information service lines provider control number',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.providerControlNumber',
                     'name' => 'Claim information service lines provider control number',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.procedureIdentifier' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines professional service procedure identifier',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.procedureIdentifier',
-            'name' => 'Claim information service lines professional service procedure identifier',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.procedureIdentifier',
                     'name' => 'Claim information service lines professional service procedure identifier',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.procedureCode' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines professional service procedure code',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.procedureCode',
-            'name' => 'Claim information service lines professional service procedure code',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.procedureCode',
                     'name' => 'Claim information service lines professional service procedure code',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.procedureModifiers' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines professional service procedure modifiers',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.procedureModifiers',
-            'name' => 'Claim information service lines professional service procedure modifiers',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.procedureModifiers',
                     'name' => 'Claim information service lines professional service procedure modifiers',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.description' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines professional service description',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.description',
-            'name' => 'Claim information service lines professional service description',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.description',
                     'name' => 'Claim information service lines professional service description',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.lineItemChargeAmount' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines professional service line item charge amount',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.lineItemChargeAmount',
-            'name' => 'Claim information service lines professional service line item charge amount',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.lineItemChargeAmount',
                     'name' => 'Claim information service lines professional service line item charge amount',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.measurementUnit' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines professional service measurement unit',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.measurementUnit',
-            'name' => 'Claim information service lines professional service measurement unit',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.measurementUnit',
                     'name' => 'Claim information service lines professional service measurement unit',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.serviceUnitCount' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines professional service service unit count',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.serviceUnitCount',
-            'name' => 'Claim information service lines professional service service unit count',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.serviceUnitCount',
                     'name' => 'Claim information service lines professional service service unit count',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.placeOfServiceCode' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines professional service place of service code',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.placeOfServiceCode',
-            'name' => 'Claim information service lines professional service place of service code',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.placeOfServiceCode',
                     'name' => 'Claim information service lines professional service place of service code',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.compositeDiagnosisCodePointers.diagnosisCodePointers' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines professional service composite  diagnosis code pointers',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.compositeDiagnosisCodePointers.diagnosisCodePointers',
-            'name' => 'Claim information service lines professional service composite  diagnosis code pointers',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.compositeDiagnosisCodePointers.diagnosisCodePointers',
                     'name' => 'Claim information service lines professional service composite  diagnosis code pointers',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.emergencyIndicator' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines professional service emergency indicator',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.emergencyIndicator',
-            'name' => 'Claim information service lines professional service emergency indicator',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.emergencyIndicator',
                     'name' => 'Claim information service lines professional service emergency indicator',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.epsdtIndicator' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines professional service epsdt indicator',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.epsdtIndicator',
-            'name' => 'Claim information service lines professional service epsdt indicator',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.epsdtIndicator',
                     'name' => 'Claim information service lines professional service epsdt indicator',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.familyPlanningIndicator' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines professional service family planning indicator',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.familyPlanningIndicator',
-            'name' => 'Claim information service lines professional service family planning indicator',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.familyPlanningIndicator',
                     'name' => 'Claim information service lines professional service family planning indicator',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.copayStatusCode' => [
-        'type' => RuleType::SINGLE->value,
-        'default' => true,
-        'description' => 'Claim information service lines professional service copay status code',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.copayStatusCode',
-            'name' => 'Claim information service lines professional service copay status code',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.copayStatusCode',
                     'name' => 'Claim information service lines professional service copay status code',
@@ -5472,13 +5315,13 @@ return [
         'default' => true,
         'description' => 'Billing contact information phone extension',
         'value' => [
-            'id' => 'claim:claimInformation.patientControlNumber',
+            'id' => 'claim:billing.contactInformation.phoneExtension',
             'name' => 'Billing contact information phone extension',
         ],
         'values' => [
             'common' => [
                 [
-                    'id' => 'claim:claimInformation.patientControlNumber',
+                    'id' => 'claim:billing.contactInformation.phoneExtension',
                     'name' => 'Billing contact information phone extension',
                 ],
             ],
@@ -5982,13 +5825,13 @@ return [
         'default' => true,
         'description' => 'Referring contact information phone extension',
         'value' => [
-            'id' => 'claim:claimInformation.patientControlNumber',
+            'id' => 'claim:referring.contactInformation.phoneExtension',
             'name' => 'Referring contact information phone extension',
         ],
         'values' => [
             'common' => [
                 [
-                    'id' => 'claim:claimInformation.patientControlNumber',
+                    'id' => 'claim:referring.contactInformation.phoneExtension',
                     'name' => 'Referring contact information phone extension',
                 ],
             ],
