@@ -26,6 +26,7 @@ abstract class Dictionary implements DictionaryInterface
         protected readonly ?Company $company,
         protected readonly ?InsurancePlan $insurancePlan,
         protected readonly ?ClaimBatch $batch = null,
+        protected readonly ?string $rule = null,
     ) {
         $this->setConfigFor();
     }
@@ -43,7 +44,7 @@ abstract class Dictionary implements DictionaryInterface
             RuleType::BOOLEAN->value => $this->getBooleanFormat((object) $config->value),
             RuleType::SINGLE->value => $this->getSingleFormat((object) $config->value),
             RuleType::SINGLE_ARRAY->value => $this->getSingleArrayFormat((object) $config->value),
-            RuleType::MULTIPLE->value => $this->getMultipleFormat($config->value, $config->glue ?? ''),
+            RuleType::MULTIPLE->value => $this->getMultipleFormat($config->value, $config->glue ?? '', $key),
             RuleType::MULTIPLE_ARRAY->value => $this->getMultipleArrayFormat($config->value, $config->glue ?? ''),
             RuleType::NONE->value => '',
             default => throw new \InvalidArgumentException('Invalid format type'),
@@ -80,7 +81,7 @@ abstract class Dictionary implements DictionaryInterface
             ->toArray();
     }
 
-    protected function getMultipleFormat(array $values, string $glue): string
+    protected function getMultipleFormat(array $values, string $glue, string $key): string|array
     {
         return Collect($values)
             ->map(fn ($value) => (string) $this->getSingleFormat((object) $value))
@@ -94,7 +95,7 @@ abstract class Dictionary implements DictionaryInterface
             ->toArray();
     }
 
-    protected function getSingleFormat(object $value): string|Collection
+    protected function getSingleFormat(object $value): string|bool|array|Collection
     {
         list($key, $default) = Str::of($value->id)->explode('|')->pad(2, null)->toArray();
 
@@ -172,20 +173,24 @@ abstract class Dictionary implements DictionaryInterface
         $rules = config("claim.formats.{$this->claim->type->value}.{$this->format}");
 
         $customRules = Rules::query()
-            ->where('insurance_plan_id', $insurancePlan?->id ?? $this->insurancePlan?->id)
-            ->where('billing_company_id', $this->claim->billing_company_id)
-            ->where('format', $this->claim->format)
-            ->whereHas('typesOfResponsibilities', fn (Builder $query) => $query->whereIn('code', $this->insurancePlan
-                ?->insurancePolicies
-                ->where('billing_company_id', $this->claim->billing_company_id)
-                ->map(fn (InsurancePolicy $policy) => $policy
-                    ->typeResponsibility
-                    ?->code
-                )
-                ->unique()
-                ->filter() ?? []
-            ))
-            ->orDoesntHave('typesOfResponsibilities')
+            ->when(
+                $this->rule,
+                fn (Builder $query) => $query->where('id', $this->rule),
+                fn (Builder $query) => $query->where('billing_company_id', $this->claim->billing_company_id)
+                    ->where('format', $this->claim->format)
+                    ->whereHas('insurancePlans', fn (Builder $query) => $query->where('insurance_plans.id', $insurancePlan?->id ?? $this->insurancePlan?->id))
+                    ->whereHas('typesOfResponsibilities', fn (Builder $query) => $query->whereIn('code', $this->insurancePlan
+                        ?->insurancePolicies
+                        ->where('billing_company_id', $this->claim->billing_company_id)
+                        ->map(fn (InsurancePolicy $policy) => $policy
+                            ->typeResponsibility
+                            ?->code
+                        )
+                        ->unique()
+                        ->filter() ?? []
+                    ))
+                    ->orDoesntHave('typesOfResponsibilities')
+            )
             ->first()
             ?->rules;
 

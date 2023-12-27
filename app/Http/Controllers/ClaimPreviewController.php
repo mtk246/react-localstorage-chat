@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Claim\GetClaimPreviewAction;
 use App\Actions\Claim\GetClaimTransmissionReportAction;
+use App\Enums\Claim\ClaimType;
 use App\Models\Claims\Claim;
 use App\Models\Claims\ClaimBatch;
 use App\Services\Claim\ClaimPreviewService;
@@ -19,7 +20,10 @@ final class ClaimPreviewController extends Controller
     public function show(Request $request, ClaimPreviewService $preview, GetClaimPreviewAction $claimPreview)
     {
         $id = $request->id ?? null;
-        $claim = Claim::query()->with(['insurancePolicies'])->find($id);
+        $claim = $request->get('default', false)
+            ? Claim::query()->with(['insurancePolicies'])->where('type', $request->get('type', ClaimType::INSTITUTIONAL->value))->first()
+            : Claim::query()->with(['insurancePolicies'])->find($id);
+    
         $preview->setConfig([
             'urlVerify' => 'www.nucc.org',
             'print' => (bool) ($request->print ?? false),

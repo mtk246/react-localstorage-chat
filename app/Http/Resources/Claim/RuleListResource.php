@@ -53,7 +53,7 @@ final class RuleListResource extends JsonResource
             $result[$level] = [
                 'type' => 'group',
                 'code' => $level,
-                'description' => __("claim.rules.{$groupName}"),
+                'description' => __("claim.rules.{$groupName}.title"),
                 'values' => [],
             ];
         }
