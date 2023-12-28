@@ -8,12 +8,15 @@ use App\Enums\Payments\MethodType;
 use App\Enums\Payments\SourceType;
 use App\Models\Claims\Claim;
 use App\Models\InsurancePlan;
+use App\Models\User;
 use Cknow\Money\Casts\MoneyDecimalCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\Payments\Payment.
@@ -60,9 +63,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  *
  * @mixin \Eloquent
  */
-final class Payment extends Model
+final class Payment extends Model implements Auditable
 {
     use HasFactory;
+    use AuditableTrait;
 
     /** @var string[] */
     protected $fillable = [
@@ -115,5 +119,25 @@ final class Payment extends Model
             ->withPivot(['id'])
             ->withTimestamps()
             ->as('payments');
+    }
+
+    /** @return array<key, string> */
+    public function getLastModifiedAttribute(): array
+    {
+        $lastModified = $this->audits()->latest()->first();
+
+        if (isset($lastModified->user_id)) {
+            $user = User::find($lastModified->user_id);
+
+            return [
+                'user' => $user->profile->first_name.' '.$user->profile->last_name,
+                'roles' => $user->roles()?->get(['name'])->pluck('name'),
+            ];
+        }
+
+        return [
+            'user' => 'Console',
+            'roles' => [],
+        ];
     }
 }
