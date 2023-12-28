@@ -71,7 +71,7 @@ final class JSONDictionary extends Dictionary
         };
     }
 
-    protected function getSubmitter($key): string
+    protected function getSubmitter($key): string|bool
     {
         $segments = explode('.', $key);
         $accesorKey = $segments[0] ?? null;
@@ -79,7 +79,7 @@ final class JSONDictionary extends Dictionary
 
         return match ($accesorKey) {
             'organizationName' => $this->claim->billingCompany->name,
-            'taxId' => $this->claim->billingCompany?->tax_id,
+            'taxId' => $this->claim->billingCompany?->tax_id ?? '',
             'lastName' => '',
             'firstName' => '',
             'middleName' => '',
@@ -87,7 +87,7 @@ final class JSONDictionary extends Dictionary
         };
     }
 
-    protected function getSubmitterContactInformation($key): string
+    protected function getSubmitterContactInformation($key): string|bool
     {
         return match ($key) {
             'name' => $this->claim->billingCompany->contact?->contact_name ?? $this->claim->billingCompany->name ?? 'Contact Billing',
@@ -279,6 +279,27 @@ final class JSONDictionary extends Dictionary
         return $claimDateInfo[$key] ?? '';
     }
 
+    protected function getClaimDateInstitutionalInformation($key): string
+    {
+        return match ($key) {
+            'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '')
+                .substr(str_replace(
+                    ':',
+                    '',
+                    ('' != ($this->claim->patientInformation->admission_date ?? ''))
+                        ? ($this->claim->patientInformation->admission_time ?? '0000')
+                        : ''),
+                    0,
+                    4
+                ),
+            'statementBeginDate' => str_replace('-', '', $this->claim->service?->from ?? ''),
+            'statementEndDate' => str_replace('-', '', $this->claim->service?->to ?? ''),
+            'dischargeHour' => substr(str_replace(':', '', $this->claim->patientInformation->discharge_time ?? ''), 0, 4),
+            'repricerReceivedDate' => Carbon::now()->format('Ymd'),
+            default => '',
+        };
+    }
+
     protected function getClaimEpsdtReferral($key): string|array
     {
         $claimServiceLinePrincipal = $this->claim->service->services->first();
@@ -302,6 +323,99 @@ final class JSONDictionary extends Dictionary
             )->toArray();
     }
 
+    protected function getClaimSupplementalInformation($key): string|bool
+    {
+        return match ($key) {
+            'priorAuthorizationNumber' => $this->claim->demographicInformation?->prior_authorization_number ?? '',
+            'referralNumber' => '',
+            'claimControlNumber' => '',
+            'repricedClaimNumber' => '',
+            'investigationalDeviceExemptionNumber' => '',
+            'claimNumber' => '',
+            'medicalRecordNumber' => '',
+            'demoProjectIdentifier' => '',
+            'serviceAuthorizationExceptionCode' => '',
+            'autoAccidentState' => $this->claim->demographicInformation?->auto_accident_place_state ?? '',
+            'peerReviewAuthorizationNumber' => '',
+            'adjustedRepricedClaimRefNumber' => '',
+            default => '',
+        };
+    }
+
+    protected function getClaimPrincipalDiagnosis($key): string
+    {
+        $diagnosisPrincipal = $this->claim->service->diagnoses->first();
+
+        return match ($key) {
+            'qualifierCode' => 'ABK',
+            'principalDiagnosisCode' => $diagnosisPrincipal?->code ?? '',
+            'presentOnAdmissionIndicator' => (true === $diagnosisPrincipal?->pivot?->admission ?? false) ? 'Y' : 'N',
+            default => '',
+        };
+    }
+
+    protected function getClaimAdmittingDiagnosis($key): string
+    {
+        $admittingDiagnosis = $this->claim->service->diagnoses->first(function ($diagnosis) {
+            return $diagnosis->pivot->admission ?? false;
+        });
+
+        if (is_null($admittingDiagnosis)) {
+            return '';
+        }
+
+        return match ($key) {
+            'qualifierCode' => 'ABJ',
+            'admittingDiagnosisCode' => $admittingDiagnosis->code,
+            default => '',
+        };
+    }
+
+    protected function getClaimDiagnosisRelatedGroupInformation($key): string
+    {
+        return match ($key) {
+            'drugRelatedGroupCode' => $this->claim->service?->diagnosisRelatedGroup?->code ?? '',
+            default => '',
+        };
+    }
+
+    protected function getClaimOtherDiagnosisInformationList(): array
+    {
+        return [
+            $this->claim->service->diagnoses
+                ->skip(1)
+                ->map(fn ($diagnosis, $index) => [
+                    'qualifierCode' => 'ABF',
+                    'otherDiagnosisCode' => $diagnosis->code,
+                    'presentOnAdmissionIndicator' => (true === $diagnosis->pivot?->admission ?? false) ? 'Y' : 'N',
+                ])->values()->toArray()
+        ];
+    }
+
+    protected function getClaimValueInformationList(): array
+    {
+        return [
+            [
+                [
+                    'valueCode' => '80',
+                    'valueCodeAmount' => $this->claim->service?->services?->first()?->days_or_units ?? '1',
+                ],
+            ]
+        ];
+    }
+
+    protected function getClaimCodeInformation($key): string
+    {
+        return match ($key) {
+            'admissionTypeCode' => $this->claim->patientInformation?->admissionType?->code ?? '',
+            'admissionSourceCode' => $this->claim->patientInformation?->admissionSource?->code ?? '',
+            'patientStatusCode' => !is_null($this->claim?->patientInformation?->patientStatus?->code)
+                ? str_pad((string) $this->claim->patientInformation->patientStatus->code, 2, '0', STR_PAD_LEFT)
+                : '',
+            default => '',
+        };
+    }
+
     protected function getClaimInformation($key): array|string|bool
     {
         $segments = explode('.', $key);
@@ -309,10 +423,6 @@ final class JSONDictionary extends Dictionary
         $property = isset($segments[1]) ? implode('.', array_slice($segments, 1)) : null;
 
         $claimServiceLinePrincipal = $this->claim->service->services->first();
-        $diagnosisPrincipal = $this->claim->service->diagnoses->first();
-        $admittingDiagnosis = $this->claim->service->diagnoses->first(function ($diagnosis) {
-            return $diagnosis->pivot->admission ?? false;
-        });
         $relatedCausesCode = array_filter([
             (true === $this->claim->demographicInformation?->auto_accident_related_condition) ? 'AA' : null,
             (true === $this->claim->demographicInformation?->employment_related_condition) ? 'EM' : null,
@@ -494,59 +604,12 @@ final class JSONDictionary extends Dictionary
                     : 'N',
                 'releaseInformationCode' => 'Y', /* Código que indica si el proveedor tiene archivada una declaración firmada por el paciente autorizando la divulgación de datos médicos a otras organizaciones.
                 * Informado = I, Sí = Y */
-                'claimDateInformation' => [
-                    'admissionDateAndHour' => str_replace('-', '', $this->claim->patientInformation->admission_date ?? '')
-                        .substr(str_replace(
-                            ':',
-                            '',
-                            ('' != ($this->claim->patientInformation->admission_date ?? ''))
-                                ? ($this->claim->patientInformation->admission_time ?? '0000')
-                                : ''),
-                            0,
-                            4
-                        ),
-                    'statementBeginDate' => str_replace('-', '', $this->claim->service?->from ?? ''),
-                    'statementEndDate' => str_replace('-', '', $this->claim->service?->to ?? ''),
-                    'dischargeHour' => substr(str_replace(':', '', $this->claim->patientInformation->discharge_time ?? ''), 0, 4),
-                    'repricerReceivedDate' => Carbon::now()->format('Ymd'),
-                ],
-                'claimSupplementalInformation' => [
-                    'priorAuthorizationNumber' => $this->claim->demographicInformation?->prior_authorization_number ?? '',
-                    'referralNumber' => '',
-                    'claimControlNumber' => '',
-                    'repricedClaimNumber' => '',
-                    'investigationalDeviceExemptionNumber' => '',
-                    'claimNumber' => '',
-                    'medicalRecordNumber' => '',
-                    'demoProjectIdentifier' => '',
-                    'serviceAuthorizationExceptionCode' => '',
-                    'autoAccidentState' => $this->claim->demographicInformation?->auto_accident_place_state,
-                    'peerReviewAuthorizationNumber' => '',
-                    'adjustedRepricedClaimRefNumber' => '',
-                ],
-                'principalDiagnosis' => [
-                    'qualifierCode' => 'ABK',
-                    'principalDiagnosisCode' => $diagnosisPrincipal?->code,
-                    'presentOnAdmissionIndicator' => (true === $diagnosisPrincipal?->pivot?->admission ?? false) ? 'Y' : 'N',
-                ],
-                'admittingDiagnosis' => isset($admittingDiagnosis)
-                    ? [
-                        'qualifierCode' => 'ABJ',
-                        'admittingDiagnosisCode' => $admittingDiagnosis->code,
-                    ]
-                    : null,
-                'diagnosisRelatedGroupInformation' => [
-                    'drugRelatedGroupCode' => $this->claim->service?->diagnosisRelatedGroup?->code ?? null,
-                ],
-                'otherDiagnosisInformationList' => [
-                    $this->claim->service->diagnoses
-                        ->skip(1)
-                        ->map(fn ($diagnosis, $index) => [
-                            'qualifierCode' => 'ABF',
-                            'otherDiagnosisCode' => $diagnosis->code,
-                            'presentOnAdmissionIndicator' => (true === $diagnosis->pivot?->admission ?? false) ? 'Y' : 'N',
-                        ])->values()->toArray(),
-                ],
+                'claimDateInformation' => $this->getClaimDateInstitutionalInformation($property),
+                'claimSupplementalInformation' => $this->getClaimSupplementalInformation($property),
+                'principalDiagnosis' => $this->getClaimPrincipalDiagnosis($property),
+                'admittingDiagnosis' => $this->getClaimAdmittingDiagnosis($property),
+                'diagnosisRelatedGroupInformation' => $this->getClaimDiagnosisRelatedGroupInformation($property),
+                'otherDiagnosisInformationList' => $this->getClaimOtherDiagnosisInformationList(),
                 'occurrenceSpanInformations' => [
                     [
                         [
@@ -556,14 +619,9 @@ final class JSONDictionary extends Dictionary
                         ],
                     ],
                 ],
-                'valueInformationList' => ('inpatient' == $this->claim->demographicInformation?->type_of_medical_assistance) ? [
-                    [
-                        [
-                            'valueCode' => '80',
-                            'valueCodeAmount' => $this->claim->service?->services?->first()?->days_or_units ?? '1',
-                        ],
-                    ],
-                ] : [],
+                'valueInformationList' => ('inpatient' == $this->claim->demographicInformation?->type_of_medical_assistance)
+                    ? $this->getClaimValueInformationList()
+                    : '',
                 'occurrenceInformationList' => [
                     [
                         [
@@ -586,13 +644,7 @@ final class JSONDictionary extends Dictionary
                 ],
                 'serviceFacilityLocation' => $this->getFacility($property),
                 'serviceLines' => $serviceLines,
-                'claimCodeInformation' => [
-                    'admissionTypeCode' => $this->claim->patientInformation?->admissionType?->code,
-                    'admissionSourceCode' => $this->claim->patientInformation?->admissionSource?->code,
-                    'patientStatusCode' => !is_null($this->claim?->patientInformation?->patientStatus?->code)
-                        ? str_pad((string) $this->claim->patientInformation->patientStatus->code, 2, '0', STR_PAD_LEFT)
-                        : '',
-                ],
+                'claimCodeInformation' => $this->getClaimCodeInformation($property),
                 'epsdtReferral' => $this->getClaimEpsdtReferral($property),
                 'propertyCasualtyClaimNumber' => '',
                 'claimChargeAmount' => str_replace(',', '', $this->claim->billed_amount ?? '0.00'),
@@ -834,13 +886,13 @@ final class JSONDictionary extends Dictionary
 
         return match ($accesorKey) {
             'providerType' => 'BillingProvider',
-            'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? null,
+            'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? '',
             'ssn' => str_replace('-', '', $billingProvider?->profile?->ssn ?? ''),
             'employerId' => str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi),
-            'firstName' => $billingProvider?->profile?->first_name,
-            'lastName' => $billingProvider?->profile?->last_name,
-            'middleName' => $billingProvider?->profile?->middle_name,
-            'suffix' => $billingProvider?->profile?->nameSuffix?->code,
+            'firstName' => $billingProvider?->profile?->first_name ?? '',
+            'lastName' => $billingProvider?->profile?->last_name ?? '',
+            'middleName' => $billingProvider?->profile?->middle_name ?? '',
+            'suffix' => $billingProvider?->profile?->nameSuffix?->code ?? '',
             'contactInformation' => $this->getBillingByHeatlhProfessionalContactInformation($property),
             'address' => $this->getBillingByHeatlhProfessionalAddress($property),
             default => '',
