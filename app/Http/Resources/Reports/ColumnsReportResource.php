@@ -7,6 +7,7 @@ namespace App\Http\Resources\Reports;
 use App\Enums\Reports\ColumnsAdminDetailPatinetType;
 use App\Enums\Reports\ColumnsAdminPayerMixType;
 use App\Enums\Reports\ColumnsAdminProfessionalProductivityType;
+use App\Enums\Reports\ColumnsAdminViewBaddebtCost;
 use App\Enums\Reports\ColumnsBillingDetailPatinetType;
 use App\Enums\Reports\ColumnsBillingGeneralFacilityType;
 use App\Enums\Reports\ColumnsBillingGeneralHealthcareProfessionalType;
@@ -69,7 +70,7 @@ final class ColumnsReportResource extends JsonResource
                 : new EnumResource(collect(ColumnsProfessionalProductivityType::cases()), ColumnsAdminDetailPatinetResource::class),
 
             TypeReportAllRecords::BAD_DEBT_COST => Gate::check('is-admin')
-                ? new EnumResource(collect(ColumnsviewBaddebtCost::cases()), ColumnsAdminDetailPatinetResource::class)
+                ? new EnumResource(collect(ColumnsAdminViewBaddebtCost::cases()), ColumnsAdminDetailPatinetResource::class)
                 : new EnumResource(collect(ColumnsviewBaddebtCost::cases()), ColumnsAdminDetailPatinetResource::class)
         };
     }

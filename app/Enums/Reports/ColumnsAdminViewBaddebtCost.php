@@ -14,11 +14,18 @@ use App\Enums\Traits\EnumToArray;
 use App\Enums\Traits\HasAttributes;
 use App\Enums\Traits\HasColumnsAttributes;
 
-enum ColumnsviewBaddebtCost: string implements TypeInterface
+enum ColumnsAdminViewBaddebtCost: string implements TypeInterface
 {
     use EnumToArray;
     use HasAttributes;
     use HasColumnsAttributes;
+
+    #[TypeAttribute('string')]
+    #[AlignAttribute('left')]
+    #[TextAttribute('Billing companies')]
+    #[WidthAttribute('370px')]
+    #[PublicAttribute(true)]
+    case BILLING_COMPANIES = 'billing_companies';
 
     #[TypeAttribute('string')]
     #[AlignAttribute('left')]
