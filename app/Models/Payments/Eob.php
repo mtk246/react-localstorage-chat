@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Payments;
 
 use App\Models\Claims\Claim;
+use App\Models\Claims\ClaimBatch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -92,5 +93,17 @@ final class Eob extends Model
     public function claimsThrough(): HasManyThrough
     {
         return $this->hasManyThrough(Claim::class, Payment::class);
+    }
+
+    public function claimBatches(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            ClaimBatch::class,
+            Payment::class,
+            'id',
+            'id',
+            'payment_id',
+            'payment_batch_id'
+        );
     }
 }
