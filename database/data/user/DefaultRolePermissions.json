@@ -492,7 +492,7 @@
         "claimrule.show",
         "claimrule.history"
     ],
-    "billingcompanyauditor": [
+    "billingauditor": [
         "setting.profile.show",
         "setting.profile.edit",
         "audit.view",
