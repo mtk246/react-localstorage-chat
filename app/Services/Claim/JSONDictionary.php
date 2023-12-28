@@ -888,7 +888,7 @@ final class JSONDictionary extends Dictionary
             'providerType' => 'BillingProvider',
             'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? '',
             'ssn' => str_replace('-', '', $billingProvider?->profile?->ssn ?? ''),
-            'employerId' => str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi),
+            'employerId' => str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi ?? ''),
             'firstName' => $billingProvider?->profile?->first_name ?? '',
             'lastName' => $billingProvider?->profile?->last_name ?? '',
             'middleName' => $billingProvider?->profile?->middle_name ?? '',
