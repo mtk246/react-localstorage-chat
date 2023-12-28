@@ -388,7 +388,7 @@ final class JSONDictionary extends Dictionary
                     'qualifierCode' => 'ABF',
                     'otherDiagnosisCode' => $diagnosis->code,
                     'presentOnAdmissionIndicator' => (true === $diagnosis->pivot?->admission ?? false) ? 'Y' : 'N',
-                ])->values()->toArray()
+                ])->values()->toArray(),
         ];
     }
 
@@ -400,7 +400,7 @@ final class JSONDictionary extends Dictionary
                     'valueCode' => '80',
                     'valueCodeAmount' => $this->claim->service?->services?->first()?->days_or_units ?? '1',
                 ],
-            ]
+            ],
         ];
     }
 
