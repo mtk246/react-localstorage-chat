@@ -421,9 +421,10 @@ final class FileDictionary extends Dictionary
             })
             ?->first()
             ?->contractFeeSpecifications()
-            ?->whereNull('health_professional_id')
-            ?->orWhere('health_professional_id', $healthProfessional?->id)
-            ?->first();
+            ?->where(function ($query) use ($healthProfessional) {
+                $query->whereNull('health_professional_id')
+                    ?->orWhere('health_professional_id', $healthProfessional?->id);
+            })->first();
 
         $resultServices = [];
         $totalCharge = 0;
@@ -633,9 +634,10 @@ final class FileDictionary extends Dictionary
             })
             ?->first()
             ?->contractFeeSpecifications()
-            ?->whereNull('health_professional_id')
-            ?->orWhere('health_professional_id', $healthProfessional?->id)
-            ?->first();
+            ?->where(function ($query) use ($healthProfessional) {
+                $query->whereNull('health_professional_id')
+                    ?->orWhere('health_professional_id', $healthProfessional?->id);
+            })->first();
 
         if (is_null($contractFeeSpecification)) {
             $companyAddress = $this->claim
