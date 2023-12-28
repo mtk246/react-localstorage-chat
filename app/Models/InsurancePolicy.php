@@ -57,6 +57,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $subscribers_count
  * @property \App\Models\TypeCatalog|null $typeResponsibility
  *
+ * @method static \Database\Factories\InsurancePolicyFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy query()

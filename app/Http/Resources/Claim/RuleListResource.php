@@ -9,8 +9,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /** @property array<key, string> $resource */
 final class RuleListResource extends JsonResource
 {
-    public function __construct($resource, protected readonly string $key, protected readonly array $custom = [])
-    {
+    public function __construct(
+        $resource,
+        protected readonly string $key,
+        protected readonly string $type,
+        protected readonly array $custom = []
+    ) {
         parent::__construct((array) $resource);
     }
 
@@ -53,7 +57,7 @@ final class RuleListResource extends JsonResource
             $result[$level] = [
                 'type' => 'group',
                 'code' => $level,
-                'description' => __("claim.rules.{$groupName}.title"),
+                'description' => __("claim.rules.{$this->type}.{$groupName}.title"),
                 'values' => [],
             ];
         }
