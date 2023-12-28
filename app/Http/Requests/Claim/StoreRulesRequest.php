@@ -35,7 +35,7 @@ final class StoreRulesRequest extends FormRequest
                 'nullable',
                 new RuleFormatRule($this->get('format', '')),
             ],
-            'rules.digital.*' => [
+            'rules.json.*' => [
                 'nullable',
                 'array',
                 new RuleFormatRule($this->get('format', '')),
