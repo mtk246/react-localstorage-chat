@@ -683,18 +683,15 @@ final class FileDictionary extends Dictionary
             $billingProviderContact = $billingProvider->contacts
                 ->where('billing_company_id', $this->claim->billing_company_id ?? null)
                 ->first();
-            $healthP = $contractFeeSpecification->healthProfessional;
-            $federalTax = $contractFeeSpecification?->health_professional_tax_id
+            $federalTax = $contractFeeSpecification?->billing_provider_tax_id
                 ?? $billingProvider->getAttribute('ein')
                 ?? '';
 
             $response = match ($key) {
                 'federal_tax' => str_replace('-', '', $federalTax),
-                'federal_tax_value' => (!empty($federalTax) && ($federalTax == $billingProvider->ein) || ($federalTax == $healthP?->ein))
+                'federal_tax_value' => (!empty($federalTax) && ($federalTax == $billingProvider->getAttribute('ein')))
                     ? 'EIN'
-                    : ((!empty($federalTax) && ($federalTax == $healthP?->profile?->ssn))
-                        ? 'SSN'
-                        : ''),
+                    : '',
                 'ein' => str_replace('-', '', $billingProvider->ein ?? ''),
                 'address' => substr($billingProviderAddress?->{$key} ?? '', 0, 55),
                 'city' => substr($billingProviderAddress?->{$key} ?? '', 0, 30),
@@ -715,13 +712,11 @@ final class FileDictionary extends Dictionary
             $billingProviderContact = $billingProvider->profile->contacts
                 ->where('billing_company_id', $this->claim->billing_company_id ?? null)
                 ->first();
-            $federalTax = $contractFeeSpecification?->health_professional_tax_id
-                ?? $this->claim->demographicInformation->company->getAttribute('ein')
-                ?? '';
+            $federalTax = $contractFeeSpecification?->billing_provider_tax_id ?? '';
 
             $response = match ($key) {
                 'federal_tax' => str_replace('-', '', $federalTax),
-                'federal_tax_value' => (!empty($federalTax) && ($federalTax == $billingProvider->ein) || ($federalTax == $this->claim->demographicInformation->company->getAttribute('ein')))
+                'federal_tax_value' => (!empty($federalTax) && ($federalTax == $billingProvider->ein))
                     ? 'EIN'
                     : ((!empty($federalTax) && ($federalTax == $billingProvider?->profile?->ssn))
                         ? 'SSN'
