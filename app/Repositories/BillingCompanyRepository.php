@@ -7,7 +7,9 @@ use App\Models\Address;
 use App\Models\BillingCompany;
 use App\Models\BillingCompany\MembershipRole;
 use App\Models\Contact;
+use App\Models\Permissions\Permission;
 use App\Models\User;
+use App\Models\User\Role;
 use Illuminate\Http\Request;
 
 final class BillingCompanyRepository
@@ -36,12 +38,20 @@ final class BillingCompanyRepository
         ]);
 
         collect(config('memberships.default_roles'))
-            ->map(function (array $role) use ($company) {
-                $role['billing_company_id'] = $company->id;
+            ->each(function (array $roleData) use($company) {
+                $role = Role::query()->updateOrCreate(
+                    ['slug' => $roleData['slug'] ,'billing_company_id' => $company->id],
+                    $roleData
+                );
+                $permitsIds = Permission::query()
+                    ->whereIn('slug', $roleData['permissions'])
+                    ->get(['id'])
+                    ->pluck('id')
+                    ->toArray();
 
-                return $role;
-            })
-            ->each(fn (array $role) => MembershipRole::query()->updateOrCreate($role));
+                $role->permissions()->syncWithPivotValues($permitsIds, ['authorizable_type' => Role::class], false);
+
+            });
 
         if (isset($data['address']['address'])) {
             $data['address']['billing_company_id'] = $company->id;

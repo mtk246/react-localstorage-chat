@@ -16,10 +16,16 @@ use App\Services\Claim\X12Dictionary;
 
 final class ClaimService
 {
-    public function create(FormatType $formatType, Claim $claim, ?Company $company, ?InsurancePlan $insurancePlan, ClaimBatch $batch = null): DictionaryInterface
-    {
+    public function create(
+        FormatType $formatType,
+        Claim $claim,
+        ?Company $company,
+        ?InsurancePlan $insurancePlan,
+        ClaimBatch $batch = null,
+        string $rule = null,
+    ): DictionaryInterface {
         return match ($formatType) {
-            FormatType::FILE => new FileDictionary($claim, $company, $insurancePlan),
+            FormatType::FILE => new FileDictionary(claim: $claim, company: $company, insurancePlan: $insurancePlan, rule: $rule),
             FormatType::X12 => new X12Dictionary($claim, $company, $insurancePlan),
             FormatType::JSON => new JSONDictionary($claim, $company, $insurancePlan, $batch),
             default => throw new \InvalidArgumentException('Invalid format type'),

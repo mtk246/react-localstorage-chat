@@ -18,7 +18,7 @@ final class GetRulesListAction
             ->mapWithKeys(function (array $items, $key) {
                 $name = ClaimType::tryFrom($key)->getName();
 
-                return [$name => collect($items)->map(fn ($format, $formatKey) => new RuleListResource($format, $formatKey))];
+                return [$name => collect($items)->map(fn ($format, $formatKey) => new RuleListResource($format, $formatKey, $name))];
             });
     }
 }

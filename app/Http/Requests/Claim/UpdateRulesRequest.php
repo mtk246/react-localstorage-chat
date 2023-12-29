@@ -56,12 +56,22 @@ final class UpdateRulesRequest extends FormRequest
             ],
             'rules.file' => [
                 Rule::excludeIf(fn () => filled($this->input('active', ''))),
-                'required',
+                'nullable',
                 'array',
             ],
             'rules.file.*' => [
                 Rule::excludeIf(fn () => filled($this->input('active', ''))),
-                'required',
+                'nullable',
+                new RuleFormatRule($this->get('format', '')),
+            ],
+            'rules.json' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
+                'array',
+            ],
+            'rules.json.*' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
                 new RuleFormatRule($this->get('format', '')),
             ],
             'rules.digital.*' => [
