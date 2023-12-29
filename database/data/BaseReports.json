@@ -166,5 +166,17 @@
         "configuration": [],
         "favorite": false,
         "tableu": false
+    },
+    {
+        "id": "01HJNJCQMXGFFZXZWTHH2VC7KH",
+        "name": "Bad Debt Cost Report",
+        "description": "Report reflecting the accounts that a company will be unable to collect.",
+        "type": 1,
+        "url": "WSTRTDBWPZ",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false,
+        "tableu": false
     }
 ]
