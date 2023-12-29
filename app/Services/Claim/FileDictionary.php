@@ -749,4 +749,12 @@ final class FileDictionary extends Dictionary
 
         return $response ?? '';
     }
+
+    protected function getClaimValueInformationAttribute(string $key): string
+    {
+        return match ($key) {
+            'valueCode' => '80',
+            'valueCodeAmount' => $this->claim->service?->services?->first()?->days_or_units ?? '1',
+        };
+    }
 }
