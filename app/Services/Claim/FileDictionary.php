@@ -758,7 +758,9 @@ final class FileDictionary extends Dictionary
 
         return match ($key) {
             'valueCode' => '80',
-            'valueCodeAmount' => $this->claim->service?->services?->first()?->days_or_units ?? '1',
+            'valueCodeAmount' => (string) $this->claim->service?->services?->reduce(function ($carry, $service) {
+                return $carry + $service['days_or_units'] ?? 1;
+            }, 0),
         };
     }
 }
