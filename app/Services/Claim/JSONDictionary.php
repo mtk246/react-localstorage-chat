@@ -398,7 +398,7 @@ final class JSONDictionary extends Dictionary
             [
                 [
                     'valueCode' => '80',
-                    'valueCodeAmount' =>  (string) $this->claim->service?->services?->reduce(function ($carry, $service) {
+                    'valueCodeAmount' => (string) $this->claim->service?->services?->reduce(function ($carry, $service) {
                         return $carry + $service['days_or_units'] ?? 1;
                     }, 0),
                 ],
@@ -887,12 +887,17 @@ final class JSONDictionary extends Dictionary
             })->first();
 
         $billingProvider = $contractFeeSpecification->billingProvider;
+        $federalTax = $contractFeeSpecification->billing_provider_tax_id ?? '';
 
         return match ($accesorKey) {
             'providerType' => 'BillingProvider',
             'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? '',
-            'ssn' => str_replace('-', '', $billingProvider?->profile?->ssn ?? ''),
-            'employerId' => str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi ?? ''),
+            'ssn' => (!empty($federalTax) && ($federalTax == $billingProvider?->profile?->ssn))
+                ? str_replace('-', '', $billingProvider?->profile?->ssn ?? '')
+                : '',
+            'employerId' => (!empty($federalTax) && ($federalTax == $billingProvider->ein))
+                ? str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi ?? '')
+                : '',
             'firstName' => $billingProvider?->profile?->first_name ?? '',
             'lastName' => $billingProvider?->profile?->last_name ?? '',
             'middleName' => $billingProvider?->profile?->middle_name ?? '',
