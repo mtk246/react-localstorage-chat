@@ -6,10 +6,10 @@ namespace App\Models\Permissions;
 
 use App\Models\User;
 use App\Models\User\Role;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**

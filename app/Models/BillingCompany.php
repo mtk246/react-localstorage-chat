@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Reports\Preset;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Laravel\Scout\Searchable;
-use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**

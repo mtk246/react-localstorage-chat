@@ -11,6 +11,7 @@ use App\Models\Permissions\Permission;
 use App\Models\Reports\Preset;
 use App\Models\User\Role;
 use App\Roles\Traits\HasRoleAndPermission;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,7 +26,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
-use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 

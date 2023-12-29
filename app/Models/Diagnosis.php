@@ -6,12 +6,12 @@ namespace App\Models;
 
 use App\Casts\Diagnosis\ClasificationsCast;
 use App\Enums\Diagnoses\DiagnosesType;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
-use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**

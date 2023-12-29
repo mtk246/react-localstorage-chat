@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
