@@ -887,15 +887,15 @@ final class JSONDictionary extends Dictionary
             })->first();
 
         $billingProvider = $contractFeeSpecification->billingProvider;
-        $federalTax = $contractFeeSpecification->billing_provider_tax_id ?? '';
+        $federalTax = str_replace('-', '', $contractFeeSpecification->billing_provider_tax_id ?? '');
 
         return match ($accesorKey) {
             'providerType' => 'BillingProvider',
             'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? '',
-            'ssn' => (!empty($federalTax) && ($federalTax == $billingProvider?->profile?->ssn))
+            'ssn' => (!empty($federalTax) && ($federalTax == str_replace('-', '', $billingProvider?->profile?->ssn ?? '')))
                 ? str_replace('-', '', $billingProvider?->profile?->ssn ?? '')
                 : '',
-            'employerId' => (!empty($federalTax) && ($federalTax == $billingProvider->ein))
+            'employerId' => (!empty($federalTax) && ($federalTax == str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi ?? '')))
                 ? str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi ?? '')
                 : '',
             'firstName' => $billingProvider?->profile?->first_name ?? '',

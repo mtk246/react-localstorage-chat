@@ -683,13 +683,13 @@ final class FileDictionary extends Dictionary
             $billingProviderContact = $billingProvider->contacts
                 ->where('billing_company_id', $this->claim->billing_company_id ?? null)
                 ->first();
-            $federalTax = $contractFeeSpecification?->billing_provider_tax_id
+            $federalTax = str_replace('-', '', $contractFeeSpecification?->billing_provider_tax_id
                 ?? $billingProvider->getAttribute('ein')
-                ?? '';
+                ?? '');
 
             $response = match ($key) {
-                'federal_tax' => str_replace('-', '', $federalTax),
-                'federal_tax_value' => (!empty($federalTax) && ($federalTax == $billingProvider->getAttribute('ein')))
+                'federal_tax' => $federalTax,
+                'federal_tax_value' => (!empty($federalTax) && ($federalTax == str_replace('-', '', $billingProvider->getAttribute('ein'))))
                     ? 'EIN'
                     : '',
                 'ein' => str_replace('-', '', $billingProvider->ein ?? ''),
@@ -716,9 +716,9 @@ final class FileDictionary extends Dictionary
 
             $response = match ($key) {
                 'federal_tax' => str_replace('-', '', $federalTax),
-                'federal_tax_value' => (!empty($federalTax) && ($federalTax == $billingProvider->ein))
+                'federal_tax_value' => (!empty($federalTax) && (str_replace('-', '', $federalTax) == str_replace('-', '', $billingProvider->ein)))
                     ? 'EIN'
-                    : ((!empty($federalTax) && ($federalTax == $billingProvider?->profile?->ssn))
+                    : ((!empty($federalTax) && (str_replace('-', '', $federalTax) == str_replace('-', '', $billingProvider?->profile?->ssn)))
                         ? 'SSN'
                         : ''),
                 'name' => $billingProvider->profile?->last_name.', '.$billingProvider->profile?->first_name
