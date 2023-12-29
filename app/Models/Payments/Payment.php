@@ -140,4 +140,9 @@ final class Payment extends Model implements Auditable
             'roles' => [],
         ];
     }
+
+    public function paymentBatch(): BelongsTo
+    {
+        return $this->belongsTo(Batch::class, 'payment_batch_id', 'id');
+    }
 }
