@@ -752,6 +752,10 @@ final class FileDictionary extends Dictionary
 
     protected function getClaimValueInformationAttribute(string $key): string
     {
+        if ('inpatient' !== $this->claim->demographicInformation?->type_of_medical_assistance) {
+            return '';
+        }
+
         return match ($key) {
             'valueCode' => '80',
             'valueCodeAmount' => $this->claim->service?->services?->first()?->days_or_units ?? '1',
