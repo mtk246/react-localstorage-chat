@@ -1540,7 +1540,7 @@ return [
             ],
         ],
     ],
-    '67l' => [
+    '67.l' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'diagnosis - code poa',
         'value' => ['name' => 'diagnosis code poa', 'id' => 'ClaimDiagnosis:code_poa'],
