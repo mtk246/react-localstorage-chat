@@ -42,7 +42,7 @@ final class DenialBodyResource extends JsonResource
             return [
                 'eob' => EobResource::make($eob),
                 'payment' => PaymentResource::make($eob->payment),
-                'claimBatches' => $eob->claimBatches,
+                'claimBatch' => json_decode(json_encode($eob->claimBatches->first()), false),
             ];
         });
 
