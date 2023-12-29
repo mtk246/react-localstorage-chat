@@ -398,7 +398,9 @@ final class JSONDictionary extends Dictionary
             [
                 [
                     'valueCode' => '80',
-                    'valueCodeAmount' => $this->claim->service?->services?->first()?->days_or_units ?? '1',
+                    'valueCodeAmount' => (string) $this->claim->service?->services?->reduce(function ($carry, $service) {
+                        return $carry + $service['days_or_units'] ?? 1;
+                    }, 0),
                 ],
             ],
         ];
@@ -764,9 +766,10 @@ final class JSONDictionary extends Dictionary
             })
             ?->first()
             ?->contractFeeSpecifications()
-            ?->whereNull('health_professional_id')
-            ?->orWhere('health_professional_id', $healthProfessional?->id)
-            ?->first();
+            ?->where(function ($query) use ($healthProfessional) {
+                $query->whereNull('health_professional_id')
+                    ?->orWhere('health_professional_id', $healthProfessional?->id);
+            })->first();
 
         if (HealthProfessional::class === $contractFeeSpecification?->billing_provider_type) {
             return $this->getBillingByHeatlhProfessional($key);
@@ -878,114 +881,29 @@ final class JSONDictionary extends Dictionary
             })
             ?->first()
             ?->contractFeeSpecifications()
-            ?->whereNull('health_professional_id')
-            ?->orWhere('health_professional_id', $healthProfessional?->id)
-            ?->first();
+            ?->where(function ($query) use ($healthProfessional) {
+                $query->whereNull('health_professional_id')
+                    ?->orWhere('health_professional_id', $healthProfessional?->id);
+            })->first();
 
         $billingProvider = $contractFeeSpecification->billingProvider;
+        $federalTax = str_replace('-', '', $contractFeeSpecification->billing_provider_tax_id ?? '');
 
         return match ($accesorKey) {
             'providerType' => 'BillingProvider',
             'npi' => str_replace('-', '', $billingProvider?->npi ?? '') ?? '',
-            'ssn' => str_replace('-', '', $billingProvider?->profile?->ssn ?? ''),
-            'employerId' => str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi ?? ''),
+            'ssn' => (!empty($federalTax) && ($federalTax == str_replace('-', '', $billingProvider?->profile?->ssn ?? '')))
+                ? str_replace('-', '', $billingProvider?->profile?->ssn ?? '')
+                : '',
+            'employerId' => (!empty($federalTax) && ($federalTax == str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi ?? '')))
+                ? str_replace('-', '', $billingProvider->ein ?? $billingProvider->npi ?? '')
+                : '',
             'firstName' => $billingProvider?->profile?->first_name ?? '',
             'lastName' => $billingProvider?->profile?->last_name ?? '',
             'middleName' => $billingProvider?->profile?->middle_name ?? '',
             'suffix' => $billingProvider?->profile?->nameSuffix?->code ?? '',
-            'contactInformation' => $this->getBillingByHeatlhProfessionalContactInformation($property),
-            'address' => $this->getBillingByHeatlhProfessionalAddress($property),
-            default => '',
-        };
-    }
-
-    protected function getBillingByHeatlhProfessionalContactInformation($key): string
-    {
-        $healthProfessional = match ($this->claim->type) {
-            ClaimType::PROFESSIONAL => $this->claim->demographicInformation
-                ?->healthProfessionals()
-                ?->wherePivot('field_id', 5)
-                ?->first(),
-            ClaimType::INSTITUTIONAL => $this->claim->demographicInformation
-                ?->healthProfessionals()
-                ?->wherePivot('field_id', 1)
-                ?->orWherePivot('field_id', 76)
-                ?->first(),
-        };
-
-        $contractFeeSpecification = $this->claim?->demographicInformation->company->contractFees()
-            ->whereHas('insurancePlans', function ($query) {
-                $query->where('insurance_plans.id', $this->claim?->higherInsurancePlan()?->id);
-            })
-            ?->first()
-            ?->contractFeeSpecifications()
-            ?->whereNull('health_professional_id')
-            ?->orWhere('health_professional_id', $healthProfessional?->id)
-            ?->first();
-
-        $billingProvider = $contractFeeSpecification->billingProvider;
-        $billingProviderContact = $billingProvider->profile->contacts
-            ->where('billing_company_id', $this->claim->billing_company_id ?? null)
-            ->first();
-
-        return match ($key) {
-            'name' => $billingProvider->profile?->last_name.', '.$billingProvider->profile?->first_name
-                .(!empty($billingProvider->profile?->nameSuffix?->code)
-                    ? ' '.$billingProvider->profile?->nameSuffix?->code
-                    : '')
-                .(!empty($billingProvider->profile?->middle_name)
-                    ? ', '.substr($billingProvider->profile?->middle_name, 0, 1)
-                    : ''),
-            'phoneNumber' => str_replace(
-                '-',
-                '',
-                $billingProviderContact->phone ?? $this->claim->billingCompany->contact?->phone ?? ''
-            ) ?? '',
-            default => '',
-        };
-    }
-
-    protected function getBillingByHeatlhProfessionalAddress($key): string
-    {
-        $healthProfessional = match ($this->claim->type) {
-            ClaimType::PROFESSIONAL => $this->claim->demographicInformation
-                ?->healthProfessionals()
-                ?->wherePivot('field_id', 5)
-                ?->first(),
-            ClaimType::INSTITUTIONAL => $this->claim->demographicInformation
-                ?->healthProfessionals()
-                ?->wherePivot('field_id', 1)
-                ?->orWherePivot('field_id', 76)
-                ?->first(),
-        };
-
-        $contractFeeSpecification = $this->claim?->demographicInformation->company->contractFees()
-            ->whereHas('insurancePlans', function ($query) {
-                $query->where('insurance_plans.id', $this->claim?->higherInsurancePlan()?->id);
-            })
-            ?->first()
-            ?->contractFeeSpecifications()
-            ?->whereNull('health_professional_id')
-            ?->orWhere('health_professional_id', $healthProfessional?->id)
-            ?->first();
-
-        $billingProvider = $contractFeeSpecification->billingProvider;
-        $billingProviderAddress = $billingProvider->profile->addresses
-            ->where('billing_company_id', $this->claim->billing_company_id ?? null)
-            ->first();
-
-        return match ($key) {
-            'address1' => $billingProviderAddress?->address ?? '',
-            'address2' => '',
-            'city' => $billingProviderAddress?->city ?? '',
-            'state' => substr($billingProviderAddress?->state ?? '', 0, 2) ?? '',
-            'postalCode' => str_replace('-', '', $billingProviderAddress?->zip) ?? '',
-            'countryCode' => ('US' !== $billingProviderAddress?->country)
-                ? $billingProviderAddress?->country
-                : '',
-            'countrySubDivisionCode' => ('US' !== $billingProviderAddress?->country)
-                ? $billingProviderAddress?->country_subdivision_code
-                : '',
+            'contactInformation' => $this->getBillingContactInformation($property),
+            'address' => $this->getBillingAddress($property),
             default => '',
         };
     }
