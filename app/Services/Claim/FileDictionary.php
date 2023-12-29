@@ -421,9 +421,10 @@ final class FileDictionary extends Dictionary
             })
             ?->first()
             ?->contractFeeSpecifications()
-            ?->whereNull('health_professional_id')
-            ?->orWhere('health_professional_id', $healthProfessional?->id)
-            ?->first();
+            ?->where(function ($query) use ($healthProfessional) {
+                $query->whereNull('health_professional_id')
+                    ?->orWhere('health_professional_id', $healthProfessional?->id);
+            })->first();
 
         $resultServices = [];
         $totalCharge = 0;
@@ -633,9 +634,10 @@ final class FileDictionary extends Dictionary
             })
             ?->first()
             ?->contractFeeSpecifications()
-            ?->whereNull('health_professional_id')
-            ?->orWhere('health_professional_id', $healthProfessional?->id)
-            ?->first();
+            ?->where(function ($query) use ($healthProfessional) {
+                $query->whereNull('health_professional_id')
+                    ?->orWhere('health_professional_id', $healthProfessional?->id);
+            })->first();
 
         if (is_null($contractFeeSpecification)) {
             $companyAddress = $this->claim
@@ -653,12 +655,10 @@ final class FileDictionary extends Dictionary
                 ->first();
 
             return match ($key) {
-                'federal_tax' => str_replace('-', '', $this->company->getAttribute('ein') ?? $this->company->getAttribute('ssn') ?? ''),
+                'federal_tax' => str_replace('-', '', $this->company->getAttribute('ein') ?? ''),
                 'federal_tax_value' => !empty($this->company->ein)
                     ? 'EIN'
-                    : (!empty($this->company->ssn)
-                        ? 'SSN'
-                        : ''),
+                    : '',
                 'ein' => str_replace('-', '', $this->company->ein ?? ''),
                 'address' => substr($companyAddress?->{$key} ?? '', 0, 55),
                 'city' => substr($companyAddress?->{$key} ?? '', 0, 30),
@@ -674,8 +674,7 @@ final class FileDictionary extends Dictionary
             };
         }
 
-        $billingProvider = $contractFeeSpecification?->billingProvider ?? $this->claim->company;
-
+        $billingProvider = $contractFeeSpecification?->billingProvider ?? $this->claim->demographicInformation->company;
         if (Company::class === $contractFeeSpecification->billing_provider_type) {
             $billingProviderAddress = $billingProvider->addresses
                 ->where('billing_company_id', $this->claim->billing_company_id ?? null)
@@ -684,11 +683,16 @@ final class FileDictionary extends Dictionary
             $billingProviderContact = $billingProvider->contacts
                 ->where('billing_company_id', $this->claim->billing_company_id ?? null)
                 ->first();
+            $healthP = $contractFeeSpecification->healthProfessional;
+            $federalTax = $contractFeeSpecification?->health_professional_tax_id
+                ?? $billingProvider->getAttribute('ein')
+                ?? '';
+
             $response = match ($key) {
-                'federal_tax' => str_replace('-', '', $billingProvider->getAttribute('ein') ?? $billingProvider->getAttribute('ssn') ?? ''),
-                'federal_tax_value' => !empty($billingProvider->ein)
+                'federal_tax' => str_replace('-', '', $federalTax),
+                'federal_tax_value' => (!empty($federalTax) && ($federalTax == $billingProvider->ein) || ($federalTax == $healthP?->ein))
                     ? 'EIN'
-                    : (!empty($billingProvider->ssn)
+                    : ((!empty($federalTax) && ($federalTax == $healthP?->profile?->ssn))
                         ? 'SSN'
                         : ''),
                 'ein' => str_replace('-', '', $billingProvider->ein ?? ''),
@@ -711,8 +715,17 @@ final class FileDictionary extends Dictionary
             $billingProviderContact = $billingProvider->profile->contacts
                 ->where('billing_company_id', $this->claim->billing_company_id ?? null)
                 ->first();
+            $federalTax = $contractFeeSpecification?->health_professional_tax_id
+                ?? $this->claim->demographicInformation->company->getAttribute('ein')
+                ?? '';
 
             $response = match ($key) {
+                'federal_tax' => str_replace('-', '', $federalTax),
+                'federal_tax_value' => (!empty($federalTax) && ($federalTax == $billingProvider->ein) || ($federalTax == $this->claim->demographicInformation->company->getAttribute('ein')))
+                    ? 'EIN'
+                    : ((!empty($federalTax) && ($federalTax == $billingProvider?->profile?->ssn))
+                        ? 'SSN'
+                        : ''),
                 'name' => $billingProvider->profile?->last_name.', '.$billingProvider->profile?->first_name
                     .(!empty($billingProvider->profile?->nameSuffix?->code)
                         ? ' '.$billingProvider->profile?->nameSuffix?->code
@@ -735,5 +748,17 @@ final class FileDictionary extends Dictionary
         }
 
         return $response ?? '';
+    }
+
+    protected function getClaimValueInformationAttribute(string $key): string
+    {
+        if ('inpatient' !== $this->claim->demographicInformation?->type_of_medical_assistance) {
+            return '';
+        }
+
+        return match ($key) {
+            'valueCode' => '80',
+            'valueCodeAmount' => $this->claim->service?->services?->first()?->days_or_units ?? '1',
+        };
     }
 }
