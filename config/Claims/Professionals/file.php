@@ -1301,20 +1301,20 @@ return [
     '25.A' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Federal tax ID number',
-        'value' => ['name' => 'Federal tax ID number', 'id' => 'company:federal_tax'],
+        'value' => ['name' => 'Federal tax ID number', 'id' => 'billingProvider:federal_tax'],
         'values' => [
             'common' => [
-                ['name' => 'Federal tax ID number', 'id' => 'company:federal_tax'],
+                ['name' => 'Federal tax ID number', 'id' => 'billingProvider:federal_tax'],
             ],
         ],
     ],
     '25.B' => [
         'type' => RuleType::SINGLE->value,
         'description' => 'Federal tax type',
-        'value' => ['name' => 'Federal tax type', 'id' => 'company:federal_tax_value'],
+        'value' => ['name' => 'Federal tax type', 'id' => 'billingProvider:federal_tax_value'],
         'values' => [
             'common' => [
-                ['name' => 'Federal tax type', 'id' => 'company:federal_tax_value'],
+                ['name' => 'Federal tax type', 'id' => 'billingProvider:federal_tax_value'],
             ],
         ],
     ],
