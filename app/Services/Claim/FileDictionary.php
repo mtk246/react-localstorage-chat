@@ -689,7 +689,7 @@ final class FileDictionary extends Dictionary
 
             $response = match ($key) {
                 'federal_tax' => $federalTax,
-                'federal_tax_value' => (!empty($federalTax) && ($federalTax == str_replace('-', '', $billingProvider->getAttribute('ein'))))
+                'federal_tax_value' => (!empty($federalTax) && ($federalTax == str_replace('-', '', $billingProvider->getAttribute('ein') ?? '')))
                     ? 'EIN'
                     : '',
                 'ein' => str_replace('-', '', $billingProvider->ein ?? ''),
@@ -716,9 +716,9 @@ final class FileDictionary extends Dictionary
 
             $response = match ($key) {
                 'federal_tax' => str_replace('-', '', $federalTax),
-                'federal_tax_value' => (!empty($federalTax) && (str_replace('-', '', $federalTax) == str_replace('-', '', $billingProvider->ein)))
+                'federal_tax_value' => (!empty($federalTax) && (str_replace('-', '', $federalTax) == str_replace('-', '', $billingProvider->ein ?? '')))
                     ? 'EIN'
-                    : ((!empty($federalTax) && (str_replace('-', '', $federalTax) == str_replace('-', '', $billingProvider?->profile?->ssn)))
+                    : ((!empty($federalTax) && (str_replace('-', '', $federalTax) == str_replace('-', '', $billingProvider?->profile?->ssn ?? '')))
                         ? 'SSN'
                         : ''),
                 'name' => $billingProvider->profile?->last_name.', '.$billingProvider->profile?->first_name
