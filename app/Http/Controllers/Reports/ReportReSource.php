@@ -19,6 +19,7 @@ use App\Enums\Reports\ColumnsGeneralHealthcareProfessionalType;
 use App\Enums\Reports\ColumnsGeneralPatinetType;
 use App\Enums\Reports\ColumnsPayerMixType;
 use App\Enums\Reports\ColumnsProfessionalProductivityType;
+use App\Enums\Reports\ColumnsviewBaddebtCost;
 use App\Enums\Reports\ReportType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reports\GetAllRequest;
@@ -118,6 +119,7 @@ final class ReportReSource extends Controller
                 'QNSJADXODC' => new EnumResource(collect(ColumnsBillingGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class),
                 'HHSUUILJFV' => new EnumResource(collect(ColumnsPayerMixType::cases()), ColumnsAdminDetailPatinetResource::class),
                 'TPEMOBKSKL' => new EnumResource(collect(ColumnsProfessionalProductivityType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'WSTRTDBWPZ' => new EnumResource(collect(ColumnsviewBaddebtCost::cases()), ColumnsAdminDetailPatinetResource::class),
             ];
 
         if (!$rs) return response()->json(__('Columns list not available'), 400);
