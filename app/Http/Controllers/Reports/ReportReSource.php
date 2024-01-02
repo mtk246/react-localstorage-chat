@@ -10,6 +10,7 @@ use App\Enums\Reports\ClassificationType;
 use App\Enums\Reports\ColumnsAdminDetailPatinetType;
 use App\Enums\Reports\ColumnsAdminPayerMixType;
 use App\Enums\Reports\ColumnsAdminProfessionalProductivityType;
+use App\Enums\Reports\ColumnsAdminViewBaddebtCost;
 use App\Enums\Reports\ColumnsBillingDetailPatinetType;
 use App\Enums\Reports\ColumnsBillingGeneralFacilityType;
 use App\Enums\Reports\ColumnsBillingGeneralHealthcareProfessionalType;
@@ -94,7 +95,8 @@ final class ReportReSource extends Controller
         );
     }
 
-    public function records(Request $request, GetAllRecordsAction $get): JsonResponse {
+    public function records(Request $request, GetAllRecordsAction $get): JsonResponse
+    {
         return response()->json(
             $get->getAllPatient($request->module, Auth::user())
         );
@@ -109,8 +111,9 @@ final class ReportReSource extends Controller
                 'QVHZFWCVGJ' => new EnumResource(collect(ColumnsGeneralFacilityType::cases()), ColumnsAdminDetailPatinetResource::class),
                 'HHSUUILJFV' => new EnumResource(collect(ColumnsAdminPayerMixType::cases()), ColumnsAdminDetailPatinetResource::class),
                 'TPEMOBKSKL' => new EnumResource(collect(ColumnsAdminProfessionalProductivityType::cases()), ColumnsAdminDetailPatinetResource::class),
-                'QNSJADXODC' => 
-                    new EnumResource(collect(ColumnsGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'QNSJADXODC' =>
+                new EnumResource(collect(ColumnsGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class),
+                'WSTRTDBWPZ' => new EnumResource(collect(ColumnsAdminViewBaddebtCost::cases()), ColumnsAdminDetailPatinetResource::class),
             ]
             : [
                 'PGFOODVKOC' => new EnumResource(collect(ColumnsBillingDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
