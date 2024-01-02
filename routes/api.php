@@ -561,9 +561,9 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         // 'role:superuser|biller|billingmanager',
     ])->group(function () {
-        Route::get('/get-all-server', [DenialController::class, 'getServerAll']);
+        Route::get('/get-all-server', [DenialController::class, 'getServerAll'])->name('denial.get-all-server');
         Route::get('/{denial}', [DenialController::class, 'getOneDenial']);
-        Route::post('/', [DenialController::class, 'createDenialTracking']);
+        Route::post('/', [DenialController::class, 'createDenialTracking'])->name('denial.create-denial-tracking');
         Route::put('/', [DenialController::class, 'updateDenialTracking']);
 
         Route::prefix('/refile')->middleware([

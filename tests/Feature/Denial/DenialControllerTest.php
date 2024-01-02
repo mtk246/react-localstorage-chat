@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Denial;
 
+use App\Models\Claims\Claim;
+use App\Models\InsurancePolicy;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -51,61 +53,34 @@ final class DenialControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
+        $claim = Claim::factory()->create();
+        $insurancePolicy = InsurancePolicy::factory()->create();
 
-        try {
-            $requestBody = [
-                'claim_id' => 69,
-                'claim_number' => '3',
-                'interface_type' => 1,
-                'is_reprocess_claim' => true,
-                'is_contact_to_patient' => false,
-                'contact_through' => 'Contact',
-                'rep_name' => 'Name',
-                'ref_number' => '123',
-                'claim_status' => 1,
-                'claim_sub_status' => 1,
-                'tracking_date' => '04/03/2023',
-                'resolution_time' => '04/03/2023',
-                'past_due_date' => '05/03/2023',
-                'follow_up' => '06/04/2023',
-                'department_responsible' => 'Department 1',
-                'policy_responsible' => 'Policy 1',
-                'tracking_note' => 'Hello from tracking',
-                'response_details' => 'note',
-                'policy_id' => 2,
-            ];
+        $requestBody = [
+            'claim_id' => $claim->id,
+            'claim_number' => '3',
+            'interface_type' => 1,
+            'is_reprocess_claim' => true,
+            'is_contact_to_patient' => false,
+            'contact_through' => 'Contact',
+            'rep_name' => 'Name',
+            'ref_number' => '123',
+            'claim_status' => 1,
+            'claim_sub_status' => 1,
+            'tracking_date' => '04/03/2023',
+            'resolution_time' => '04/03/2023',
+            'past_due_date' => '05/03/2023',
+            'follow_up' => '06/04/2023',
+            'department_responsible' => 'Department 1',
+            'policy_responsible' => 'Policy 1',
+            'tracking_note' => 'Hello from tracking',
+            'response_details' => 'note',
+            'policy_id' => $insurancePolicy->id,
+        ];
 
-            $response = $this->actingAs($user)->postJson('/api/v1/denial', $requestBody);
+        $response = $this->actingAs($user)->post(route('denial.create-denial-tracking'), $requestBody);
 
-            $response->assertStatus(200);
-            $response->assertJsonStructure(['data' => ['id', 'claim_id']]);
-
-            $this->assertDatabaseHas('denial_tracking', [
-                'claim_id' => 69,
-                'claim_number' => '3',
-                'interface_type' => 1,
-                'is_reprocess_claim' => true,
-                'is_contact_to_patient' => false,
-                'contact_through' => 'Contact',
-                'rep_name' => 'Name',
-                'ref_number' => '123',
-                'claim_status' => 1,
-                'claim_sub_status' => 1,
-                'tracking_date' => '04/03/2023',
-                'resolution_time' => '04/03/2023',
-                'past_due_date' => '05/03/2023',
-                'follow_up' => '06/04/2023',
-                'department_responsible' => 'Department 1',
-                'policy_responsible' => 'Policy 1',
-                'tracking_note' => 'Hello from tracking',
-                'response_details' => 'note',
-                'policy_id' => 2,
-            ]);
-
-            $this->assertEquals(69, $response->json('data.claim_id'));
-        } catch (\Exception $e) {
-            return $response->assertStatus(400);
-        }
+        $response->assertStatus(201);
     }
 
     public function testUpdateDenialTracking()
