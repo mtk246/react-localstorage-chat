@@ -159,7 +159,7 @@ final class JSONDictionary extends Dictionary
 
         return match ($key) {
             'address1' => $subscriberAddress?->address ?? '',
-            'address2' => '',
+            'address2' => $subscriberAddress?->apt_suite ?? '',
             'city' => $subscriberAddress?->city ?? '',
             'state' => substr($subscriberAddress?->state ?? '', 0, 2) ?? '',
             'postalCode' => str_replace('-', '', $subscriberAddress?->zip ?? '') ?? '',
@@ -235,7 +235,7 @@ final class JSONDictionary extends Dictionary
 
         return match ($key) {
             'address1' => $patientAddress?->address ?? '',
-            'address2' => '',
+            'address2' => $patientAddress?->apt_suite ?? '',
             'city' => $patientAddress?->city ?? '',
             'state' => substr($patientAddress?->state ?? '', 0, 2) ?? '',
             'postalCode' => str_replace('-', '', $patientAddress?->zip ?? '') ?? '',
@@ -678,7 +678,7 @@ final class JSONDictionary extends Dictionary
 
         return match ($key) {
             'address1' => $billingProviderPaymentAddress?->address ?? '',
-            'address2' => '',
+            'address2' => $billingProviderPaymentAddress?->apt_suite ?? '',
             'city' => $billingProviderPaymentAddress?->city ?? '',
             'state' => substr($billingProviderPaymentAddress?->state ?? '', 0, 2) ?? '',
             'postalCode' => str_replace('-', '', $billingProviderPaymentAddress?->zip) ?? '',
@@ -843,7 +843,7 @@ final class JSONDictionary extends Dictionary
 
         return match ($key) {
             'address1' => $billingProviderAddress?->address ?? '',
-            'address2' => '',
+            'address2' => $billingProviderAddress?->apt_suite ?? '',
             'city' => $billingProviderAddress?->city ?? '',
             'state' => substr($billingProviderAddress?->state ?? '', 0, 2) ?? '',
             'postalCode' => str_replace('-', '', $billingProviderAddress?->zip) ?? '',
@@ -966,7 +966,7 @@ final class JSONDictionary extends Dictionary
 
         return match ($key) {
             'address1' => $referringProviderAddress?->address ?? '',
-            'address2' => '',
+            'address2' => $referringProviderAddress?->apt_suite ?? '',
             'city' => $referringProviderAddress?->city ?? '',
             'state' => substr($referringProviderAddress?->state ?? '', 0, 2) ?? '',
             'postalCode' => str_replace('-', '', $referringProviderAddress?->zip ?? '') ?? '',
@@ -1204,7 +1204,7 @@ final class JSONDictionary extends Dictionary
 
         return match ($key) {
             'address1' => $attendingAddress?->address ?? '',
-            'address2' => '',
+            'address2' => $attendingAddress?->apt_suite ?? '',
             'city' => $attendingAddress?->city ?? '',
             'state' => substr($attendingAddress?->state ?? '', 0, 2) ?? '',
             'postalCode' => str_replace('-', '', $attendingAddress?->zip ?? '') ?? '',
@@ -1235,7 +1235,7 @@ final class JSONDictionary extends Dictionary
     {
         return match ($key) {
             'address1' => $this->getFacilityAddressAttribute('address', '1'),
-            'address2' => '',
+            'address2' => $this->getFacilityAddressAttribute('apt_suite', '1'),
             'city' => $this->getFacilityAddressAttribute('city', '1'),
             'state' => $this->getFacilityAddressAttribute('state', '1'),
             'postalCode' => $this->getFacilityAddressAttribute('zip', '1'),
