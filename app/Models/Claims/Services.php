@@ -8,9 +8,9 @@ use App\Models\PlaceOfService;
 use App\Models\Procedure;
 use App\Models\TypeCatalog;
 use App\Models\TypeOfService;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**

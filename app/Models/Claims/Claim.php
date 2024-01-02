@@ -13,6 +13,7 @@ use App\Models\BillingCompany;
 use App\Models\InsurancePolicy;
 use App\Models\PrivateNote;
 use App\Models\User;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use App\Traits\Claim\ClaimFile;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -26,7 +27,6 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
