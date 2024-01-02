@@ -842,7 +842,8 @@ final class JSONDictionary extends Dictionary
             ?->first() ?? null;
 
         return match ($key) {
-            'address1' => $billingProviderAddress?->address ?? '',
+            'address1' => ($billingProviderAddress?->address ?? '') .
+                (!empty($billingProviderAddress?->apt_suite) ? (' ' . $billingProviderAddress?->apt_suite ?? '') : ''),
             'address2' => '',
             'city' => $billingProviderAddress?->city ?? '',
             'state' => substr($billingProviderAddress?->state ?? '', 0, 2) ?? '',
