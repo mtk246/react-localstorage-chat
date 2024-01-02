@@ -86,7 +86,7 @@ final class FileDictionary extends Dictionary
 
         return match ($key) {
             'code_area' => str_replace('-', '', substr($value?->phone ?? '', 0, 3)),
-            'phone' => str_replace('-', '', substr($value?->phone ?? '', 0, 10)),
+            'phone' => str_replace('-', '', substr($value?->phone ?? '', 3, 10)),
             'phone_fax' => str_replace('-', '', substr($value?->phone ?? $value?->fax ?? '', 0, 10)),
             default => (string) $value?->{$key} ?? '',
         };
@@ -668,7 +668,7 @@ final class FileDictionary extends Dictionary
                     ? $companyAddress?->country
                     : '',
                 'code_area' => str_replace('-', '', substr($companyContact?->phone ?? '', 0, 3)),
-                'phone' => str_replace('-', '', substr($companyContact?->phone ?? '', 0, 10)),
+                'phone' => str_replace('-', '', substr($companyContact?->phone ?? '', 3, 10)),
                 'phone_fax' => str_replace('-', '', substr($companyContact?->phone ?? $companyContact?->fax ?? '', 0, 10)),
                 default => (string) $this->company->getAttribute($key),
             };
@@ -701,7 +701,7 @@ final class FileDictionary extends Dictionary
                     ? $billingProviderAddress?->country
                     : '',
                 'code_area' => str_replace('-', '', substr($billingProviderContact?->phone ?? '', 0, 3)),
-                'phone' => str_replace('-', '', substr($billingProviderContact?->phone ?? '', 0, 10)),
+                'phone' => str_replace('-', '', substr($billingProviderContact?->phone ?? '', 3, 10)),
                 'phone_fax' => str_replace('-', '', substr($billingProviderContact?->phone ?? $billingProviderContact?->fax ?? '', 0, 10)),
                 default => (string) $billingProvider->getAttribute($key),
             };
@@ -736,7 +736,7 @@ final class FileDictionary extends Dictionary
                     ? $billingProviderAddress?->country
                     : '',
                 'code_area' => str_replace('-', '', substr($billingProviderContact?->phone ?? '', 0, 3)),
-                'phone' => str_replace('-', '', substr($billingProviderContact?->phone ?? '', 0, 10)),
+                'phone' => str_replace('-', '', substr($billingProviderContact?->phone ?? '', 3, 10)),
                 'phone_fax' => str_replace('-', '', substr($billingProviderContact?->phone ?? $billingProviderContact?->fax ?? '', 0, 10)),
                 default => $billingProvider->{$key} ?? '',
             };
