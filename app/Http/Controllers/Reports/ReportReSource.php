@@ -21,6 +21,7 @@ use App\Enums\Reports\ColumnsGeneralPatinetType;
 use App\Enums\Reports\ColumnsPayerMixType;
 use App\Enums\Reports\ColumnsProfessionalProductivityType;
 use App\Enums\Reports\ColumnsviewBaddebtCost;
+use App\Enums\Reports\ColumnsViewChangeModule;
 use App\Enums\Reports\ReportType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reports\GetAllRequest;
@@ -114,6 +115,7 @@ final class ReportReSource extends Controller
                 'QNSJADXODC' =>
                 new EnumResource(collect(ColumnsGeneralHealthcareProfessionalType::cases()), ColumnsAdminDetailPatinetResource::class),
                 'WSTRTDBWPZ' => new EnumResource(collect(ColumnsAdminViewBaddebtCost::cases()), ColumnsAdminDetailPatinetResource::class),
+                'ZHJZLMVKWP' => new EnumResource(collect(ColumnsViewChangeModule::cases()), ColumnsAdminDetailPatinetResource::class),
             ]
             : [
                 'PGFOODVKOC' => new EnumResource(collect(ColumnsBillingDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
@@ -123,6 +125,7 @@ final class ReportReSource extends Controller
                 'HHSUUILJFV' => new EnumResource(collect(ColumnsPayerMixType::cases()), ColumnsAdminDetailPatinetResource::class),
                 'TPEMOBKSKL' => new EnumResource(collect(ColumnsProfessionalProductivityType::cases()), ColumnsAdminDetailPatinetResource::class),
                 'WSTRTDBWPZ' => new EnumResource(collect(ColumnsviewBaddebtCost::cases()), ColumnsAdminDetailPatinetResource::class),
+                'ZHJZLMVKWP' => new EnumResource(collect(ColumnsViewChangeModule::cases()), ColumnsAdminDetailPatinetResource::class),
             ];
 
         if (!$rs) return response()->json(__('Columns list not available'), 400);

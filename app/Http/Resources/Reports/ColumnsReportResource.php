@@ -18,6 +18,7 @@ use App\Enums\Reports\ColumnsGeneralPatinetType;
 use App\Enums\Reports\ColumnsPayerMixType;
 use App\Enums\Reports\ColumnsProfessionalProductivityType;
 use App\Enums\Reports\ColumnsviewBaddebtCost;
+use App\Enums\Reports\ColumnsViewChangeModule;
 use App\Enums\Reports\TypeReportAllRecords;
 use App\Http\Resources\Enums\EnumResource;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -71,7 +72,11 @@ final class ColumnsReportResource extends JsonResource
 
             TypeReportAllRecords::BAD_DEBT_COST => Gate::check('is-admin')
                 ? new EnumResource(collect(ColumnsAdminViewBaddebtCost::cases()), ColumnsAdminDetailPatinetResource::class)
-                : new EnumResource(collect(ColumnsviewBaddebtCost::cases()), ColumnsAdminDetailPatinetResource::class)
+                : new EnumResource(collect(ColumnsviewBaddebtCost::cases()), ColumnsAdminDetailPatinetResource::class),
+
+            TypeReportAllRecords::CHANGE_BY_MODULE => Gate::check('is-admin')
+                ? new EnumResource(collect(ColumnsViewChangeModule::cases()), ColumnsAdminDetailPatinetResource::class)
+                : new EnumResource(collect(ColumnsViewChangeModule::cases()), ColumnsAdminDetailPatinetResource::class)
         };
     }
 }
