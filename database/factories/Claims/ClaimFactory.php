@@ -20,7 +20,7 @@ final class ClaimFactory extends Factory
     public function definition()
     {
         return [
-            'code' => "12345tre",
+            'code' => '12345tre',
             'type' => $this->faker->randomElement([1, 2]),
             'submitter_name' => $this->faker->name,
             'submitter_contact' => $this->faker->name,

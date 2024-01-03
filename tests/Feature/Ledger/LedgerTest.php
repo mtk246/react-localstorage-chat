@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Ledger;
 
-use App\Models\BillingCompany;
 use App\Models\Claims\Claim;
 use App\Models\Claims\ClaimDemographicInformation;
 use App\Models\Claims\ClaimService;
@@ -66,7 +65,7 @@ final class LedgerTest extends TestCase
         $adminRole = Role::where('slug', 'superuser')->first();
         $user = UserFactory::new()->whithRole($adminRole)->create();
 
-        //create request get with params claim_number = "hola
+        // create request get with params claim_number = "hola
 
         $response = $this->actingAs($user)->get(route('ledger.search', [
             'claim_number' => $claim->code,
@@ -74,5 +73,4 @@ final class LedgerTest extends TestCase
 
         $response->assertOk();
     }
-
 }

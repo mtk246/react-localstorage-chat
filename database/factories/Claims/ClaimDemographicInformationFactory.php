@@ -40,35 +40,35 @@ final class ClaimDemographicInformationFactory extends Factory
     private function withClaim(): self
     {
         return $this->state(fn (array $attributes) => [
-            'claim_id' => Claim::factory()
+            'claim_id' => Claim::factory(),
         ]);
     }
 
     private function withCompany(): self
     {
         return $this->state(fn (array $attributes) => [
-            'company_id' => Company::factory()
+            'company_id' => Company::factory(),
         ]);
     }
 
     private function withPatient(): self
     {
         return $this->state(fn (array $attributes) => [
-            'patient_id' => Patient::factory()
+            'patient_id' => Patient::factory(),
         ]);
     }
 
     private function withHealthProfessional(): self
     {
         return $this->state(fn (array $attributes) => [
-            'health_professional_id' => HealthProfessional::factory()
+            'health_professional_id' => HealthProfessional::factory(),
         ]);
     }
 
     private function withInsurancePolicy(): self
     {
         return $this->state(fn (array $attributes) => [
-            'insurance_policy_id' => InsurancePolicy::factory()
+            'insurance_policy_id' => InsurancePolicy::factory(),
         ]);
     }
 }

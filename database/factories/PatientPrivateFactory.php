@@ -24,7 +24,7 @@ final class PatientPrivateFactory extends Factory
             'reference_num' => $this->faker->randomDigit(),
             'patient_num' => $this->faker->randomDigit(),
             'med_num' => $this->faker->randomDigit(),
-            'billing_company_id' => BillingCompany::factory()
+            'billing_company_id' => BillingCompany::factory(),
         ];
     }
 
