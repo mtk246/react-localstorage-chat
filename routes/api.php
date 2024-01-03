@@ -570,8 +570,8 @@ Route::prefix('v1')/* ->middleware('audit') */
             'auth:api',
             // 'role:superuser|biller|billingmanager',
         ])->group(function () {
-            Route::post('/', [DenialController::class, 'createDenialRefile']);
-            Route::put('/', [DenialController::class, 'updateDenialRefile']);
+            Route::post('/', [DenialController::class, 'createDenialRefile'])->name('denial.create-denial-refile');
+            Route::put('/', [DenialController::class, 'updateDenialRefile'])->name('denial.update-denial-refile');
         });
     });
 

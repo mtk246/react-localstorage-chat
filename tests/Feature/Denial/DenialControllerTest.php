@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Denial;
 
 use App\Models\Claims\Claim;
+use App\Models\Claims\DenialRefile;
 use App\Models\Claims\DenialTracking;
 use App\Models\InsurancePolicy;
 use App\Models\User;
@@ -124,50 +125,43 @@ final class DenialControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
+        $claim = Claim::factory()->create();
 
-        try {
-            $requestBody = [
-                'refile_type' => 0,
-                'policy_id' => 1,
-                'is_cross_over' => false,
-                'cross_over_date' => null,
-                'note' => 'Newly created denial refile 2',
-                'original_claim_id' => '',
-                'refile_reason' => '',
-                'claim_id' => 1,
-            ];
+        $requestBody = [
+            'refile_type' => 0,
+            'policy_id' => 1,
+            'is_cross_over' => false,
+            'cross_over_date' => null,
+            'note' => 'Newly created denial refile 2',
+            'original_claim_id' => '',
+            'refile_reason' => '',
+            'claim_id' => $claim->id,
+        ];
 
-            $response = $this->actingAs($user)->postJson('/api/v1/denial/refile', $requestBody);
-
-            $response->assertStatus(200);
-        } catch (\Exception $e) {
-            return $response->assertStatus(500);
-        }
+        $response = $this->actingAs($user)->post(route('denial.create-denial-refile'), $requestBody);
     }
 
     public function testUpdateDenialRefile()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
+        $claim = Claim::factory()->create();
+        $denialRefile = DenialRefile::factory()->create();
 
-        try {
-            $requestBody = [
-                'refile_id' => 1,
-                'refile_type' => 0,
-                'policy_id' => 1,
-                'is_cross_over' => false,
-                'cross_over_date' => null,
-                'note' => 'Newly created denial refile 2',
-                'original_claim_id' => '',
-                'refile_reason' => '',
-                'claim_id' => 1,
-            ];
+        $requestBody = [
+            'refile_id' => $denialRefile->id,
+            'refile_type' => 0,
+            'policy_id' => 1,
+            'is_cross_over' => false,
+            'cross_over_date' => null,
+            'note' => 'Newly created denial refile 2',
+            'original_claim_id' => '',
+            'refile_reason' => '',
+            'claim_id' => $claim->id,
+        ];
 
-            $response = $this->actingAs($user)->putJson('/api/v1/denial/refile', $requestBody);
+        $response = $this->actingAs($user)->put(route('denial.update-denial-refile'), $requestBody);
 
-            $response->assertStatus(200);
-        } catch (\Exception $e) {
-            return $response->assertStatus(500);
-        }
+        $response->assertStatus(200);
     }
 }
