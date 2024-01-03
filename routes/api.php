@@ -564,7 +564,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-all-server', [DenialController::class, 'getServerAll'])->name('denial.get-all-server');
         Route::get('/{denial}', [DenialController::class, 'getOneDenial']);
         Route::post('/', [DenialController::class, 'createDenialTracking'])->name('denial.create-denial-tracking');
-        Route::put('/', [DenialController::class, 'updateDenialTracking']);
+        Route::put('/', [DenialController::class, 'updateDenialTracking'])->name('denial.update-denial-tracking');
 
         Route::prefix('/refile')->middleware([
             'auth:api',
