@@ -176,7 +176,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/get-all-server', [\App\Http\Controllers\FacilityController::class, 'getServerAll'])->name('facility.get.all.server')->middleware(['auth:api']);
         Route::get('/get-list-billing-companies', [\App\Http\Controllers\FacilityController::class, 'getListBillingCompanies'])->middleware(['auth:api']);
         Route::post('/', [\App\Http\Controllers\FacilityController::class, 'create'])->middleware([
-            'auth:api'
+            'auth:api',
         ])->name('facility.create');
         Route::get('/', [\App\Http\Controllers\FacilityController::class, 'getAllFacilities'])->middleware([
             'auth:api',

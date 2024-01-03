@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\FacilityType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +20,7 @@ final class BillClassificationFactory extends Factory
     {
         return [
             'code' => $this->faker->randomElement(['01', '02', '03']),
-            'name' => $this->faker->randomElement(['Clinics', 'Hospitals', 'Labs'])
+            'name' => $this->faker->randomElement(['Clinics', 'Hospitals', 'Labs']),
         ];
     }
 }

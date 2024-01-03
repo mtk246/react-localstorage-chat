@@ -121,36 +121,36 @@ final class FacilityTest extends TestCase
             ->create();
 
         $data = [
-            "name" => "facility Edited",
-            "npi" => "123fa1c321",
-            "companies" => [$company->id],
-            "abbreviation" => "ABBFAC",
-            "billing_company_id" => $billingCompany->id,
-            "taxonomies" => [
+            'name' => 'facility Edited',
+            'npi' => '123fa1c321',
+            'companies' => [$company->id],
+            'abbreviation' => 'ABBFAC',
+            'billing_company_id' => $billingCompany->id,
+            'taxonomies' => [
                 [
-                    "tax_id" => "TAX01213",
-                    "name" => "NameTaxonomy",
-                    "primary" => true
+                    'tax_id' => 'TAX01213',
+                    'name' => 'NameTaxonomy',
+                    'primary' => true,
                 ],
                 [
-                    "tax_id" => "TAX01214",
-                    "name" => "NameTaxonomy",
-                    "primary" => false
-                ]
+                    'tax_id' => 'TAX01214',
+                    'name' => 'NameTaxonomy',
+                    'primary' => false,
+                ],
             ],
-            "address" => [
-                "address" => "address Facility",
-                "city" => "city Facility",
-                "state" => "state Facility",
-                "country" => "country Facility",
-                "zip" => "234",
-                "apt_suite" => "Apt suite value"
+            'address' => [
+                'address' => 'address Facility',
+                'city' => 'city Facility',
+                'state' => 'state Facility',
+                'country' => 'country Facility',
+                'zip' => '234',
+                'apt_suite' => 'Apt suite value',
             ],
-            "contact" => [
-                "phone" => "222-222-2235",
-                "mobile" => "222-222-2222",
-                "fax" => "222-222-2222",
-                "email" => "facility41@facility.com"
+            'contact' => [
+                'phone' => '222-222-2235',
+                'mobile' => '222-222-2222',
+                'fax' => '222-222-2222',
+                'email' => 'facility41@facility.com',
             ],
             'types' => [
                 [
