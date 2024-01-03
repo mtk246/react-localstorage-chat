@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
@@ -57,6 +57,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $subscribers_count
  * @property \App\Models\TypeCatalog|null $typeResponsibility
  *
+ * @method static \Database\Factories\InsurancePolicyFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InsurancePolicy query()

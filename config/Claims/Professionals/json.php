@@ -7,6 +7,7 @@ use App\Enums\Claim\RuleType;
 return [
     'controlNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim control number',
         'value' => [
             'id' => 'claim:controlNumber',
@@ -23,6 +24,7 @@ return [
     ],
     'tradingPartnerServiceId' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim trading partner service id',
         'value' => [
             'id' => 'claim:tradingPartnerServiceId',
@@ -39,6 +41,7 @@ return [
     ],
     'tradingPartnerName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim trading partner service id',
         'value' => [
             'id' => 'claim:tradingPartnerName',
@@ -55,6 +58,7 @@ return [
     ],
     'usageIndicator' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim usage indicator',
         'value' => [
             'id' => 'claim:usageIndicator',
@@ -71,6 +75,7 @@ return [
     ],
     'submitter.organizationName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Organization name',
         'value' => [
             'id' => 'claim:submitter.organizationName',
@@ -105,6 +110,7 @@ return [
     ],
     'submitter.contactInformation.name' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Submitter contact information name',
         'value' => [
             'id' => 'claim:submitter.contactInformation.name',
@@ -121,6 +127,7 @@ return [
     ],
     'submitter.contactInformation.phoneNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Submitter contact information phone number',
         'value' => [
             'id' => 'claim:submitter.contactInformation.phoneNumber',
@@ -137,6 +144,7 @@ return [
     ],
     'submitter.contactInformation.faxNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Submitter contact information fax number',
         'value' => [
             'id' => 'claim:submitter.contactInformation.faxNumber',
@@ -153,6 +161,7 @@ return [
     ],
     'submitter.contactInformation.email' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Submitter contact information email',
         'value' => [
             'id' => 'claim:submitter.contactInformation.email',
@@ -175,6 +184,7 @@ return [
     ],
     'receiver.organizationName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Receiver organization name',
         'value' => [
             'id' => 'claim:receiver.organizationName',
@@ -191,6 +201,7 @@ return [
     ],
     'subscriber.memberId' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber member ID',
         'value' => [
             'id' => 'claim:subscriber.memberId',
@@ -207,6 +218,7 @@ return [
     ],
     'subscriber.ssn' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber ssn',
         'value' => [
             'id' => 'claim:subscriber.ssn',
@@ -223,6 +235,7 @@ return [
     ],
     'subscriber.paymentResponsibilityLevelCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber payment responsibility level code',
         'value' => [
             'id' => 'claim:subscriber.paymentResponsibilityLevelCode',
@@ -257,6 +270,7 @@ return [
     ],
     'subscriber.firstName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber first name',
         'value' => [
             'id' => 'claim:subscriber.firstName',
@@ -273,6 +287,7 @@ return [
     ],
     'subscriber.lastName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber last name',
         'value' => [
             'id' => 'claim:subscriber.lastName',
@@ -289,6 +304,7 @@ return [
     ],
     'subscriber.middleName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber middle name',
         'value' => [
             'id' => 'claim:subscriber.middleName',
@@ -305,6 +321,7 @@ return [
     ],
     'subscriber.suffix' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber name suffix',
         'value' => [
             'id' => 'claim:subscriber.suffix',
@@ -321,6 +338,7 @@ return [
     ],
     'subscriber.gender' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber gender',
         'value' => [
             'id' => 'claim:subscriber.gender',
@@ -337,6 +355,7 @@ return [
     ],
     'subscriber.dateOfBirth' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber date of birth',
         'value' => [
             'id' => 'claim:subscriber.dateOfBirth',
@@ -353,6 +372,7 @@ return [
     ],
     'subscriber.policyNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber policy number',
         'value' => [
             'id' => 'claim:subscriber.policyNumber',
@@ -375,6 +395,7 @@ return [
     ],
     'subscriber.contactInformation.name' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber contact information name',
         'value' => [
             'id' => 'claim:subscriber.contactInformation.name',
@@ -391,6 +412,7 @@ return [
     ],
     'subscriber.contactInformation.phoneNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber contact information phone number',
         'value' => [
             'id' => 'claim:subscriber.contactInformation.phoneNumber',
@@ -407,6 +429,7 @@ return [
     ],
     'subscriber.contactInformation.faxNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber contact information fax number',
         'value' => [
             'id' => 'claim:subscriber.contactInformation.faxNumber',
@@ -423,6 +446,7 @@ return [
     ],
     'subscriber.contactInformation.email' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber contact information email',
         'value' => [
             'id' => 'claim:subscriber.contactInformation.email',
@@ -445,6 +469,7 @@ return [
     ],
     'subscriber.address.address1' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber contact information address1',
         'value' => [
             'id' => 'claim:subscriber.address.address1',
@@ -461,6 +486,7 @@ return [
     ],
     'subscriber.address.address2' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber contact information address2',
         'value' => [
             'id' => 'claim:subscriber.address.address2',
@@ -477,6 +503,7 @@ return [
     ],
     'subscriber.address.city' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber contact information city',
         'value' => [
             'id' => 'claim:subscriber.address.city',
@@ -493,6 +520,7 @@ return [
     ],
     'subscriber.address.state' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber contact information state',
         'value' => [
             'id' => 'claim:subscriber.address.state',
@@ -509,6 +537,7 @@ return [
     ],
     'subscriber.address.postalCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber contact information postal code',
         'value' => [
             'id' => 'claim:subscriber.address.postalCode',
@@ -525,6 +554,7 @@ return [
     ],
     'subscriber.address.countryCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber contact information country code',
         'value' => [
             'id' => 'claim:subscriber.address.countryCode',
@@ -541,6 +571,7 @@ return [
     ],
     'subscriber.address.countrySubDivisionCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Subscriber contact information country subdivision code',
         'value' => [
             'id' => 'claim:subscriber.address.countrySubDivisionCode',
@@ -557,6 +588,7 @@ return [
     ],
     'dependent.firstName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent first name',
         'value' => [
             'id' => 'claim:dependent.firstName',
@@ -573,6 +605,7 @@ return [
     ],
     'dependent.lastName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent last name',
         'value' => [
             'id' => 'claim:dependent.lastName',
@@ -589,6 +622,7 @@ return [
     ],
     'dependent.middleName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent middle name',
         'value' => [
             'id' => 'claim:dependent.middleName',
@@ -605,6 +639,7 @@ return [
     ],
     'dependent.suffix' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent name suffix',
         'value' => [
             'id' => 'claim:dependent.suffix',
@@ -621,6 +656,7 @@ return [
     ],
     'dependent.gender' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent gender',
         'value' => [
             'id' => 'claim:dependent.gender',
@@ -637,6 +673,7 @@ return [
     ],
     'dependent.dateOfBirth' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent date of birth',
         'value' => [
             'id' => 'claim:dependent.dateOfBirth',
@@ -653,6 +690,7 @@ return [
     ],
     'dependent.ssn' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent ssn',
         'value' => [
             'id' => 'claim:dependent.ssn',
@@ -669,6 +707,7 @@ return [
     ],
     'dependent.memberId' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent member id',
         'value' => [
             'id' => 'claim:dependent.memberId',
@@ -685,6 +724,7 @@ return [
     ],
     'dependent.relationshipToSubscriberCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent relationship to subscriber code',
         'value' => [
             'id' => 'claim:dependent.relationshipToSubscriberCode',
@@ -701,6 +741,7 @@ return [
     ],
     'dependent.contactInformation.name' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent contact information name',
         'value' => [
             'id' => 'claim:dependent.contactInformation.name',
@@ -717,6 +758,7 @@ return [
     ],
     'dependent.contactInformation.phoneNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent contact information phone number',
         'value' => [
             'id' => 'claim:dependent.contactInformation.phoneNumber',
@@ -733,6 +775,7 @@ return [
     ],
     'dependent.contactInformation.faxNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent contact information fax number',
         'value' => [
             'id' => 'claim:dependent.contactInformation.faxNumber',
@@ -749,6 +792,7 @@ return [
     ],
     'dependent.contactInformation.email' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent contact information email',
         'value' => [
             'id' => 'claim:dependent.contactInformation.email',
@@ -771,6 +815,7 @@ return [
     ],
     'dependent.address.address1' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent contact information address1',
         'value' => [
             'id' => 'claim:dependent.address.address1',
@@ -787,6 +832,7 @@ return [
     ],
     'dependent.address.address2' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent contact information address2',
         'value' => [
             'id' => 'claim:dependent.address.address2',
@@ -803,6 +849,7 @@ return [
     ],
     'dependent.address.city' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent contact information city',
         'value' => [
             'id' => 'claim:dependent.address.city',
@@ -819,6 +866,7 @@ return [
     ],
     'dependent.address.state' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent contact information state',
         'value' => [
             'id' => 'claim:dependent.address.state',
@@ -835,6 +883,7 @@ return [
     ],
     'dependent.address.postalCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent contact information postal code',
         'value' => [
             'id' => 'claim:dependent.address.postalCode',
@@ -851,6 +900,7 @@ return [
     ],
     'dependent.address.countryCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent contact information country code',
         'value' => [
             'id' => 'claim:dependent.address.countryCode',
@@ -867,6 +917,7 @@ return [
     ],
     'dependent.address.countrySubDivisionCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Dependent contact information country subdivision code',
         'value' => [
             'id' => 'claim:dependent.address.countrySubDivisionCode',
@@ -883,6 +934,7 @@ return [
     ],
     'claimInformation.claimFilingCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information filing code',
         'value' => [
             'id' => 'claim:claimInformation.claimFilingCode',
@@ -923,6 +975,7 @@ return [
     ],
     'claimInformation.patientControlNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information patient control number',
         'value' => [
             'id' => 'claim:claimInformation.patientControlNumber',
@@ -939,6 +992,7 @@ return [
     ],
     'claimInformation.claimChargeAmount' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information claim charge amount',
         'value' => [
             'id' => 'claim:claimInformation.claimChargeAmount',
@@ -955,6 +1009,7 @@ return [
     ],
     'claimInformation.placeOfServiceCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information place of service code',
         'value' => [
             'id' => 'claim:claimInformation.placeOfServiceCode',
@@ -971,6 +1026,7 @@ return [
     ],
     'claimInformation.claimFrequencyCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information claim frequency code',
         'value' => [
             'id' => 'claim:claimInformation.claimFrequencyCode',
@@ -987,6 +1043,7 @@ return [
     ],
     'claimInformation.signatureIndicator' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information signature indicator',
         'value' => [
             'id' => 'claim:claimInformation.signatureIndicator',
@@ -1003,6 +1060,7 @@ return [
     ],
     'claimInformation.planParticipationCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information plan participation code',
         'value' => [
             'id' => 'claim:claimInformation.planParticipationCode',
@@ -1019,6 +1077,7 @@ return [
     ],
     'claimInformation.benefitsAssignmentCertificationIndicator' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information benefits assignment certification indicator',
         'value' => [
             'id' => 'claim:claimInformation.benefitsAssignmentCertificationIndicator',
@@ -1035,6 +1094,7 @@ return [
     ],
     'claimInformation.releaseInformationCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information release information code',
         'value' => [
             'id' => 'claim:claimInformation.releaseInformationCode',
@@ -1057,6 +1117,7 @@ return [
     ],
     'claimInformation.relatedCausesCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information related causes code',
         'value' => [
             'id' => 'claim:claimInformation.relatedCausesCode',
@@ -1073,6 +1134,7 @@ return [
     ],
     'claimInformation.autoAccidentStateCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information auto accident state code',
         'value' => [
             'id' => 'claim:claimInformation.autoAccidentStateCode',
@@ -1089,6 +1151,7 @@ return [
     ],
     'claimInformation.autoAccidentCountryCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information auto accident country code',
         'value' => [
             'id' => 'claim:claimInformation.autoAccidentCountryCode',
@@ -1135,6 +1198,7 @@ return [
     ],
     'claimInformation.claimDateInformation.symptomDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information symptom date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.symptomDate',
@@ -1151,6 +1215,7 @@ return [
     ],
     'claimInformation.claimDateInformation.initialTreatmentDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information initial treatment date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.initialTreatmentDate',
@@ -1167,6 +1232,7 @@ return [
     ],
     'claimInformation.claimDateInformation.lastSeenDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information last seen date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.lastSeenDate',
@@ -1183,6 +1249,7 @@ return [
     ],
     'claimInformation.claimDateInformation.acuteManifestationDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information acute manifestation date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.acuteManifestationDate',
@@ -1199,6 +1266,7 @@ return [
     ],
     'claimInformation.claimDateInformation.accidentDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information accident date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.accidentDate',
@@ -1215,6 +1283,7 @@ return [
     ],
     'claimInformation.claimDateInformation.lastMenstrualPeriodDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information last menstrual period date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.lastMenstrualPeriodDate',
@@ -1231,6 +1300,7 @@ return [
     ],
     'claimInformation.claimDateInformation.lastXRayDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information last X-Ray date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.lastXRayDate',
@@ -1247,6 +1317,7 @@ return [
     ],
     'claimInformation.claimDateInformation.hearingAndVisionPrescriptionDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information hearing and vision prescription date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.hearingAndVisionPrescriptionDate',
@@ -1263,6 +1334,7 @@ return [
     ],
     'claimInformation.claimDateInformation.disabilityBeginDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information disability begin date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.disabilityBeginDate',
@@ -1279,6 +1351,7 @@ return [
     ],
     'claimInformation.claimDateInformation.disabilityEndDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information disability end date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.disabilityEndDate',
@@ -1295,6 +1368,7 @@ return [
     ],
     'claimInformation.claimDateInformation.lastWorkedDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information last worked date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.lastWorkedDate',
@@ -1311,6 +1385,7 @@ return [
     ],
     'claimInformation.claimDateInformation.authorizedReturnToWorkDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information authorized return to work date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.authorizedReturnToWorkDate',
@@ -1327,6 +1402,7 @@ return [
     ],
     'claimInformation.claimDateInformation.admissionDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information admission date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.admissionDate',
@@ -1343,6 +1419,7 @@ return [
     ],
     'claimInformation.claimDateInformation.dischargeDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information discharge date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.dischargeDate',
@@ -1359,6 +1436,7 @@ return [
     ],
     'claimInformation.claimDateInformation.assumedAndRelinquishedCareBeginDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information assumed and relinquished care begin date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.assumedAndRelinquishedCareBeginDate',
@@ -1375,6 +1453,7 @@ return [
     ],
     'claimInformation.claimDateInformation.assumedAndRelinquishedCareEndDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information assumed and relinquished care end date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.assumedAndRelinquishedCareEndDate',
@@ -1391,6 +1470,7 @@ return [
     ],
     'claimInformation.claimDateInformation.repricerReceivedDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information repricer received date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.repricerReceivedDate',
@@ -1407,6 +1487,7 @@ return [
     ],
     'claimInformation.claimDateInformation.firstContactDate' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information first contact date',
         'value' => [
             'id' => 'claim:claimInformation.claimDateInformation.firstContactDate',
@@ -1669,6 +1750,7 @@ return [
     ],
     'claimInformation.homeboundIndicator' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information homebound indicator',
         'value' => [
             'id' => 'claim:claimInformation.homeboundIndicator',
@@ -1685,6 +1767,7 @@ return [
     ],
     'claimInformation.epsdtReferral.certificationConditionCodeAppliesIndicator' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information epsdt certification condition code applies indicator',
         'value' => [
             'id' => 'claim:claimInformation.epsdtReferral.certificationConditionCodeAppliesIndicator',
@@ -1701,6 +1784,7 @@ return [
     ],
     'claimInformation.epsdtReferral.conditionCodes' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information epsdt referral condition codes',
         'value' => [
             'id' => 'claim:claimInformation.epsdtReferral.conditionCodes',
@@ -1715,34 +1799,19 @@ return [
             ],
         ],
     ],
-    'claimInformation.healthCareCodeInformation.diagnosisTypeCode' => [
+    'claimInformation.healthCareCodeInformation' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information healthCare diagnosis type code',
         'value' => [
-            'id' => 'claim:claimInformation.healthCareCodeInformation.diagnosisTypeCode',
+            'id' => 'claim:claimInformation.healthCareCodeInformation',
             'name' => 'Claim information healthCare diagnosis type code',
         ],
         'values' => [
             'common' => [
                 [
-                    'id' => 'claim:claimInformation.healthCareCodeInformation.diagnosisTypeCode',
+                    'id' => 'claim:claimInformation.healthCareCodeInformation',
                     'name' => 'Claim information healthCare diagnosis type code',
-                ],
-            ],
-        ],
-    ],
-    'claimInformation.healthCareCodeInformation.diagnosisCode' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information healthCare diagnosis code',
-        'value' => [
-            'id' => 'claim:claimInformation.healthCareCodeInformation.diagnosisCode',
-            'name' => 'Claim information healthCare diagnosis code',
-        ],
-        'values' => [
-            'common' => [
-                [
-                    'id' => 'claim:claimInformation.healthCareCodeInformation.diagnosisCode',
-                    'name' => 'Claim information healthCare diagnosis code',
                 ],
             ],
         ],
@@ -1821,6 +1890,7 @@ return [
     ],
     'claimInformation.serviceFacilityLocation.organizationName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information service facility organization name',
         'value' => [
             'id' => 'claim:claimInformation.serviceFacilityLocation.organizationName',
@@ -1837,6 +1907,7 @@ return [
     ],
     'claimInformation.serviceFacilityLocation.address.address1' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information service facility address1',
         'value' => [
             'id' => 'claim:claimInformation.serviceFacilityLocation.address.address1',
@@ -1853,6 +1924,7 @@ return [
     ],
     'claimInformation.serviceFacilityLocation.address.address2' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information service facility address2',
         'value' => [
             'id' => 'claim:claimInformation.serviceFacilityLocation.address.address2',
@@ -1869,6 +1941,7 @@ return [
     ],
     'claimInformation.serviceFacilityLocation.address.city' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information service facility city',
         'value' => [
             'id' => 'claim:claimInformation.serviceFacilityLocation.address.city',
@@ -1885,6 +1958,7 @@ return [
     ],
     'claimInformation.serviceFacilityLocation.address.state' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information service facility state',
         'value' => [
             'id' => 'claim:claimInformation.serviceFacilityLocation.address.state',
@@ -1901,6 +1975,7 @@ return [
     ],
     'claimInformation.serviceFacilityLocation.address.postalCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information service facility postal code',
         'value' => [
             'id' => 'claim:claimInformation.serviceFacilityLocation.address.postalCode',
@@ -1917,6 +1992,7 @@ return [
     ],
     'claimInformation.serviceFacilityLocation.address.countryCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information service facility country code',
         'value' => [
             'id' => 'claim:claimInformation.serviceFacilityLocation.address.countryCode',
@@ -1933,6 +2009,7 @@ return [
     ],
     'claimInformation.serviceFacilityLocation.address.countrySubDivisionCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information service facility country sub division code',
         'value' => [
             'id' => 'claim:claimInformation.serviceFacilityLocation.address.countrySubDivisionCode',
@@ -1949,6 +2026,7 @@ return [
     ],
     'claimInformation.serviceFacilityLocation.npi' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information service facility npi',
         'value' => [
             'id' => 'claim:claimInformation.serviceFacilityLocation.npi',
@@ -1965,6 +2043,7 @@ return [
     ],
     'claimInformation.serviceFacilityLocation.secondaryIdentifier.qualifier' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information service facility secondary identifier qualifier',
         'value' => [
             'id' => 'claim:claimInformation.serviceFacilityLocation.secondaryIdentifier.qualifier',
@@ -1981,6 +2060,7 @@ return [
     ],
     'claimInformation.serviceFacilityLocation.secondaryIdentifier.identifier' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information service facility secondary identifier',
         'value' => [
             'id' => 'claim:claimInformation.serviceFacilityLocation.secondaryIdentifier.identifier',
@@ -1997,6 +2077,7 @@ return [
     ],
     'claimInformation.serviceFacilityLocation.secondaryIdentifier.otherIdentifier' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information service facility secondary other identifier',
         'value' => [
             'id' => 'claim:claimInformation.serviceFacilityLocation.secondaryIdentifier.otherIdentifier',
@@ -2013,6 +2094,7 @@ return [
     ],
     'claimInformation.serviceFacilityLocation.phoneName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information service facility phone name',
         'value' => [
             'id' => 'claim:claimInformation.serviceFacilityLocation.phoneName',
@@ -2029,6 +2111,7 @@ return [
     ],
     'claimInformation.serviceFacilityLocation.phoneNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information service facility phone number',
         'value' => [
             'id' => 'claim:claimInformation.serviceFacilityLocation.phoneNumber',
@@ -2045,6 +2128,7 @@ return [
     ],
     'claimInformation.serviceFacilityLocation.phoneExtension' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Claim information service facility phone extension',
         'value' => [
             'id' => 'claim:claimInformation.serviceFacilityLocation.phoneExtension',
@@ -2575,12 +2659,81 @@ return [
         'value' => [],
         'values' => [],
     ],
-    'claimInformation.serviceLines.assignedNumber' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines assigned number',
+    'claimInformation.serviceLines' => [
+        'type' => RuleType::MULTIPLE->value,
+        'default' => true,
+        'length' => 30,
+        'glue' => '',
+        'description' => 'Claim information service lines',
         'value' => [
-            'id' => 'claim:claimInformation.serviceLines.assignedNumber',
-            'name' => 'Claim information service lines assigned number',
+            [
+                'id' => 'claim:claimInformation.serviceLines.assignedNumber',
+                'name' => 'Claim information service lines assigned number',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.serviceDate',
+                'name' => 'Claim information service lines service date',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.serviceDateEnd',
+                'name' => 'Claim information service lines service date end',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.providerControlNumber',
+                'name' => 'Claim information service lines provider control number',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.procedureIdentifier',
+                'name' => 'Claim information service lines professional service procedure identifier',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.procedureCode',
+                'name' => 'Claim information service lines professional service procedure code',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.procedureModifiers',
+                'name' => 'Claim information service lines professional service procedure modifiers',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.description',
+                'name' => 'Claim information service lines professional service description',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.lineItemChargeAmount',
+                'name' => 'Claim information service lines professional service line item charge amount',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.measurementUnit',
+                'name' => 'Claim information service lines professional service measurement unit',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.serviceUnitCount',
+                'name' => 'Claim information service lines professional service service unit count',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.placeOfServiceCode',
+                'name' => 'Claim information service lines professional service place of service code',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.compositeDiagnosisCodePointers.diagnosisCodePointers',
+                'name' => 'Claim information service lines professional service composite  diagnosis code pointers',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.emergencyIndicator',
+                'name' => 'Claim information service lines professional service emergency indicator',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.epsdtIndicator',
+                'name' => 'Claim information service lines professional service epsdt indicator',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.familyPlanningIndicator',
+                'name' => 'Claim information service lines professional service family planning indicator',
+            ],
+            [
+                'id' => 'claim:claimInformation.serviceLines.professionalService.copayStatusCode',
+                'name' => 'Claim information service lines professional service copay status code',
+            ],
         ],
         'values' => [
             'common' => [
@@ -2588,258 +2741,66 @@ return [
                     'id' => 'claim:claimInformation.serviceLines.assignedNumber',
                     'name' => 'Claim information service lines assigned number',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.serviceDate' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines service date',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.serviceDate',
-            'name' => 'Claim information service lines service date',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.serviceDate',
                     'name' => 'Claim information service lines service date',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.serviceDateEnd' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines service date end',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.serviceDateEnd',
-            'name' => 'Claim information service lines service date end',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.serviceDateEnd',
                     'name' => 'Claim information service lines service date end',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.providerControlNumber' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines provider control number',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.providerControlNumber',
-            'name' => 'Claim information service lines provider control number',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.providerControlNumber',
                     'name' => 'Claim information service lines provider control number',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.procedureIdentifier' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines professional service procedure identifier',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.procedureIdentifier',
-            'name' => 'Claim information service lines professional service procedure identifier',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.procedureIdentifier',
                     'name' => 'Claim information service lines professional service procedure identifier',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.procedureCode' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines professional service procedure code',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.procedureCode',
-            'name' => 'Claim information service lines professional service procedure code',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.procedureCode',
                     'name' => 'Claim information service lines professional service procedure code',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.procedureModifiers' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines professional service procedure modifiers',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.procedureModifiers',
-            'name' => 'Claim information service lines professional service procedure modifiers',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.procedureModifiers',
                     'name' => 'Claim information service lines professional service procedure modifiers',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.description' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines professional service description',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.description',
-            'name' => 'Claim information service lines professional service description',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.description',
                     'name' => 'Claim information service lines professional service description',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.lineItemChargeAmount' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines professional service line item charge amount',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.lineItemChargeAmount',
-            'name' => 'Claim information service lines professional service line item charge amount',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.lineItemChargeAmount',
                     'name' => 'Claim information service lines professional service line item charge amount',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.measurementUnit' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines professional service measurement unit',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.measurementUnit',
-            'name' => 'Claim information service lines professional service measurement unit',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.measurementUnit',
                     'name' => 'Claim information service lines professional service measurement unit',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.serviceUnitCount' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines professional service service unit count',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.serviceUnitCount',
-            'name' => 'Claim information service lines professional service service unit count',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.serviceUnitCount',
                     'name' => 'Claim information service lines professional service service unit count',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.placeOfServiceCode' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines professional service place of service code',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.placeOfServiceCode',
-            'name' => 'Claim information service lines professional service place of service code',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.placeOfServiceCode',
                     'name' => 'Claim information service lines professional service place of service code',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.compositeDiagnosisCodePointers.diagnosisCodePointers' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines professional service composite  diagnosis code pointers',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.compositeDiagnosisCodePointers.diagnosisCodePointers',
-            'name' => 'Claim information service lines professional service composite  diagnosis code pointers',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.compositeDiagnosisCodePointers.diagnosisCodePointers',
                     'name' => 'Claim information service lines professional service composite  diagnosis code pointers',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.emergencyIndicator' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines professional service emergency indicator',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.emergencyIndicator',
-            'name' => 'Claim information service lines professional service emergency indicator',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.emergencyIndicator',
                     'name' => 'Claim information service lines professional service emergency indicator',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.epsdtIndicator' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines professional service epsdt indicator',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.epsdtIndicator',
-            'name' => 'Claim information service lines professional service epsdt indicator',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.epsdtIndicator',
                     'name' => 'Claim information service lines professional service epsdt indicator',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.familyPlanningIndicator' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines professional service family planning indicator',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.familyPlanningIndicator',
-            'name' => 'Claim information service lines professional service family planning indicator',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.familyPlanningIndicator',
                     'name' => 'Claim information service lines professional service family planning indicator',
                 ],
-            ],
-        ],
-    ],
-    'claimInformation.serviceLines.professionalService.copayStatusCode' => [
-        'type' => RuleType::SINGLE->value,
-        'description' => 'Claim information service lines professional service copay status code',
-        'value' => [
-            'id' => 'claim:claimInformation.serviceLines.professionalService.copayStatusCode',
-            'name' => 'Claim information service lines professional service copay status code',
-        ],
-        'values' => [
-            'common' => [
                 [
                     'id' => 'claim:claimInformation.serviceLines.professionalService.copayStatusCode',
                     'name' => 'Claim information service lines professional service copay status code',
@@ -4619,6 +4580,7 @@ return [
     ],
     'payToAddress.address1' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Pay to address address 1',
         'value' => [
             'id' => 'claim:payToAddress.address1',
@@ -4635,6 +4597,7 @@ return [
     ],
     'payToAddress.address2' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Pay to address address 2',
         'value' => [
             'id' => 'claim:payToAddress.address2',
@@ -4651,6 +4614,7 @@ return [
     ],
     'payToAddress.city' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Pay to address city',
         'value' => [
             'id' => 'claim:payToAddress.city',
@@ -4667,6 +4631,7 @@ return [
     ],
     'payToAddress.state' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Pay to address state',
         'value' => [
             'id' => 'claim:payToAddress.state',
@@ -4683,6 +4648,7 @@ return [
     ],
     'payToAddress.postalCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Pay to address postal code',
         'value' => [
             'id' => 'claim:payToAddress.postalCode',
@@ -4699,6 +4665,7 @@ return [
     ],
     'payToAddress.countryCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Pay to address country code',
         'value' => [
             'id' => 'claim:payToAddress.countryCode',
@@ -4715,6 +4682,7 @@ return [
     ],
     'payToAddress.countrySubDivisionCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Pay to address country sub division code',
         'value' => [
             'id' => 'claim:payToAddress.countrySubDivisionCode',
@@ -4851,6 +4819,7 @@ return [
     ],
     'billing.providerType' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing provider type',
         'value' => [
             'id' => 'claim:billing.providerType',
@@ -4867,6 +4836,7 @@ return [
     ],
     'billing.npi' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing npi',
         'value' => [
             'id' => 'claim:billing.npi',
@@ -4883,6 +4853,7 @@ return [
     ],
     'billing.ssn' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing ssn',
         'value' => [
             'id' => 'claim:billing.ssn',
@@ -4899,6 +4870,7 @@ return [
     ],
     'billing.employerId' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing employerId',
         'value' => [
             'id' => 'claim:billing.employerId',
@@ -4915,6 +4887,7 @@ return [
     ],
     'billing.commercialNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing commercial number',
         'value' => [
             'id' => 'claim:billing.commercialNumber',
@@ -4931,6 +4904,7 @@ return [
     ],
     'billing.locationNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing location number',
         'value' => [
             'id' => 'claim:billing.locationNumber',
@@ -4947,6 +4921,7 @@ return [
     ],
     'billing.payerIdentificationNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing payer identification number',
         'value' => [
             'id' => 'claim:billing.payerIdentificationNumber',
@@ -4963,6 +4938,7 @@ return [
     ],
     'billing.employerIdentificationNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing employer identification number',
         'value' => [
             'id' => 'claim:billing.employerIdentificationNumber',
@@ -4979,6 +4955,7 @@ return [
     ],
     'billing.claimOfficeNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing claim office number',
         'value' => [
             'id' => 'claim:billing.claimOfficeNumber',
@@ -4995,6 +4972,7 @@ return [
     ],
     'billing.naic' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing naic',
         'value' => [
             'id' => 'claim:billing.naic',
@@ -5011,6 +4989,7 @@ return [
     ],
     'billing.stateLicenseNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing state license number',
         'value' => [
             'id' => 'claim:billing.stateLicenseNumber',
@@ -5027,6 +5006,7 @@ return [
     ],
     'billing.providerUpinNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing provider upin number',
         'value' => [
             'id' => 'claim:billing.providerUpinNumber',
@@ -5043,6 +5023,7 @@ return [
     ],
     'billing.taxonomyCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing taxonomy code',
         'value' => [
             'id' => 'claim:billing.taxonomyCode',
@@ -5059,6 +5040,7 @@ return [
     ],
     'billing.firstName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing first name',
         'value' => [
             'id' => 'claim:billing.firstName',
@@ -5075,6 +5057,7 @@ return [
     ],
     'billing.lastName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing last name',
         'value' => [
             'id' => 'claim:billing.lastName',
@@ -5091,6 +5074,7 @@ return [
     ],
     'billing.middleName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing middle name',
         'value' => [
             'id' => 'claim:billing.middleName',
@@ -5107,6 +5091,7 @@ return [
     ],
     'billing.suffix' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing suffix',
         'value' => [
             'id' => 'claim:billing.suffix',
@@ -5123,6 +5108,7 @@ return [
     ],
     'billing.organizationName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing organization name',
         'value' => [
             'id' => 'claim:billing.organizationName',
@@ -5139,6 +5125,7 @@ return [
     ],
     'billing.address.address1' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing address address 1',
         'value' => [
             'id' => 'claim:billing.address.address1',
@@ -5155,6 +5142,7 @@ return [
     ],
     'billing.address.address2' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing address address 2',
         'value' => [
             'id' => 'claim:billing.address.address2',
@@ -5171,6 +5159,7 @@ return [
     ],
     'billing.address.city' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing address city',
         'value' => [
             'id' => 'claim:billing.address.city',
@@ -5187,6 +5176,7 @@ return [
     ],
     'billing.address.state' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing address state',
         'value' => [
             'id' => 'claim:billing.address.state',
@@ -5203,6 +5193,7 @@ return [
     ],
     'billing.address.postalCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing address postal code',
         'value' => [
             'id' => 'claim:billing.address.postalCode',
@@ -5219,6 +5210,7 @@ return [
     ],
     'billing.address.countryCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing address country code',
         'value' => [
             'id' => 'claim:billing.address.countryCode',
@@ -5235,6 +5227,7 @@ return [
     ],
     'billing.address.countrySubDivisionCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing address country sub division code',
         'value' => [
             'id' => 'claim:billing.address.countrySubDivisionCode',
@@ -5251,6 +5244,7 @@ return [
     ],
     'billing.contactInformation.name' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing contact information name',
         'value' => [
             'id' => 'claim:billing.contactInformation.name',
@@ -5267,6 +5261,7 @@ return [
     ],
     'billing.contactInformation.phoneNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing contact information phone number',
         'value' => [
             'id' => 'claim:billing.contactInformation.phoneNumber',
@@ -5283,6 +5278,7 @@ return [
     ],
     'billing.contactInformation.faxNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing contact information fax number',
         'value' => [
             'id' => 'claim:billing.contactInformation.faxNumber',
@@ -5299,6 +5295,7 @@ return [
     ],
     'billing.contactInformation.email' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing contact information email',
         'value' => [
             'id' => 'claim:billing.contactInformation.email',
@@ -5315,15 +5312,16 @@ return [
     ],
     'billing.contactInformation.phoneExtension' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Billing contact information phone extension',
         'value' => [
-            'id' => 'claim:claimInformation.patientControlNumber',
+            'id' => 'claim:billing.contactInformation.phoneExtension',
             'name' => 'Billing contact information phone extension',
         ],
         'values' => [
             'common' => [
                 [
-                    'id' => 'claim:claimInformation.patientControlNumber',
+                    'id' => 'claim:billing.contactInformation.phoneExtension',
                     'name' => 'Billing contact information phone extension',
                 ],
             ],
@@ -5331,6 +5329,7 @@ return [
     ],
     'referring.providerType' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring provider type',
         'value' => [
             'id' => 'claim:referring.providerType',
@@ -5347,6 +5346,7 @@ return [
     ],
     'referring.npi' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring npi',
         'value' => [
             'id' => 'claim:referring.npi',
@@ -5363,6 +5363,7 @@ return [
     ],
     'referring.ssn' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring ssn',
         'value' => [
             'id' => 'claim:referring.ssn',
@@ -5379,6 +5380,7 @@ return [
     ],
     'referring.employerId' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring employerId',
         'value' => [
             'id' => 'claim:referring.employerId',
@@ -5395,6 +5397,7 @@ return [
     ],
     'referring.commercialNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring commercial number',
         'value' => [
             'id' => 'claim:referring.commercialNumber',
@@ -5411,6 +5414,7 @@ return [
     ],
     'referring.locationNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring location number',
         'value' => [
             'id' => 'claim:referring.locationNumber',
@@ -5427,6 +5431,7 @@ return [
     ],
     'referring.payerIdentificationNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring payer identification number',
         'value' => [
             'id' => 'claim:referring.payerIdentificationNumber',
@@ -5443,6 +5448,7 @@ return [
     ],
     'referring.employerIdentificationNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring employer identification number',
         'value' => [
             'id' => 'claim:referring.employerIdentificationNumber',
@@ -5459,6 +5465,7 @@ return [
     ],
     'referring.claimOfficeNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring claim office number',
         'value' => [
             'id' => 'claim:referring.claimOfficeNumber',
@@ -5475,6 +5482,7 @@ return [
     ],
     'referring.naic' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring naic',
         'value' => [
             'id' => 'claim:referring.naic',
@@ -5491,6 +5499,7 @@ return [
     ],
     'referring.stateLicenseNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring state license number',
         'value' => [
             'id' => 'claim:referring.stateLicenseNumber',
@@ -5507,6 +5516,7 @@ return [
     ],
     'referring.providerUpinNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring provider upin number',
         'value' => [
             'id' => 'claim:referring.providerUpinNumber',
@@ -5523,6 +5533,7 @@ return [
     ],
     'referring.taxonomyCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring taxonomy code',
         'value' => [
             'id' => 'claim:referring.taxonomyCode',
@@ -5539,6 +5550,7 @@ return [
     ],
     'referring.firstName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring first name',
         'value' => [
             'id' => 'claim:referring.firstName',
@@ -5555,6 +5567,7 @@ return [
     ],
     'referring.lastName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring last name',
         'value' => [
             'id' => 'claim:referring.lastName',
@@ -5571,6 +5584,7 @@ return [
     ],
     'referring.middleName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring middle name',
         'value' => [
             'id' => 'claim:referring.middleName',
@@ -5587,6 +5601,7 @@ return [
     ],
     'referring.suffix' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring suffix',
         'value' => [
             'id' => 'claim:referring.suffix',
@@ -5603,6 +5618,7 @@ return [
     ],
     'referring.organizationName' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring organization name',
         'value' => [
             'id' => 'claim:referring.organizationName',
@@ -5619,6 +5635,7 @@ return [
     ],
     'referring.address.address1' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring address address 1',
         'value' => [
             'id' => 'claim:referring.address.address1',
@@ -5635,6 +5652,7 @@ return [
     ],
     'referring.address.address2' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring address address 2',
         'value' => [
             'id' => 'claim:referring.address.address2',
@@ -5651,6 +5669,7 @@ return [
     ],
     'referring.address.city' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring address city',
         'value' => [
             'id' => 'claim:referring.address.city',
@@ -5667,6 +5686,7 @@ return [
     ],
     'referring.address.state' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring address state',
         'value' => [
             'id' => 'claim:referring.address.state',
@@ -5683,6 +5703,7 @@ return [
     ],
     'referring.address.postalCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring address postal code',
         'value' => [
             'id' => 'claim:referring.address.postalCode',
@@ -5699,6 +5720,7 @@ return [
     ],
     'referring.address.countryCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring address country code',
         'value' => [
             'id' => 'claim:referring.address.countryCode',
@@ -5715,6 +5737,7 @@ return [
     ],
     'referring.address.countrySubDivisionCode' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring address country sub division code',
         'value' => [
             'id' => 'claim:referring.address.countrySubDivisionCode',
@@ -5731,6 +5754,7 @@ return [
     ],
     'referring.contactInformation.name' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring contact information name',
         'value' => [
             'id' => 'claim:referring.contactInformation.name',
@@ -5747,6 +5771,7 @@ return [
     ],
     'referring.contactInformation.phoneNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring contact information phone number',
         'value' => [
             'id' => 'claim:referring.contactInformation.phoneNumber',
@@ -5763,6 +5788,7 @@ return [
     ],
     'referring.contactInformation.faxNumber' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring contact information fax number',
         'value' => [
             'id' => 'claim:referring.contactInformation.faxNumber',
@@ -5779,6 +5805,7 @@ return [
     ],
     'referring.contactInformation.email' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring contact information email',
         'value' => [
             'id' => 'claim:referring.contactInformation.email',
@@ -5795,15 +5822,16 @@ return [
     ],
     'referring.contactInformation.phoneExtension' => [
         'type' => RuleType::SINGLE->value,
+        'default' => true,
         'description' => 'Referring contact information phone extension',
         'value' => [
-            'id' => 'claim:claimInformation.patientControlNumber',
+            'id' => 'claim:referring.contactInformation.phoneExtension',
             'name' => 'Referring contact information phone extension',
         ],
         'values' => [
             'common' => [
                 [
-                    'id' => 'claim:claimInformation.patientControlNumber',
+                    'id' => 'claim:referring.contactInformation.phoneExtension',
                     'name' => 'Referring contact information phone extension',
                 ],
             ],

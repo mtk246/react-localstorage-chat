@@ -8,6 +8,7 @@ use App\Enums\Claim\RuleFormatType;
 use App\Models\BillingCompany;
 use App\Models\InsurancePlan;
 use App\Models\TypeCatalog;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,7 +16,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Scout\Searchable;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
@@ -30,7 +30,10 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property array|null $parameters
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null $insurance_plan_id
+ * @property bool $active
+ * @property string|null $note
+ * @property Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  * @property BillingCompany|null $billingCompany
  * @property Collection<int, InsurancePlan> $insurancePlans
  * @property int|null $insurance_plans_count
@@ -41,13 +44,14 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Rules newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Rules newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Rules query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Rules whereActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereFormat($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rules whereInsurancePlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rules whereNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereParameters($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereRules($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rules whereUpdatedAt($value)

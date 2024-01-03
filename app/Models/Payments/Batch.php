@@ -8,14 +8,15 @@ use App\Enums\Payments\BatchStateType;
 use App\Models\BillingCompany;
 use App\Models\Company;
 use App\Models\User;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Cknow\Money\Casts\MoneyDecimalCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Facades\Date;
 use Laravel\Scout\Searchable;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
@@ -31,6 +32,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $close_date
+ * @property string $code
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property BillingCompany $billingCompany
@@ -46,6 +49,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|Batch query()
  * @method static \Illuminate\Database\Eloquent\Builder|Batch whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Batch whereBillingCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Batch whereCloseDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Batch whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Batch whereCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Batch whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Batch whereCurrency($value)
@@ -66,6 +71,7 @@ final class Batch extends Model implements Auditable
     protected $table = 'payment_batches';
 
     protected $fillable = [
+        'code',
         'name',
         'posting_date',
         'currency',
@@ -73,12 +79,14 @@ final class Batch extends Model implements Auditable
         'status',
         'company_id',
         'billing_company_id',
+        'close_date',
     ];
 
     protected $casts = [
         'posting_date' => 'date',
         'amount' => MoneyDecimalCast::class.':currency',
         'status' => BatchStateType::class,
+        'close_date' => 'date',
     ];
 
     public function company(): BelongsTo
@@ -101,9 +109,12 @@ final class Batch extends Model implements Auditable
         return $this->hasManyThrough(Eob::class, Payment::class, 'payment_batch_id');
     }
 
-    public function close(): self
+    public function close(string $date): self
     {
         $this->status = BatchStateType::COMPLETED->value;
+        $this->close_date = $date;
+
+        $this->save();
 
         return $this;
     }
@@ -131,6 +142,7 @@ final class Batch extends Model implements Auditable
     public function toSearchableArray()
     {
         return [
+            'code' => $this->code,
             'name' => $this->name,
             'posting_date' => $this->posting_date,
             'currency' => $this->currency,
