@@ -10,6 +10,10 @@ final class SearchRequest extends FormRequest
 {
     public function rules(): array
     {
+        if (empty($this->all())) {
+            abort(400, 'Error, You must provide at least 1 search parameter');
+        }
+
         return [
             'claim_number' => 'nullable|string',
 
