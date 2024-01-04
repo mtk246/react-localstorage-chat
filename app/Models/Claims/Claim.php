@@ -593,8 +593,12 @@ class Claim extends Model implements Auditable
                 ->first()
                 ?->abbreviation,
             'patient' => $this->demographicInformation->patient?->profile->only(['first_name', 'last_name', 'ssn']),
+            'patient.name' => $this->demographicInformation->patient?->profile->fullName(),
             'health_professionals' => $this->demographicInformation->healthProfessionals,
+            'policy' => $this->higherOrderPolicy(),
+            'policy.number' => $this->higherOrderPolicy()?->policy_number,
             'insurance_plan' => $this->higherInsurancePlan(),
+            'insurance_plan.name' => $this->higherInsurancePlan()?->name,
             'transmitted' => $this->claimTransmissionResponses->count() > 0,
             'status' => $this->status()
                 ->orderBy('claim_status_claim.id', 'desc')
@@ -605,6 +609,7 @@ class Claim extends Model implements Auditable
                 ->first()
                 ?->status,
             'user_created' => $this->user_created,
+            'follow_up' => $this->denialTrackings->last()->follow_up,
         ];
     }
 }

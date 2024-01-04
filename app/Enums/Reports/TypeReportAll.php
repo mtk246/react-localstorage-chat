@@ -48,4 +48,9 @@ enum TypeReportAll: string implements TypeInterface
     #[NameAttribute('bad_debt_cost')]
     #[PublicAttribute(true)]
     case WSTRTDBWPZ = 'WSTRTDBWPZ';
+
+    #[TextAttribute('view_change_by_module')]
+    #[NameAttribute('change_by_module')]
+    #[PublicAttribute(true)]
+    case ZHJZLMVKWP = 'ZHJZLMVKWP';
 }
