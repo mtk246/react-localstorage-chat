@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\HealthProfessional\HealthProfessionalType as HealthProfessionalTypeEnum;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\HealthProfessionalType.
  *
  * @property int $id
- * @property $type
+ * @property HealthProfessionalTypeEnum $type
  * @property int|null $health_professional_id
  * @property int|null $billing_company_id
  * @property \Illuminate\Support\Carbon|null $created_at

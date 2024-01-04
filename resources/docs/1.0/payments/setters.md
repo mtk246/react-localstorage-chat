@@ -45,6 +45,7 @@
   "amount": "25000",
   "payments": [
     {
+      "order": 1,
       "source_id":1,
       "insurance_company_id": 1,
       "payment_date": "2015-10-5",
@@ -60,6 +61,10 @@
         "file_name": "test"
       }]
     }
+  ],
+  "files": [ // files for eobs
+    eob_files 
+    ...
   ]
 }
 ```
@@ -80,6 +85,7 @@
   "payments": [
     {
       "id": 20,
+      "order": 1,
       "source": 1,
       "payment_date": "2015-10-05T00:00:00.000000Z",
       "total_amount": "25000",
@@ -143,6 +149,7 @@
   "amount": "25000",
   "payments": [
     {
+      "order": 1,
       "source_id":1,
       "insurance_company_id": 1,
       "payment_date": "2015-10-5",
@@ -158,6 +165,10 @@
         "file_name": "test"
       }]
     }
+  ]
+  "files": [ // files for eobs
+    eob_files 
+    ...
   ]
 }
 ```
@@ -316,146 +327,31 @@
 
 ```json
 {
-  "id": 16,
-  "name": "test",
-  "posting_date": "2015-10-05T00:00:00.000000Z",
-  "currency": "USD",
-  "amount": "25000",
-  "status": 1,
   "payments": [
     {
-      "id": 16,
-      "source": 1,
-      "payment_date": "2015-10-05T00:00:00.000000Z",
-      "total_amount": "25000",
-      "payment_method": "1",
-      "reference": "1541586",
-      "card_number": null,
-      "expiration_date": null,
-      "statement": true,
-      "note": "asdawdsadawsdw",
-      "eobs": {
-        "name": "test",
-        "date": "2015-10-05T00:00:00.000000Z",
-        "file_name": "",
-        "file_url": null
-      },
-      "insurance_company": {
-        "id": 1,
-        "code": "IC-00001-2023",
-        "name": "Providence Administrative Services",
-        "naic": "1101",
-        "created_at": "2023-11-21T13:37:34.000000Z",
-        "updated_at": "2023-11-21T13:37:34.000000Z",
-        "payer_id": "PAS01",
-        "file_method_id": 1,
-        "status": false,
-        "last_modified": {
-          "user": "Console",
-          "roles": []
-        }
-      },
-      "claims": [
+      "id":1,
+      "services": [
         {
-          "id": 3,
-          "code": "01HG6E9JAYFFR6B56XJFY25NHW",
-          "patient": "Fonseca Leonela",
-          "insurance_plan": "Connect 1500 Gold",
-          "billed_amount": "600.00",
-          "paid_amount": null,
-          "services": [
-            {
-              "id": 1,
-              "claim_service_id": 1,
-              "procedure_id": 11,
-              "modifier_ids": [],
-              "diagnostic_pointers": [],
-              "from_service": "2022-07-05",
-              "to_service": "2022-07-05",
-              "price": "200",
-              "total_charge": "200",
-              "copay": "200",
-              "revenue_code_id": "11",
-              "place_of_service_id": null,
-              "type_of_service_id": null,
-              "days_or_units": "1.5",
-              "emg": null,
-              "epsdt_id": null,
-              "family_planning_id": null,
-              "created_at": "2023-11-26T18:29:29.000000Z",
-              "updated_at": "2023-11-26T18:29:29.000000Z",
-              "payment": null,
-              "modifiers": []
-            },
-            {
-              "id": 2,
-              "claim_service_id": 1,
-              "procedure_id": 15,
-              "modifier_ids": [],
-              "diagnostic_pointers": [],
-              "from_service": "2022-07-05",
-              "to_service": "2022-07-05",
-              "price": "200",
-              "total_charge": "200",
-              "copay": "200",
-              "revenue_code_id": "11",
-              "place_of_service_id": null,
-              "type_of_service_id": null,
-              "days_or_units": "1.5",
-              "emg": null,
-              "epsdt_id": null,
-              "family_planning_id": null,
-              "created_at": "2023-11-26T18:29:29.000000Z",
-              "updated_at": "2023-11-26T18:29:29.000000Z",
-              "payment": {
-                "payment_id": 1,
-                "service_id": 2,
-                "id": 1,
-                "claim_id": 3,
-                "currency": "USD",
-                "payment": "0",
-                "exp_adj": "0",
-                "remain": "0",
-                "ins_amount": "0",
-                "resp_insurance": "1",
-                "pt_resp": "0",
-                "reason": "1",
-                "denial_reason": "1",
-                "note": "as dasw wwa sw asd was awds aw sa aw",
-                "created_at": "2023-11-27T13:39:29.000000Z",
-                "updated_at": "2023-11-27T13:39:29.000000Z",
-                "adjustments": [
-                  {
-                    "id": 1,
-                    "payment_service_id": 1,
-                    "currency": "USD",
-                    "amount": "0",
-                    "adj_reason": "11",
-                    "created_at": "2023-11-27T13:39:29.000000Z",
-                    "updated_at": "2023-11-27T13:39:29.000000Z"
-                  },
-                  {
-                    "id": 2,
-                    "payment_service_id": 1,
-                    "currency": "USD",
-                    "amount": "0",
-                    "adj_reason": "11",
-                    "created_at": "2023-11-27T18:58:51.000000Z",
-                    "updated_at": "2023-11-27T18:58:51.000000Z"
-                  }
-                ]
-              },
-              "modifiers": []
-            }
-          ]
+          "claim_id": 4,
+          "service_id": 7,
+          "payment": "$100.00",
+          "exp_adj": "$0.00",
+          "adjust": [{
+            "amount": "$15.00",
+            "adj_reason": "11"
+          }],
+          "remain": "$20.00",
+          "ins_amount": "$10.00",
+          "resp_insurance": "1",
+          "pt_resp": "$22.00",
+          "reason": "1",
+          "denial_reason": "1",
+          "note": "as dasw wwa sw asd was awds aw sa aw",
+          "refile": null
         }
       ]
     }
-  ],
-  "created_at": "2023-11-26T18:09:03.000000Z",
-  "updated_at": "2023-11-26T18:09:03.000000Z",
-  "company": {...},
-  "billing_company": {...}
+  ]
 }
 ```
 

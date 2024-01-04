@@ -9,6 +9,7 @@ use App\Http\Casts\Claim\UpdateRulesWrapper;
 use App\Http\Requests\Traits\HasCastedClass;
 use App\Rules\Claim\RuleFormatRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 final class UpdateRulesRequest extends FormRequest
@@ -21,25 +22,78 @@ final class UpdateRulesRequest extends FormRequest
     public function rules()
     {
         return [
-            'insurance_plan_id' => 'required|integer|exists:insurance_plans,id',
-            'name' => 'required|string',
+            'insurance_plan_ids' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'required',
+                'array',
+            ],
+            'insurance_plan_ids.*' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'required',
+                'integer',
+                'exists:insurance_plans,id',
+            ],
+            'name' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'required',
+                'string',
+            ],
             'format' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
                 'required',
                 new Enum(RuleFormatType::class),
             ],
-            'responsibilities' => 'nullable|array',
-            'responsibilities.*' => 'required|integer|exists:type_catalogs,id',
-            'rules.file' => 'required|array',
-            'rules.file.*' => [
+            'responsibilities' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
+                'array',
+            ],
+            'responsibilities.*' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
                 'required',
+                'integer',
+                'exists:type_catalogs,id',
+            ],
+            'rules.file' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
+                'array',
+            ],
+            'rules.file.*' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
+                new RuleFormatRule($this->get('format', '')),
+            ],
+            'rules.json' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
+                'array',
+            ],
+            'rules.json.*' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
                 new RuleFormatRule($this->get('format', '')),
             ],
             'rules.digital.*' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
                 'required',
                 'array',
                 new RuleFormatRule($this->get('format', '')),
             ],
-            'parameters' => 'nullable|array',
+            'parameters' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
+                'array',
+            ],
+            'active' => [
+                'nullable',
+                'boolean',
+            ],
+            'note' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
+                'string',
+            ],
         ];
     }
 }

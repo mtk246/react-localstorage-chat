@@ -9,9 +9,9 @@ use App\Models\Company;
 use App\Models\Facility;
 use App\Models\HealthProfessional;
 use App\Models\Patient;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**

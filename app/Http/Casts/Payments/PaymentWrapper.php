@@ -15,7 +15,7 @@ final class PaymentWrapper extends CastsRequest
         return $this->getInt('id', 0);
     }
 
-    public function getPaymentdata(): array
+    public function getPaymentdata(int $paymentBatchId, int $order): array
     {
         return [
             'source' => $this->get('source_id'),
@@ -26,6 +26,8 @@ final class PaymentWrapper extends CastsRequest
             'statement' => $this->get('statement'),
             'note' => $this->get('note'),
             'insurance_plan_id' => $this->get('insurance_plan_id'),
+            'payment_batch_id' => $paymentBatchId,
+            'order' => $this->get('order', $order),
         ];
     }
 

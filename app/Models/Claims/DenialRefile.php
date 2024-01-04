@@ -7,11 +7,11 @@ namespace App\Models\Claims;
 use App\Models\InsurancePolicy;
 use App\Models\PrivateNote;
 use App\Models\RefileReason;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Scout\Searchable;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
@@ -22,12 +22,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $policy_id
  * @property bool|null $is_cross_over
  * @property string|null $cross_over_date
- * @property string|null $policy_id
- * @property bool|null $is_cross_over
- * @property string|null $cross_over_date
  * @property string $note
- * @property string|null $original_claim_id
- * @property int|null $refile_reason
  * @property string|null $original_claim_id
  * @property int|null $refile_reason
  * @property \Illuminate\Support\Carbon|null $created_at

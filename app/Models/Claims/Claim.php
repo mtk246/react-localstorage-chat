@@ -13,6 +13,7 @@ use App\Models\BillingCompany;
 use App\Models\InsurancePolicy;
 use App\Models\PrivateNote;
 use App\Models\User;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use App\Traits\Claim\ClaimFile;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -26,7 +27,6 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
@@ -74,6 +74,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimSubStatus> $subStatus
  * @property int|null $sub_status_count
  *
+ * @method static \Database\Factories\Claims\ClaimFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Claim newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Claim newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Claim query()
@@ -334,7 +335,7 @@ class Claim extends Model implements Auditable
 
     public function getBilledAmountAttribute()
     {
-        $billed = $this->service->services->reduce(function ($carry, $service) {
+        $billed = $this->service?->services->reduce(function ($carry, $service) {
             return $carry + ($service['days_or_units'] ?? 1) * ((float) $service['price'] ?? 0);
         }, 0);
 
@@ -343,7 +344,7 @@ class Claim extends Model implements Auditable
 
     public function getAmountPaidAttribute()
     {
-        $paid = $this->service->services->reduce(function ($carry, $service) {
+        $paid = $this->service?->services->reduce(function ($carry, $service) {
             return $carry + ((float) $service['copay'] ?? 0);
         }, 0);
 
@@ -591,9 +592,13 @@ class Claim extends Model implements Auditable
                 ->where('billing_company_id', $this->billing_company_id)
                 ->first()
                 ?->abbreviation,
-            'patient' => $this->demographicInformation->patient->profile->only(['first_name', 'last_name', 'ssn']),
+            'patient' => $this->demographicInformation->patient?->profile->only(['first_name', 'last_name', 'ssn']),
+            'patient.name' => $this->demographicInformation->patient?->profile->fullName(),
             'health_professionals' => $this->demographicInformation->healthProfessionals,
+            'policy' => $this->higherOrderPolicy(),
+            'policy.number' => $this->higherOrderPolicy()?->policy_number,
             'insurance_plan' => $this->higherInsurancePlan(),
+            'insurance_plan.name' => $this->higherInsurancePlan()?->name,
             'transmitted' => $this->claimTransmissionResponses->count() > 0,
             'status' => $this->status()
                 ->orderBy('claim_status_claim.id', 'desc')
@@ -604,6 +609,7 @@ class Claim extends Model implements Auditable
                 ->first()
                 ?->status,
             'user_created' => $this->user_created,
+            'follow_up' => $this->denialTrackings->last()->follow_up,
         ];
     }
 }

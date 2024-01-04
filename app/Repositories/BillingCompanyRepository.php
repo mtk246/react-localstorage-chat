@@ -2,13 +2,18 @@
 
 namespace App\Repositories;
 
+use App\Facades\Pagination;
 use App\Http\Requests\ImgBillingCompanyRequest;
 use App\Models\Address;
 use App\Models\BillingCompany;
 use App\Models\BillingCompany\MembershipRole;
 use App\Models\Contact;
+use App\Models\Permissions\Permission;
 use App\Models\User;
+use App\Models\User\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Meilisearch\Endpoints\Indexes;
 
 final class BillingCompanyRepository
 {
@@ -36,12 +41,20 @@ final class BillingCompanyRepository
         ]);
 
         collect(config('memberships.default_roles'))
-            ->map(function (array $role) use ($company) {
-                $role['billing_company_id'] = $company->id;
+            ->each(function (array $roleData) use($company) {
+                $role = Role::query()->updateOrCreate(
+                    ['slug' => $roleData['slug'] ,'billing_company_id' => $company->id],
+                    $roleData
+                );
+                $permitsIds = Permission::query()
+                    ->whereIn('slug', $roleData['permissions'])
+                    ->get(['id'])
+                    ->pluck('id')
+                    ->toArray();
 
-                return $role;
-            })
-            ->each(fn (array $role) => MembershipRole::query()->updateOrCreate($role));
+                $role->permissions()->syncWithPivotValues($permitsIds, ['authorizable_type' => Role::class], false);
+
+            });
 
         if (isset($data['address']['address'])) {
             $data['address']['billing_company_id'] = $company->id;
@@ -140,38 +153,27 @@ final class BillingCompanyRepository
 
     public function getServerAllBillingCompanies(Request $request)
     {
-        $bC = auth()->user()->billing_company_id ?? null;
-        if (!$bC) {
-            $data = BillingCompany::with([
-                'users',
-                'addresses',
-                'contacts',
-            ]);
-        } else {
-            $data = BillingCompany::whereId($bC)->with([
-                'users',
-                'addresses',
-                'contacts',
-            ]);
-        }
+        $data = BillingCompany::search(
+            $request->query('query', ''),
+            function (Indexes $searchEngine, string $query, array $options) use ($request) {
+                $config = config('scout.meilisearch.index-settings.'.BillingCompany::class);
 
-        if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
-            $data = $data->search($request->query('query'));
-        }
-        if ($request->sortBy) {
-            if (str_contains($request->sortBy, 'email')) {
-                $data = $data->orderBy('id', (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
-                /**$data = $data->orderBy(Contact::select('email')
-                             ->join('contacts', 'contacts.contactable_id', '=', 'billing_companies.id')
-                             ->whereColumn('contacts.contactable_type', BillingCompany::class), (bool)(json_decode($request->sortDesc)) ? 'desc' : 'asc');*/
-            } else {
-                $data = $data->orderBy($request->sortBy, (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
+                if (isset($request->sortBy) && in_array($request->sortBy, $config['sortableAttributes'])) {
+                    $options['sort'] = [$request->sortBy.':'.Pagination::sortDesc()];
+                }
+
+                if (isset($request->filter)) {
+                    $options['filter'] = $request->filter;
+                }
+
+                return $searchEngine->search($query, $options);
             }
-        } else {
-            $data = $data->orderBy('created_at', 'desc')->orderBy('id', 'asc');
-        }
-
-        $data = $data->paginate($request->itemsPerPage);
+        )
+            ->when(
+                Gate::denies('is-admin'),
+                fn ($query) => $query->where('billing_company_id', $request->user()->billing_company_id),
+            )
+            ->paginate(Pagination::itemsPerPage());
 
         return response()->json([
             'data' => $data->items(),

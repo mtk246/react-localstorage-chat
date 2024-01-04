@@ -52,7 +52,7 @@ definitions:
           - vendor
         script:
           - ln -f -s .env.example .env
-          - ./vendor/bin/pint --test
+          - ./vendor/bin/pint --test --config pint.json -vvv
           ## - ./vendor/bin/phpcs
           ## - ./vendor/bin/pstan
     - step: &deploy-forge

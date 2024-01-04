@@ -8,12 +8,15 @@ use App\Enums\Payments\MethodType;
 use App\Enums\Payments\SourceType;
 use App\Models\Claims\Claim;
 use App\Models\InsurancePlan;
+use App\Models\User;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Cknow\Money\Casts\MoneyDecimalCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\Payments\Payment.
@@ -31,6 +34,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $insurance_plan_id
+ * @property int|null $order
  * @property MethodType $method
  * @property \App\Models\Payments\Batch $batch
  * @property \App\Models\Payments\Card|null $card
@@ -47,6 +51,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereInsurancePlanId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment whereOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentBatchId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment wherePaymentMethod($value)
@@ -58,9 +63,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  *
  * @mixin \Eloquent
  */
-final class Payment extends Model
+final class Payment extends Model implements Auditable
 {
     use HasFactory;
+    use AuditableTrait;
 
     /** @var string[] */
     protected $fillable = [
@@ -74,6 +80,7 @@ final class Payment extends Model
         'note',
         'payment_batch_id',
         'insurance_plan_id',
+        'order',
     ];
 
     /** @var array<string, string> */
@@ -112,5 +119,25 @@ final class Payment extends Model
             ->withPivot(['id'])
             ->withTimestamps()
             ->as('payments');
+    }
+
+    /** @return array<key, string> */
+    public function getLastModifiedAttribute(): array
+    {
+        $lastModified = $this->audits()->latest()->first();
+
+        if (isset($lastModified->user_id)) {
+            $user = User::find($lastModified->user_id);
+
+            return [
+                'user' => $user->profile->first_name.' '.$user->profile->last_name,
+                'roles' => $user->roles()?->get(['name'])->pluck('name'),
+            ];
+        }
+
+        return [
+            'user' => 'Console',
+            'roles' => [],
+        ];
     }
 }

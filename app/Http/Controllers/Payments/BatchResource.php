@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Payments;
 
+use App\Http\Resources\Payments\EobPaymentResource;
 use App\Actions\Payments\GetBatchAction;
 use App\Actions\Payments\StoreBachAction;
 use App\Actions\Payments\UpdateBachAction;
@@ -14,6 +15,7 @@ use App\Http\Requests\Payments\StoreBatchRequest;
 use App\Actions\Payments\AddClaimsToBachAction;
 use App\Actions\Payments\AddServicesToBachAction;
 use App\Enums\Payments\BatchStateType;
+use App\Facades\Pagination;
 use App\Http\Requests\Payments\AddClaimToBatchRequest;
 use App\Http\Requests\Payments\AddServicesToBatchRequest;
 use App\Http\Resources\Enums\ColorsTypeResource;
@@ -48,9 +50,9 @@ final class BatchResource extends Controller
         return response()->json($update->invoke($batch, $request->casted()));
     }
 
-    public function destroy(Request $request): JsonResponse
+    public function destroy(Batch $batch): JsonResponse
     {
-        return response()->json();
+        return response()->json($batch->delete());
     }
 
     public function getStates(): JsonResponse
@@ -81,14 +83,23 @@ final class BatchResource extends Controller
         })->get(['id', 'code', 'description']));
     }
 
-    public function showEob(Eob $eobFile)
+    public function getEobs(Batch $batch): JsonResponse
     {
-        return response()->file($eobFile->file_name);
+        $this->authorize('view', $batch);
+
+        return response()->json(EobPaymentResource::collection(
+            $batch->eobs()->orderBy(Pagination::sortBy(), Pagination::sortDesc())->get()
+        ));
     }
 
-    public function close(Batch $batch): JsonResponse
+    public function showEob(Eob $eobFile)
     {
-        return response()->json(new BatchApiResource($batch->close()));
+        return response()->file(storage_path('app/eobs/'.$eobFile->file_name))->setAutoEtag();
+    }
+
+    public function close(Request $request, Batch $batch): JsonResponse
+    {
+        return response()->json(new BatchApiResource($batch->close($request->get('date', now()->toString()))));
     }
 
     public function storeClaims(AddClaimToBatchRequest $request, AddClaimsToBachAction $add, Batch $batch): JsonResponse

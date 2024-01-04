@@ -21,7 +21,8 @@ final class StoreRulesRequest extends FormRequest
     public function rules()
     {
         return [
-            'insurance_plan_id' => 'required|integer|exists:insurance_plans,id',
+            'insurance_plan_ids' => 'required|array',
+            'insurance_plan_ids.*' => 'required|integer|exists:insurance_plans,id',
             'name' => 'required|string',
             'format' => [
                 'required',
@@ -29,17 +30,18 @@ final class StoreRulesRequest extends FormRequest
             ],
             'responsibilities' => 'nullable|array',
             'responsibilities.*' => 'required|integer|exists:type_catalogs,id',
-            'rules.file' => 'required|array',
+            'rules.file' => 'nullable|array',
             'rules.file.*' => [
-                'required',
+                'nullable',
                 new RuleFormatRule($this->get('format', '')),
             ],
-            'rules.digital.*' => [
-                'required',
+            'rules.json.*' => [
+                'nullable',
                 'array',
                 new RuleFormatRule($this->get('format', '')),
             ],
             'parameters' => 'nullable|array',
+            'note' => 'nullable|string',
         ];
     }
 }
