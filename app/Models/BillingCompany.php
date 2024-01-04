@@ -266,6 +266,9 @@ class BillingCompany extends Model implements Auditable
             'icon' => $this->logo,
             'abbreviation' => $this->abbreviation,
             'contact.email' => $this->contact?->email ?? null,
+            'contacts.email' => $this->contacts->pluck('email')->toArray(),
+            'active' => $this->status,
+            'created_at' => $this->created_at,
         ];
     }
 

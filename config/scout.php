@@ -172,8 +172,26 @@ return [
         'key' => env('MEILISEARCH_KEY'),
         'index-settings' => [
             BillingCompany::class => [
-                'filterableAttributes' => ['tax_id', 'name', 'code', 'abbreviation'],
-                'sortableAttributes' => ['created_at'],
+                'filterableAttributes' => [
+                    'tax_id',
+                    'name',
+                    'code',
+                    'icon',
+                    'abbreviation',
+                    'contact.email',
+                    'contacts.email',
+                    'active',
+                ],
+                'sortableAttributes' => [
+                    'tax_id',
+                    'name',
+                    'code',
+                    'icon',
+                    'abbreviation',
+                    'contact.email',
+                    'contacts.email',
+                    'active',
+                ],
                 'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Claim::class => [
