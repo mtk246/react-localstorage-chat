@@ -598,7 +598,7 @@ Route::prefix('v1')/* ->middleware('audit') */
     ])->group(function () {
         Route::get('/search', [\App\Http\Controllers\LedgerController::class, 'search'])->name('ledger.search');
         Route::get('/{patient}/claims', [\App\Http\Controllers\LedgerController::class, 'getClaims'])
-            ->name('ledger.patients.claims');
+            ->name('ledger.patients.claims'); 
     });
 
     Route::prefix('payments')->middleware([
