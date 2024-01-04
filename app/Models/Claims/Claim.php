@@ -592,7 +592,8 @@ class Claim extends Model implements Auditable
                 ->where('billing_company_id', $this->billing_company_id)
                 ->first()
                 ?->abbreviation,
-            'patient.name' => $this->demographicInformation->patient?->profile->only(['first_name', 'last_name', 'ssn']),
+            'patient' => $this->demographicInformation->patient?->profile->only(['first_name', 'last_name', 'ssn']),
+            'patient.name' => $this->demographicInformation->patient?->profile->fullName(),
             'health_professionals' => $this->demographicInformation->healthProfessionals,
             'policy' => $this->higherOrderPolicy(),
             'policy.number' => $this->higherOrderPolicy()?->policy_number,
