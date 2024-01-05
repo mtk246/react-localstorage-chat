@@ -36,11 +36,14 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $insurance_plan_id
  * @property int|null $order
  * @property MethodType $method
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  * @property \App\Models\Payments\Batch $batch
  * @property \App\Models\Payments\Card|null $card
  * @property \Illuminate\Database\Eloquent\Collection<int, Claim> $claims
  * @property int|null $claims_count
  * @property \App\Models\Payments\Eob|null $eobs
+ * @property array<key, string> $last_modified
  * @property InsurancePlan|null $insurancePlan
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Payment newModelQuery()
@@ -118,7 +121,7 @@ final class Payment extends Model implements Auditable
             ->using(ClaimPayment::class)
             ->withPivot(['id'])
             ->withTimestamps()
-            ->as('payments');
+            ->as('payment');
     }
 
     /** @return array<key, string> */
