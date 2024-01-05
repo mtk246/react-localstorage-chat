@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Payments;
 
+use App\Enums\Payments\SourceType;
 use App\Http\Casts\Payments\StoreBatchWrapper;
 use App\Http\Requests\Traits\HasCastedClass;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 /** @method StoreBatchWrapper casted() */
 final class StoreBatchRequest extends FormRequest
@@ -38,11 +40,13 @@ final class StoreBatchRequest extends FormRequest
             'amount' => 'required|numeric',
             'payments' => 'required|array',
             'payments.*.order' => 'nullable|integer|distinct',
-            'payments.*.source_id' => 'required|integer',
-            'paiments.*.insurance_plan_id' => [
+            'payments.*.source_id' => ['required', 'integer', new Enum(SourceType::class)],
+            'payments.*.insurance_plan_id' => [
+                'required_if:payments.*.source_id,2',
+                'required_if:payments.*.source_id,4',
                 'nullable',
                 'integer',
-                'exists:\App\Models\InsuranceCompany,id',
+                'exists:\App\Models\InsurancePlan,id',
             ],
             'payments.*.payment_date' => 'required|date',
             'payments.*.currency' => 'required|string',
@@ -50,12 +54,12 @@ final class StoreBatchRequest extends FormRequest
             'payments.*.method' => 'required|string',
             'payments.*.reference' => 'nullable|integer',
             'payments.*.card_num' => [
-                Rule::prohibitedIf(fn () => 1 !== $this->method),
+                'prohibited_if:payments.*.method,3',
                 'nullable',
                 'integer',
             ],
             'payments.*.card_date' => [
-                Rule::prohibitedIf(fn () => 1 !== $this->method),
+                'prohibited_if:payments.*.method,3',
                 'nullable',
                 'integer',
             ],
