@@ -607,7 +607,7 @@ class Claim extends Model implements Auditable
                 ?->abbreviation,
             'patient' => $this->demographicInformation->patient?->profile->only(['first_name', 'last_name', 'ssn']),
             'patient.name' => $this->demographicInformation->patient?->profile->fullName(),
-            'health_professionals' => $this->demographicInformation->healthProfessionals,
+            'health_professionals' => $this->demographicInformation?->healthProfessionals,
             'policy' => $this->higherOrderPolicy(),
             'policy.number' => $this->higherOrderPolicy()?->policy_number,
             'insurance_plan' => $this->higherInsurancePlan(),
@@ -622,7 +622,7 @@ class Claim extends Model implements Auditable
                 ->first()
                 ?->status,
             'user_created' => $this->user_created,
-            'follow_up' => $this->denialTrackings->last()->follow_up,
+            'follow_up' => $this->denialTrackings->last()?->follow_up,
         ];
     }
 }
