@@ -33,8 +33,11 @@ final class AddServicesToBatchRequest extends FormRequest
                 $batch->id,
             )],
 
+            'payments.*.claims' => 'nullable|array',
+            'payments.*.claims.*' => ['required', 'integer', Rule::exists('claims', 'id')],
+
             'payments.*.services' => 'required|array',
-            'payments.*.services.*.claim_id' => 'required|integer|exists:claims,id',
+            'payments.*.services.*.claim_id' => 'required|string',
             'payments.*.services.*.service_id' => 'required|integer|exists:services,id',
             'payments.*.services.*.payment' => ['required', 'string', new Money($currency)],
             'payments.*.services.*.exp_adj' => ['required', 'string', new Money($currency)],
