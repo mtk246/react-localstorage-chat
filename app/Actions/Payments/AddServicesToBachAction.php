@@ -21,17 +21,20 @@ final class AddServicesToBachAction
         return DB::transaction(function () use ($batch, $request): BatchResource {
             $request->each(function (AddServicesToBachWrapper $paymentRequest) use ($batch): void {
                 $payment = $batch->payments->where('id', $paymentRequest->getPaymentId())->first();
-                $payment->claims()->sync($paymentRequest->getClaimsIds());
+                $claimsId = $paymentRequest->getClaimsIds();
+
+                if ($claimsId->isNotEmpty()) {
+                    $payment->claims()->sync($claimsId);
+                }
+
                 $payment->claims->each(function (Claim $claim) use ($paymentRequest, $batch) {
-                    $syncServices = $paymentRequest->getServicesSyncData($batch->currency)
-                        ->where('claim_id', $claim->id)
-                        ->toArray();
+                    $syncServices = $paymentRequest->getServicesSyncData($batch->currency)->toArray();
+
+                    $claim->payment->services()->sync($syncServices);
 
                     $servicesData = $paymentRequest->getServices();
-                    $claim->payments->services()->sync($syncServices);
-
-                    $claim->payments->services->each(function (Services $service) use ($servicesData, $batch) {
-                        /** @var ServiceWrapper $adjustments */
+                    $claim->payment->services->each(function (Services $service) use ($servicesData, $batch) {
+                        /* @var ServiceWrapper $adjustments */
                         $adjustments = $servicesData->filter(fn (ServiceWrapper $serviceData) => $serviceData->getServiceId() === $service->id)
                             ->first();
 
