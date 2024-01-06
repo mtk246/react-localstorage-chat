@@ -635,7 +635,7 @@ class ProcedureRepository
         }
     }
 
-    public function getList($company_id = null, $search = '')
+    public function getList($company_id = null, $revenue_code_id = '', $search = '')
     {
         try {
             if (null == $company_id) {
@@ -672,10 +672,13 @@ class ProcedureRepository
             } else {
                 return Procedure::query()
                     ->where('procedures.type', '<>', '4')
-                    ->when('' !== $search, function ($query) use ($search, $company_id) {
-                        $query->where(function ($query) use ($search, $company_id) {
-                            $query->whereHas('companyServices', function ($query) use ($company_id) {
-                                $query->where('company_id', $company_id);
+                    ->when('' !== $search, function ($query) use ($search, $company_id, $revenue_code_id) {
+                        $query->where(function ($query) use ($search, $company_id, $revenue_code_id) {
+                            $query->whereHas('companyServices', function ($query) use ($company_id, $revenue_code_id) {
+                                $query->where('company_id', $company_id)
+                                    ->when(!empty($revenue_code_id), function ($query) use ($revenue_code_id) {
+                                        $query->where('revenue_code_id', $revenue_code_id);
+                                    });
                             })
                             ->where('code', 'like', "%$search%")
                             ->orWhere(function ($query) use ($search) {
@@ -684,9 +687,12 @@ class ProcedureRepository
                                     ->where('code', 'like', "%$search%F");
                             });
                         });
-                    }, function ($query) use ($company_id) {
-                        $query->whereHas('companyServices', function ($query) use ($company_id) {
-                            $query->where('company_id', $company_id);
+                    }, function ($query) use ($company_id, $revenue_code_id) {
+                        $query->whereHas('companyServices', function ($query) use ($company_id, $revenue_code_id) {
+                            $query->where('company_id', $company_id)
+                                ->when(!empty($revenue_code_id), function ($query) use ($revenue_code_id) {
+                                    $query->where('revenue_code_id', $revenue_code_id);
+                                });
                         });
                     })
                     ->with(['companyServices' => function ($query) use ($company_id) {
