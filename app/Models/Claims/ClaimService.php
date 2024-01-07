@@ -33,6 +33,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\Services> $services
  * @property int|null $services_count
  *
+ * @method static \Database\Factories\Claims\ClaimServiceFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService query()

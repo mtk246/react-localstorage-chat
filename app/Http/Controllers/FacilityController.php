@@ -30,7 +30,7 @@ class FacilityController extends Controller
     {
         $rs = $this->facilityRepository->create($request->validated());
 
-        return $rs ? response()->json($rs) : response()->json(__('Error creating facility'), 400);
+        return $rs ? response()->json($rs, 201) : response()->json(__('Error creating facility'), 400);
     }
 
     public function getListFacilityTypes(): JsonResponse

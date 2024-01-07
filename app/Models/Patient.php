@@ -69,6 +69,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscriber> $subscribers
  * @property int|null $subscribers_count
  *
+ * @method static \Database\Factories\PatientFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Patient newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Patient newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Patient query()
