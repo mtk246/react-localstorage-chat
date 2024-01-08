@@ -43,14 +43,18 @@ final class ClaimResource extends JsonResource
                 ?->name,
             'billed_amount' => $this->resource->billed_amount,
             'paid_amount' => $this->resource->paid_amount,
-            'services' => $this->resource->service->services->map(function ($service) {
-                $service->setAttribute('payment', $this->resource->payment->services->where(
-                    'pivot.service_id',
-                    $service->id
-                )->first()?->pivot);
+            'services' => $this->resource
+                ->service
+                ->services
+                ->load(['procedure', 'revenueCode'])
+                ->map(function ($service) {
+                    $service->setAttribute('payment', $this->resource->payment->services->where(
+                        'pivot.service_id',
+                        $service->id
+                    )->first()?->pivot);
 
-                return new ServiceResource($service);
-            }),
+                    return new ServiceResource($service);
+                }),
         ];
     }
 }
