@@ -46,7 +46,7 @@ final class ClaimResource extends JsonResource
             'services' => $this->resource
                 ->service
                 ->services
-                ->load(['procedure', 'revenueCode'])
+                ->load(['procedure', 'revenueCode', 'claimService'])
                 ->map(function ($service) {
                     $service->setAttribute('payment', $this->resource->payment->services->where(
                         'pivot.service_id',
