@@ -46,6 +46,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property Procedure|null $revenueCode
  * @property TypeOfService|null $typeOfService
  *
+ * @method static \Database\Factories\Claims\ServicesFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Services newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Services newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Services query()

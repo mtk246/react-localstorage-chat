@@ -52,6 +52,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $health_professionals_count
  * @property Patient|null $patient
  *
+ * @method static \Database\Factories\Claims\ClaimDemographicInformationFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation query()

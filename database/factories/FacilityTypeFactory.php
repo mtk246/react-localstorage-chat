@@ -19,6 +19,7 @@ final class FacilityTypeFactory extends Factory
     public function definition()
     {
         return [
+            'code' => $this->faker->randomElement([1, 2, 3, 4, 5, 6, 7, 8]),
             'type' => $this->faker->randomElement(['01 - Clinics', '02 - Hospitals', '03 - Labs']),
         ];
     }
