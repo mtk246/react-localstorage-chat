@@ -436,7 +436,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         // 'role:superuser|biller|billingmanager',
     ])->group(function () {
-        Route::post('/', [\App\Http\Controllers\ProcedureController::class, 'createProcedure']);
+        Route::post('/', [\App\Http\Controllers\ProcedureController::class, 'createProcedure'])->name('procedure.create-procedure');
         Route::get('/', [\App\Http\Controllers\ProcedureController::class, 'getAllProcedures']);
         Route::get('/get-all-server', [\App\Http\Controllers\ProcedureController::class, 'getServerAll']);
         Route::get('/get-by-code/{code}', [\App\Http\Controllers\ProcedureController::class, 'getByCode']);
