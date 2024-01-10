@@ -95,3 +95,5 @@
     - [eobs](/{{route}}/{{version}}/payments/eobs)
     - [getters](/{{route}}/{{version}}/payments/getters)
     - [setters](/{{route}}/{{version}}/payments/setters)
+- ## Ledger
+    - [Ledger](/{{route}}/{{version}}/ledger)
