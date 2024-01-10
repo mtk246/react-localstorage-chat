@@ -31,7 +31,7 @@ final class ServiceWrapper extends CastsRequest
         ];
     }
 
-    public function getAdjustments(): Collection
+    public function getAdjustments(): ?Collection
     {
         return $this->castMany('adjust', AdjustmentWrapper::class);
     }
