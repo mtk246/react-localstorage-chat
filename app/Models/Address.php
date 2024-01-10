@@ -37,6 +37,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property Model|\Eloquent $profile
  * @property Model|\Eloquent $user
  *
+ * @method static \Database\Factories\AddressFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Address newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Address newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Address query()

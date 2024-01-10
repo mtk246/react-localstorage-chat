@@ -50,6 +50,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
  * @property int|null $taxonomies_count
  *
+ * @method static \Database\Factories\HealthProfessionalFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional query()
