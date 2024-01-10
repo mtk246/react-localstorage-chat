@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
 /**
  * App\Models\Payments\PaymentService.
  *
+ * @property \Cknow\Money\Money|null $payment
  * @property Collection $adjustments
  * @property int|null $adjustments_count
  *

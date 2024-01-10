@@ -37,19 +37,19 @@ final class AddServicesToBatchRequest extends FormRequest
             'payments.*.claims.*' => ['required', 'integer', Rule::exists('claims', 'id')],
 
             'payments.*.services' => 'required|array',
-            'payments.*.services.*.claim_id' => 'required|string',
             'payments.*.services.*.service_id' => 'required|integer|exists:services,id',
             'payments.*.services.*.payment' => ['required', 'string', new Money($currency)],
             'payments.*.services.*.exp_adj' => ['required', 'string', new Money($currency)],
             'payments.*.services.*.remain' => ['required', 'string', new Money($currency)],
             'payments.*.services.*.ins_amount' => ['required', 'string', new Money($currency)],
+            'payments.*.services.*.claim_id' => 'nullable|string',
             'payments.*.services.*.resp_insurance' => ['nullable', 'string'],
             'payments.*.services.*.pt_resp' => ['required', 'string', new Money($currency)],
             'payments.*.services.*.reason' => ['nullable', 'string'],
             'payments.*.services.*.denial_reason' => ['nullable', 'string'],
             'payments.*.services.*.note' => ['nullable', 'string'],
 
-            'payments.*.services.*.adjust' => 'required|array',
+            'payments.*.services.*.adjust' => 'nullable|array',
             'payments.*.services.*.adjust.*.amount' => ['nullable', 'string', new Money($currency)],
             'payments.*.services.*.adjust.*.adj_reason' => ['nullable', 'string'],
 

@@ -34,7 +34,11 @@ final class StoreBatchRequest extends FormRequest
                 'integer',
                 'exists:\App\Models\Company,id',
             ],
-            'name' => 'required|string|unique:payment_batches,name',
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('payment_batches', 'name')->ignore($this->batch?->id),
+            ],
             'posting_date' => 'nullable|date',
             'currency' => 'required|string',
             'amount' => 'required|numeric',
