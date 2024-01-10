@@ -99,7 +99,7 @@ final class ReportReSource extends Controller
     public function records(Request $request, GetAllRecordsAction $get): JsonResponse
     {
         return response()->json(
-            $get->getAllPatient($request->module, Auth::user())
+            $get->getAllPatient($request, Auth::user())
         );
     }
 

@@ -53,8 +53,11 @@ final class RuleResource extends JsonResource
                 'id' => $type->id,
                 'name' => $type->code.' - '.$type->description,
             ]),
-            'rules' => collect(config('claim.formats.'.(RuleFormatType::INSTITUTIONAL == $this->resource->format ? '2' : '1')))
-                ->map(fn ($format, $formatKey) => new RuleListResource($format, $formatKey, $this->resource->format->value, $this->resource->rules[$formatKey] ?? [])),
+            'rules' => [
+                'raw' => $this->resource->rules,
+                'formatted' => collect(config('claim.formats.'.(RuleFormatType::INSTITUTIONAL == $this->resource->format ? '2' : '1')))
+                    ->map(fn ($format, $formatKey) => new RuleListResource($format, $formatKey, $this->resource->format->value, $this->resource->rules[$formatKey] ?? [])),
+            ],
             'parameters' => $this->resource->parameters,
             'active' => $this->resource->active,
             'note' => $this->resource->note,

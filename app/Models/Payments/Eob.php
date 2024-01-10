@@ -93,4 +93,16 @@ final class Eob extends Model
     {
         return $this->hasManyThrough(Claim::class, Payment::class);
     }
+
+    public function paymentBatch(): HasManyThrough
+    {
+        return $this->HasManyThrough(
+            Batch::class,
+            Payment::class,
+            'id',
+            'id',
+            'payment_id',
+            'payment_batch_id',
+        );
+    }
 }

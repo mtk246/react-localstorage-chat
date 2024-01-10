@@ -516,8 +516,10 @@ final class JSONDictionary extends Dictionary
                         'nonCoveredChargeAmount' => '',
                     ],
                     'assignedNumber' => $service->id,
-                    'serviceDate' => '',
-                    'serviceDateEnd' => '',
+                    'serviceDate' => str_replace('-', '', $service->from_service),
+                    'serviceDateEnd' => !empty($service->to_service)
+                        ? str_replace('-', '', $service->to_service)
+                        : null,
                     'serviceTaxAmount' => '',
                     'facilityTaxAmount' => '',
                     'lineItemControlNumber' => '',
