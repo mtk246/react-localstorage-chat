@@ -173,11 +173,12 @@ abstract class Dictionary implements DictionaryInterface
         $rules = config("claim.formats.{$this->claim->type->value}.{$this->format}");
 
         $customRules = Rules::query()
+            ->where('format', $this->claim->format)
+            ->where('billing_company_id', $this->claim->billing_company_id)
             ->when(
                 $this->rule,
                 fn (Builder $query) => $query->where('id', $this->rule),
-                fn (Builder $query) => $query->where('billing_company_id', $this->claim->billing_company_id)
-                    ->where('format', $this->claim->format)
+                fn (Builder $query) => $query
                     ->whereHas('insurancePlans', fn (Builder $query) => $query->where('insurance_plans.id', $insurancePlan?->id ?? $this->insurancePlan?->id))
                     ->whereHas('typesOfResponsibilities', fn (Builder $query) => $query->whereIn('code', $this->insurancePlan
                         ?->insurancePolicies

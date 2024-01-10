@@ -14,4 +14,6 @@ final class TypeReportAllRecords extends Enum
     public const GENERAL_HEALTHCARE_PROFESSIONAL = 'general_healthcare_professional';
     public const PAYER_MIX = 'payer_mix';
     public const PROFESSIONAL_PRODUCTIVITY = 'professional_productivity';
+    public const BAD_DEBT_COST = 'bad_debt_cost';
+    public const CHANGE_BY_MODULE = 'change_by_module';
 }

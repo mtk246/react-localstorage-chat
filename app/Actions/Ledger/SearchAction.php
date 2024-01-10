@@ -11,14 +11,19 @@ final class SearchAction
 {
     public function search($filters)
     {
-        $query = Patient::search();
+        $query = Patient::query();
 
         if (isset($filters['claim_number'])) {
             $query->with('claimDemographics.claim')
                 ->whereHas('claimDemographics.claim', fn ($q) => $q->where('code', $filters['claim_number']));
         }
 
-        if (array_key_exists(['first_name', 'last_name', 'dob', 'ssn'], $filters)) {
+        if (
+            array_key_exists('first_name', $filters)
+            || array_key_exists('last_name', $filters)
+            || array_key_exists('dob', $filters)
+            || array_key_exists('ssn', $filters)
+        ) {
             $query->with('profile')
                 ->whereHas('profile', function ($q) use ($filters): void {
                     $q->when(isset($filters['first_name']), fn ($query) => $query->whereRaw(

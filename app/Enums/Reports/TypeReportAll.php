@@ -43,4 +43,14 @@ enum TypeReportAll: string implements TypeInterface
     #[NameAttribute('professional_productivity')]
     #[PublicAttribute(true)]
     case TPEMOBKSKL = 'TPEMOBKSKL';
+
+    #[TextAttribute('view_bad_debt_cost')]
+    #[NameAttribute('bad_debt_cost')]
+    #[PublicAttribute(true)]
+    case WSTRTDBWPZ = 'WSTRTDBWPZ';
+
+    #[TextAttribute('view_change_by_module')]
+    #[NameAttribute('change_by_module')]
+    #[PublicAttribute(true)]
+    case ZHJZLMVKWP = 'ZHJZLMVKWP';
 }

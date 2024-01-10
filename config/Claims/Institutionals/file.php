@@ -916,21 +916,23 @@ return [
         ],
     ],
     '39.a' => [
-        'type' => RuleType::NONE->value,
-        'description' => null,
-        'value' => [
-        ],
+        'type' => RuleType::SINGLE->value,
+        'description' => 'Claim value information code',
+        'value' => ['name' => 'Claim value code', 'id' => 'claimValueInformation:valueCode'],
         'values' => [
-            'common' => [],
+            'common' => [
+                ['name' => 'Claim value code', 'id' => 'claimValueInformation:valueCode'],
+            ],
         ],
     ],
     '39.b' => [
-        'type' => RuleType::NONE->value,
-        'description' => null,
-        'value' => [
-        ],
+        'type' => RuleType::SINGLE->value,
+        'description' => 'Claim value information code amount',
+        'value' => ['name' => 'Claim value code amount', 'id' => 'claimValueInformation:valueCodeAmount'],
         'values' => [
-            'common' => [],
+            'common' => [
+                ['name' => 'Claim value code amount', 'id' => 'claimValueInformation:valueCodeAmount'],
+            ],
         ],
     ],
     '39.c' => [
@@ -1540,7 +1542,7 @@ return [
             ],
         ],
     ],
-    '67l' => [
+    '67.l' => [
         'type' => RuleType::SINGLE_ARRAY->value,
         'description' => 'diagnosis - code poa',
         'value' => ['name' => 'diagnosis code poa', 'id' => 'ClaimDiagnosis:code_poa'],

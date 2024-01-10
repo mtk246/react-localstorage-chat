@@ -14,9 +14,9 @@ final class AddServicesToBachWrapper extends CastsRequest
         return $this->getInt('id');
     }
 
-    public function getClaimsIds(): array
+    public function getClaimsIds(): Collection
     {
-        return $this->getCollect('services')->pluck(['claim_id'])->toArray();
+        return $this->getCollect('claims');
     }
 
     public function getServicesSyncData(string $currency): Collection

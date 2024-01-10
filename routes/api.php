@@ -174,11 +174,11 @@ Route::prefix('v1')/* ->middleware('audit') */
     });
 
     Route::prefix('facility')->group(function () {
-        Route::get('/get-all-server', [\App\Http\Controllers\FacilityController::class, 'getServerAll'])->middleware(['auth:api']);
+        Route::get('/get-all-server', [\App\Http\Controllers\FacilityController::class, 'getServerAll'])->name('facility.get.all.server')->middleware(['auth:api']);
         Route::get('/get-list-billing-companies', [\App\Http\Controllers\FacilityController::class, 'getListBillingCompanies'])->middleware(['auth:api']);
         Route::post('/', [\App\Http\Controllers\FacilityController::class, 'create'])->middleware([
             'auth:api',
-        ]);
+        ])->name('facility.create');
         Route::get('/', [\App\Http\Controllers\FacilityController::class, 'getAllFacilities'])->middleware([
             'auth:api',
         ]);
@@ -194,10 +194,10 @@ Route::prefix('v1')/* ->middleware('audit') */
         ]);
         Route::put('/{id}', [\App\Http\Controllers\FacilityController::class, 'updateFacility'])->middleware([
             'auth:api',
-        ]);
+        ])->name('facility.update');
         Route::patch('/{id}/change-status', [\App\Http\Controllers\FacilityController::class, 'changeStatus'])->middleware([
             'auth:api',
-        ]);
+        ])->name('facility.change-status');
         Route::get('/{id}/get-by-name', [\App\Http\Controllers\FacilityController::class, 'getByName'])->middleware([
             'auth:api',
         ]);

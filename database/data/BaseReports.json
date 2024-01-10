@@ -166,5 +166,29 @@
         "configuration": [],
         "favorite": false,
         "tableu": false
+    },
+    {
+        "id": "01229C734819911EEB20257ACS",
+        "name": "Bad Debt Cost Report",
+        "description": "Report reflecting the accounts that a company will be unable to collect.",
+        "type": 1,
+        "url": "WSTRTDBWPZ",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false,
+        "tableu": false
+    },
+    {
+        "id": "01229C734819911EEB20227ACS",
+        "name": "Change by module",
+        "description": "Report that reflects the actions executed by users.",
+        "type": 1,
+        "url": "ZHJZLMVKWP",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false,
+        "tableu": false
     }
 ]
