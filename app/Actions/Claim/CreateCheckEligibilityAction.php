@@ -16,9 +16,7 @@ final class CreateCheckEligibilityAction
 {
     public function invoke(string $token, array $data): ?array
     {
-        try {
-            DB::beginTransaction();
-
+        return DB::transaction(function () use ($token, $data) {
             $patient = Patient::query()
                 ->with(
                     [
@@ -189,15 +187,9 @@ final class CreateCheckEligibilityAction
                 'note' => ' The patient will pay for the service',
             ]);
 
-            DB::commit();
-
             return [
                 'insurance_policies' => $insurancePolicies,
             ];
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            return null;
-        }
+        });
     }
 }
