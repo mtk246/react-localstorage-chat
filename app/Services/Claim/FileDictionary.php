@@ -670,6 +670,7 @@ final class FileDictionary extends Dictionary
                 'federal_tax_value' => !empty($this->company->ein)
                     ? 'EIN'
                     : '',
+                'ssn' => '',
                 'ein' => str_replace('-', '', $this->company->ein ?? ''),
                 'address' => substr($companyAddress?->{$key} ?? '', 0, 55),
                 'city' => substr($companyAddress?->{$key} ?? '', 0, 30),
