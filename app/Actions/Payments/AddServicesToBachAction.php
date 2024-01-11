@@ -38,7 +38,7 @@ final class AddServicesToBachAction
                         $adjustments = $servicesData->filter(fn (ServiceWrapper $serviceData) => $serviceData->getServiceId() === $service->id)
                             ->first();
 
-                        $adjustments?->getAdjustments()->each(fn (AdjustmentWrapper $serviceData) => $service->pivot->adjustments()->updateOrCreate(
+                        $adjustments?->getAdjustments()?->each(fn (AdjustmentWrapper $serviceData) => $service->pivot->adjustments()->updateOrCreate(
                             ['payment_service_id' => $service->pivot->id, 'id' => $serviceData->getAdjustmentId()],
                             $serviceData->getData($batch->currency)
                         ));

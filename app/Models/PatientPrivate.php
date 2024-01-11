@@ -24,6 +24,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $audits_count
  * @property \App\Models\Patient $patient
  *
+ * @method static \Database\Factories\PatientPrivateFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|PatientPrivate newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PatientPrivate newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PatientPrivate query()

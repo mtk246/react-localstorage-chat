@@ -49,7 +49,7 @@ final class AddServicesToBatchRequest extends FormRequest
             'payments.*.services.*.denial_reason' => ['nullable', 'string'],
             'payments.*.services.*.note' => ['nullable', 'string'],
 
-            'payments.*.services.*.adjust' => 'required|array',
+            'payments.*.services.*.adjust' => 'nullable|array',
             'payments.*.services.*.adjust.*.amount' => ['nullable', 'string', new Money($currency)],
             'payments.*.services.*.adjust.*.adj_reason' => ['nullable', 'string'],
 

@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $payment_service_id
  * @property string $currency
- * @property string $amount
+ * @property \Cknow\Money\Money|null $amount
  * @property string $adj_reason
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
