@@ -32,8 +32,11 @@ final class CreateCheckEligibilityAction
             $insurancePolicies = [];
             $company = Company::query()
                 ->find($data['demographic_information']['company_id']);
+            $patientPolicies = $patient->insurancePolicies
+                ->where('policy_number', '<>', 'Self Pay')
+                ->where('billing_company_id', $data['billing_company_id']) ?? [];
 
-            foreach ($patient->insurancePolicies ?? [] as $insurancePolicy) {
+            foreach ($patientPolicies as $insurancePolicy) {
                 if (false == $insurancePolicy->status) {
                     continue;
                 }
@@ -157,8 +160,13 @@ final class CreateCheckEligibilityAction
                 return $a_index - $b_index;
             });
 
+            $selfPayPatientPolicy = $patient->insurancePolicies
+                ->where('policy_number', 'Self Pay')
+                ->where('billing_company_id', $data['billing_company_id'])
+                ->first();
+
             array_push($insurancePolicies, [
-                'id' => 0,
+                'id' => $selfPayPatientPolicy->id ?? 0,
                 'own' => true,
                 'status' => true,
                 'eff_date' => null,
