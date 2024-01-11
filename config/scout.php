@@ -401,7 +401,16 @@ return [
                     'type',
                     'clasifications',
                 ],
-                'sortableAttributes' => ['created_at'],
+                'sortableAttributes' => [
+                    'code',
+                    'public_note',
+                    'start_date',
+                    'end_date',
+                    'short_description',
+                    'description',
+                    'type',
+                    'clasifications',
+                ],
                 'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],
             ],
             Diagnosis::class => [
