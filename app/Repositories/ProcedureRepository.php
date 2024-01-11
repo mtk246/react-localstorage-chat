@@ -218,7 +218,7 @@ class ProcedureRepository
             ->with(['procedureFees' => function ($q) use ($id) {
                 $q->where('procedure_id', $id)->with('insuranceLabelFee');
             }])
-            ->paginate();
+            ->paginate(Pagination::itemsPerPage());
 
         return !is_null($procedure) ? $procedure : null;
     }
