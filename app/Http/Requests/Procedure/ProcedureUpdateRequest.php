@@ -31,7 +31,7 @@ class ProcedureUpdateRequest extends FormRequest
             'description' => ['required', 'string'],
             'insurance_companies' => ['nullable', 'array'],
             'specific_insurance_company' => ['boolean', 'nullable'],
-            'start_date' => ['required', 'date'],
+            'start_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
 
             'type' => ['required', new Enum(ProcedureType::class)],
