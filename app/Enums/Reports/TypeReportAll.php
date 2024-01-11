@@ -53,4 +53,9 @@ enum TypeReportAll: string implements TypeInterface
     #[NameAttribute('change_by_module')]
     #[PublicAttribute(true)]
     case ZHJZLMVKWP = 'ZHJZLMVKWP';
+
+    #[TextAttribute('view_daily_insurance_responsibility_aging')]
+    #[NameAttribute('daily_insurance_responsibility_aging')]
+    #[PublicAttribute(true)]
+    case GTGFOJQBHQ = 'GTGFOJQBHQ';
 }
