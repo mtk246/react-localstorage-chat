@@ -703,6 +703,7 @@ final class FileDictionary extends Dictionary
                 'federal_tax_value' => (!empty($federalTax) && ($federalTax == str_replace('-', '', $billingProvider->getAttribute('ein') ?? '')))
                     ? 'EIN'
                     : '',
+                'ssn' => '',
                 'ein' => str_replace('-', '', $billingProvider->ein ?? ''),
                 'address' => substr($billingProviderAddress?->{$key} ?? '', 0, 55),
                 'city' => substr($billingProviderAddress?->{$key} ?? '', 0, 30),
@@ -749,6 +750,7 @@ final class FileDictionary extends Dictionary
                 'code_area' => str_replace('-', '', substr($billingProviderContact?->phone ?? '', 0, 3)),
                 'phone' => str_replace('-', '', substr($billingProviderContact?->phone ?? '', 3, 10)),
                 'phone_fax' => str_replace('-', '', substr($billingProviderContact?->phone ?? $billingProviderContact?->fax ?? '', 0, 10)),
+                'ssn' => $billingProvider->profile?->ssn ?? '',
                 default => $billingProvider->{$key} ?? '',
             };
         }
