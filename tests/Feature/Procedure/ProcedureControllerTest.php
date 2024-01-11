@@ -13,10 +13,20 @@ final class ProcedureControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testItGetAllProcedures()
+    public function testItGetServerAll()
     {
         $this->markTestSkipped('skip until scout is fixed');
 
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->actingAs($user)->getJson('/api/v1/procedure/get-all-server');
+
+        $response->assertStatus(200);
+    }
+
+    public function testItGetAllProcedures()
+    {
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -150,16 +160,6 @@ final class ProcedureControllerTest extends TestCase
         ]);
 
         $response->assertStatus(422);
-    }
-
-    public function testItGetServerAll()
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
-        $response = $this->actingAs($user)->getJson('/api/v1/procedure/get-all-server');
-
-        $response->assertStatus(200);
     }
 
     public function testItGetMacLocalitiesLists()
