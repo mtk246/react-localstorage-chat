@@ -596,6 +596,17 @@ final class FileDictionary extends Dictionary
         ?->{$key} ?? '';
     }
 
+    protected function getFacilityTaxonomyAttribute(string $key): string
+    {
+        return (string) $this->claim
+        ->demographicInformation
+        ->facility
+        ?->taxonomies
+        ->where('taxonomies.primary', true)
+        ->first()
+        ?->{$key} ?? '';
+    }
+
     protected function getFacilityAddressAttribute(string $key, string $entry): string
     {
         $value = (string) $this->claim
