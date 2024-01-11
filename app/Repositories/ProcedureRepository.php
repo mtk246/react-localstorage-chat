@@ -212,12 +212,13 @@ class ProcedureRepository
             'insuranceCompanies',
             'diagnoses',
             'modifiers',
-            'macLocalities' => function ($query) use ($id) {
-                $query->with(['procedureFees' => function ($q) use ($id) {
-                    $q->where('procedure_id', $id)->with('insuranceLabelFee');
-                }]);
-            },
         ])->first();
+
+        $procedure->mac_localities = $procedure->macLocalities()
+            ->with(['procedureFees' => function ($q) use ($id) {
+                $q->where('procedure_id', $id)->with('insuranceLabelFee');
+            }])
+            ->paginate();
 
         return !is_null($procedure) ? $procedure : null;
     }
