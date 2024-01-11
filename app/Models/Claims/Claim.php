@@ -458,9 +458,34 @@ class Claim extends Model implements Auditable
 
     public function setInsurancePolicies(Collection $insurancePolicies): void
     {
-        $this
+        if ($insurancePolicies->isEmpty()) {
+            $insurancePolicy = InsurancePolicy::create([
+                'own' => true,
+                'status' => true,
+                'dual_plan' => false,
+                'policy_number' => 'Self Pay',
+                'group_number' => 'Self Pay',
+                'eff_date' => null,
+                'end_date' => null,
+                'insurance_policy_type_id' => null,
+                'type_responsibility_id' => null,
+                'release_info' => false,
+                'assign_benefits' => false,
+                'patient_id' => $this->demographicInformation->patient_id,
+                'insurance_plan_id' => null,
+                'plan_type_id' => null,
+                'billing_company_id' => $this->billing_company_id,
+                'complementary_policy_id' => null,
+            ]);
+
+            $this
             ->insurancePolicies()
-            ->sync($insurancePolicies->toArray());
+            ->sync([$insurancePolicy->id => ['order' => 1]]);
+        } else {
+            $this
+                ->insurancePolicies()
+                ->sync($insurancePolicies->toArray());
+        }
     }
 
     public function setStates(int $status, ?int $subStatus, ?string $note): PrivateNote
