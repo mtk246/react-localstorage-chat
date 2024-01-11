@@ -19,7 +19,10 @@ final class ColorTypeCast implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes)
     {
-        return new ColorTypeResource($this->enumClass::from((int) $value), $this->enumClass);
+        return new ColorTypeResource($this->enumClass::from(is_object($value)
+            ? $value->value
+            : (int) $value
+        ), $this->enumClass);
     }
 
     /**
