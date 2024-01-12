@@ -6,7 +6,6 @@ namespace Database\Factories;
 
 use App\Models\BillingCompany;
 use App\Models\Company;
-use App\Models\FacilityType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,8 +13,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 final class FacilityFactory extends Factory
 {
-    protected $model = Facility::class;
-
     /**
      * Define the model's default state.
      *
@@ -27,18 +24,8 @@ final class FacilityFactory extends Factory
             'name' => $this->faker->word(),
             'npi' => $this->faker->uuid(),
             'code' => $this->faker->uuid(),
-            'nickname' => $this->faker->userName(),
-            'abbreviation' => 'ABBFAC',
+            'other_name' => $this->faker->word(),
         ];
-    }
-
-    public function withFacilityType()
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'facility_type_id' => FacilityType::factory()->create(),
-            ];
-        });
     }
 
     public function withBillingCompany()

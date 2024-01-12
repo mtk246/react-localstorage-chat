@@ -11,6 +11,8 @@ use App\Http\Casts\Claims\ClaimServicesWrapper;
 use App\Http\Casts\Claims\DemographicInformationWrapper;
 use App\Models\BillingCompany;
 use App\Models\InsurancePolicy;
+use App\Models\Payments\ClaimPayment;
+use App\Models\Payments\Payment;
 use App\Models\PrivateNote;
 use App\Models\User;
 use App\Traits\Auditing\CustomAuditable as AuditableTrait;
@@ -68,6 +70,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, InsurancePolicy> $insurancePolicies
  * @property int|null $insurance_policies_count
  * @property \App\Models\Claims\PatientAdditionalInformation|null $patientInformation
+ * @property \Illuminate\Database\Eloquent\Collection<int, Payment> $payments
+ * @property int|null $payments_count
  * @property \App\Models\Claims\ClaimService|null $service
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatus> $status
  * @property int|null $status_count
@@ -206,6 +210,15 @@ class Claim extends Model implements Auditable
     public function claimBatchs()
     {
         return $this->belongsToMany(ClaimBatch::class)->withTimestamps();
+    }
+
+    public function payments(): BelongsToMany
+    {
+        return $this->belongsToMany(Payment::class, 'claim_payment')
+            ->using(ClaimPayment::class)
+            ->withPivot(['id'])
+            ->withTimestamps()
+            ->as('payment');
     }
 
     public function scopeSearch($query, $search)
@@ -594,7 +607,7 @@ class Claim extends Model implements Auditable
                 ?->abbreviation,
             'patient' => $this->demographicInformation->patient?->profile->only(['first_name', 'last_name', 'ssn']),
             'patient.name' => $this->demographicInformation->patient?->profile->fullName(),
-            'health_professionals' => $this->demographicInformation->healthProfessionals,
+            'health_professionals' => $this->demographicInformation?->healthProfessionals,
             'policy' => $this->higherOrderPolicy(),
             'policy.number' => $this->higherOrderPolicy()?->policy_number,
             'insurance_plan' => $this->higherInsurancePlan(),
@@ -609,7 +622,7 @@ class Claim extends Model implements Auditable
                 ->first()
                 ?->status,
             'user_created' => $this->user_created,
-            'follow_up' => $this->denialTrackings->last()->follow_up,
+            'follow_up' => $this->denialTrackings->last()?->follow_up,
         ];
     }
 }
