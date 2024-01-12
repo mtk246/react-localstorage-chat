@@ -1480,6 +1480,18 @@ return [
             ],
         ],
     ],
+    '32.B' => [
+        'type' => RuleType::MULTIPLE->value,
+        'description' => 'Facility secondary identifier',
+        'length' => 20,
+        'value' => [],
+        'values' => [
+            'common' => [
+                ['name' => 'Facility npi', 'id' => 'facility:npi'],
+                ['name' => 'Facility taxonomy code primary', 'id' => 'facilityTaxonomy:tax_id'],
+            ],
+        ],
+    ],
     '33.A0' => [
         'type' => RuleType::MULTIPLE->value,
         'description' => 'Billing provider name',
@@ -1609,6 +1621,19 @@ return [
                 ['name' => 'Billing provider phone code', 'id' => 'companyContact:code_area|0'],
                 ['name' => 'Billing provider phone number', 'id' => 'companyContact:phone|0'],
                 ['name' => 'Billing provider npi', 'id' => 'billingProvider:npi'],
+            ],
+        ],
+    ],
+    '33.B' => [
+        'type' => RuleType::MULTIPLE->value,
+        'description' => 'Billing provider secondary identifier',
+        'length' => 20,
+        'value' => [],
+        'values' => [
+            'common' => [
+                ['name' => 'Billing provider npi', 'id' => 'billingProvider:npi'],
+                ['name' => 'Billing provider ssn', 'id' => 'billingProvider:ssn'],
+                ['name' => 'Billing provider taxonomy code primary', 'id' => 'billingProviderTaxonomy:tax_id'],
             ],
         ],
     ],
