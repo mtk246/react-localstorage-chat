@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Facades\Pagination;
 use App\Http\Resources\Procedure\ListModifierResource;
 use App\Models\Company;
 use App\Models\Diagnosis;
@@ -39,7 +40,7 @@ class ProcedureRepository
             DB::beginTransaction();
             $procedure = Procedure::create([
                 'code' => $data['code'],
-                'start_date' => $data['start_date'],
+                'start_date' => $data['start_date'] ?? null,
                 'end_date' => $data['end_date'] ?? null,
                 'short_description' => $data['short_description'],
                 'description' => $data['description'],
@@ -151,7 +152,7 @@ class ProcedureRepository
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return null;
+            throw $e;
         }
     }
 
@@ -169,21 +170,22 @@ class ProcedureRepository
 
     public function getServerAllProcedures(Request $request)
     {
-        $data = Procedure::with([
-            'publicNote',
-        ]);
+        $data = Procedure::search(
+            $request->query('query', ''),
+            function (Indexes $searchEngine, string $query, array $options) use ($request) {
+                $config = config('scout.meilisearch.index-settings.'.Procedure::class);
 
-        if (!empty($request->query('query')) && '{}' !== $request->query('query')) {
-            $data = $data->search($request->query('query'));
-        }
+                if (isset($request->sortBy) && in_array($request->sortBy, $config['sortableAttributes'])) {
+                    $options['sort'] = [$request->sortBy.':'.Pagination::sortDesc()];
+                }
 
-        if ($request->sortBy) {
-            $data = $data->orderBy($request->sortBy, (bool) (json_decode($request->sortDesc)) ? 'desc' : 'asc');
-        } else {
-            $data = $data->orderBy('created_at', 'desc')->orderBy('id', 'asc');
-        }
+                if (isset($request->filter)) {
+                    $options['filter'] = $request->filter;
+                }
 
-        $data = $data->paginate($request->itemsPerPage ?? 10);
+                return $searchEngine->search($query, $options);
+            }
+        )->paginate(Pagination::itemsPerPage());
 
         return response()->json([
             'data' => $data->items(),
@@ -210,12 +212,13 @@ class ProcedureRepository
             'insuranceCompanies',
             'diagnoses',
             'modifiers',
-            'macLocalities' => function ($query) use ($id) {
-                $query->with(['procedureFees' => function ($q) use ($id) {
-                    $q->where('procedure_id', $id)->with('insuranceLabelFee');
-                }]);
-            },
         ])->first();
+
+        $procedure->mac_localities = $procedure->macLocalities()
+            ->with(['procedureFees' => function ($q) use ($id) {
+                $q->where('procedure_id', $id)->with('insuranceLabelFee');
+            }])
+            ->paginate(Pagination::itemsPerPage());
 
         return !is_null($procedure) ? $procedure : null;
     }
@@ -307,7 +310,7 @@ class ProcedureRepository
 
             $procedure->update([
                 'code' => $data['code'],
-                'start_date' => $data['start_date'],
+                'start_date' => $data['start_date'] ?? null,
                 'end_date' => $data['end_date'] ?? null,
                 'short_description' => $data['short_description'],
                 'description' => $data['description'],
@@ -635,7 +638,7 @@ class ProcedureRepository
         }
     }
 
-    public function getList($company_id = null, $search = '')
+    public function getList($company_id = null, $revenue_code_id = '', $search = '')
     {
         try {
             if (null == $company_id) {
@@ -672,10 +675,13 @@ class ProcedureRepository
             } else {
                 return Procedure::query()
                     ->where('procedures.type', '<>', '4')
-                    ->when('' !== $search, function ($query) use ($search, $company_id) {
-                        $query->where(function ($query) use ($search, $company_id) {
-                            $query->whereHas('companyServices', function ($query) use ($company_id) {
-                                $query->where('company_id', $company_id);
+                    ->when('' !== $search, function ($query) use ($search, $company_id, $revenue_code_id) {
+                        $query->where(function ($query) use ($search, $company_id, $revenue_code_id) {
+                            $query->whereHas('companyServices', function ($query) use ($company_id, $revenue_code_id) {
+                                $query->where('company_id', $company_id)
+                                    ->when(!empty($revenue_code_id), function ($query) use ($revenue_code_id) {
+                                        $query->where('revenue_code_id', $revenue_code_id);
+                                    });
                             })
                             ->where('code', 'like', "%$search%")
                             ->orWhere(function ($query) use ($search) {
@@ -684,9 +690,12 @@ class ProcedureRepository
                                     ->where('code', 'like', "%$search%F");
                             });
                         });
-                    }, function ($query) use ($company_id) {
-                        $query->whereHas('companyServices', function ($query) use ($company_id) {
-                            $query->where('company_id', $company_id);
+                    }, function ($query) use ($company_id, $revenue_code_id) {
+                        $query->whereHas('companyServices', function ($query) use ($company_id, $revenue_code_id) {
+                            $query->where('company_id', $company_id)
+                                ->when(!empty($revenue_code_id), function ($query) use ($revenue_code_id) {
+                                    $query->where('revenue_code_id', $revenue_code_id);
+                                });
                         });
                     })
                     ->with(['companyServices' => function ($query) use ($company_id) {

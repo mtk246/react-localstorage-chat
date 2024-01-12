@@ -254,7 +254,9 @@ class Procedure extends Model implements Auditable
             'short_description' => $this->short_description,
             'description' => $this->description,
             'type' => $this->type->value,
-            'clasifications' => $this->clasifications,
+            'clasification.general' => $this->clasifications['general']?->resource->getName(),
+            'clasification.specific' => $this->clasifications['specific']?->resource->getName(),
+            'clasification.sub_specific' => $this->clasifications['sub_specific']?->resource->getName(),
         ];
     }
 }
