@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Ledger;
 
+use App\Models\Claims\ClaimStatus;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 final class ClaimDetailResource extends JsonResource
@@ -22,7 +23,7 @@ final class ClaimDetailResource extends JsonResource
             'code' => $this->resource->claim->code,
             'submiter_name' => $this->resource->claim->submiter_name,
             'created_at' => $this->resource->claim->created_at,
-            'status' => $this->resource->claim->claimStatusClaims->first()->claimStatus,
+            'status' => $this->getStatusData(),
             'privateNote' => $this->resource->claim->private_note,
             'billed_amount' => $this->resource->claim->billed_amount,
             'amount_paid' => $this->resource->claim->amount_paid,
@@ -31,8 +32,25 @@ final class ClaimDetailResource extends JsonResource
             'user_created' => $this->resource->claim->user_created,
             'charge' => $this->resource->claim->billed_amount, // charge field in claim_demographic_information model
             'services' => ClaimServiceResource::collection($this->resource->claim->service->services),
-            'health_professional' => $this->resource->healthProfessionals->first(),
+            'health_professional' => $this->getHealthProfessionalData(),
             'insurance_policies' => $this->resource->claim->insurancePolicies->first()->insurancePlan,
         ];
+    }
+
+    private function getHealthProfessionalData()
+    {
+        $healthProfessional = $this->resource->healthProfessionals->first();
+
+        if ($healthProfessional) {
+            $healthProfessional->load(['profile']);
+        }
+
+        return $healthProfessional ?? null;
+    }
+
+    private function getStatusData()
+    {
+        $claimStatusId = $this->resource->claim->claimStatusClaims->where('claim_status_type', ClaimStatus::class)->first();
+        return ClaimStatus::find($claimStatusId?->claim_status_id) ?? null;
     }
 }
