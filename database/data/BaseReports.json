@@ -190,5 +190,17 @@
         "configuration": [],
         "favorite": false,
         "tableu": false
+    },
+    {
+        "id": "01HDPRCFVYQYJ7JSPZ4QDBFJNS",
+        "name": "Daily insurance responsibility aging",
+        "description": "Report that reflects the actions executed by users.",
+        "type": 1,
+        "url": "ZHJZLMVKWP",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false,
+        "tableu": false
     }
 ]
