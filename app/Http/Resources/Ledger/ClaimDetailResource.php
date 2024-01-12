@@ -50,8 +50,8 @@ final class ClaimDetailResource extends JsonResource
 
     private function getStatusData()
     {
-        $claimStatusId = $this->resource->claim->claimStatusClaims->where('claim_status_type', ClaimStatus::class)->first();
+        $claimStatus = $this->resource->claim->claimStatusClaims->where('claim_status_type', ClaimStatus::class)->first();
 
-        return ClaimStatus::find($claimStatusId?->claim_status_id) ?? null;
+        return $claimStatus->claimStatus ?? null;
     }
 }
