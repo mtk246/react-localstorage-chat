@@ -18,11 +18,11 @@ final class GetClaimsPatientAction
                 $query->orderBy('created_at', 'desc');
             },
             'claimDemographics.claim.service',
-            'claimDemographics.healthProfessionals.profile',
             'claimDemographics.healthProfessionals' => function ($query) {
                 $query->wherePivot('field_id', 5)
                     ->orWherePivot('field_id', 1)
-                    ->orWherePivot('field_id', 76);
+                    ->orWherePivot('field_id', 76)
+                    ->with(['profile']);
             },
             'claimDemographics.claim.insurancePolicies.insurancePlan',
             'claimDemographics.company',
