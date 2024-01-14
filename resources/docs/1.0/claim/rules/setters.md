@@ -26,7 +26,8 @@
   "name": "test test test",
   "format": "institutional",
   "billing_company_id": 1,
-  "insurance_plan_id": 1,
+  "insurance_company_ids": [1],
+  "insurance_plan_ids": [1],
   "rules": {
     "file": {
       "1a":["demographicInformation.company.name"]
@@ -108,7 +109,8 @@
   "name": "test test test",
   "format": "institutional",
   "billing_company_id": 1,
-  "insurance_plan_id": 1,
+  "insurance_company_ids": [1],
+  "insurance_plan_ids": [1],
   "rules": {
     "file": {
       "1a":["demographicInformation.company.name"]
