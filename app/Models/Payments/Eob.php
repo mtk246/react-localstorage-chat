@@ -29,6 +29,8 @@ use Illuminate\Support\Collection;
  * @property \Illuminate\Support\Collection|null $claims
  * @property string|null $file_url
  * @property \App\Models\Payments\Payment $payment
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Payments\Batch> $paymentBatch
+ * @property int|null $payment_batch_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Eob newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Eob newQuery()
