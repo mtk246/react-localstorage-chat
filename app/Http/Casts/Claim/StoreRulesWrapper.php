@@ -32,6 +32,11 @@ final class StoreRulesWrapper extends CastsRequest
             : $this->user->billingCompanies->first()?->id;
     }
 
+    public function getInsuranceCompanies(): array
+    {
+        return $this->getArray('insurance_company_ids');
+    }
+
     public function getInsurancePlans(): array
     {
         return $this->getArray('insurance_plan_ids');
