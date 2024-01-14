@@ -6,6 +6,7 @@ namespace App\Models\Claims;
 
 use App\Enums\Claim\RuleFormatType;
 use App\Models\BillingCompany;
+use App\Models\InsuranceCompany;
 use App\Models\InsurancePlan;
 use App\Models\TypeCatalog;
 use App\Traits\Auditing\CustomAuditable as AuditableTrait;
@@ -95,6 +96,11 @@ final class Rules extends Model implements Auditable
         return $this->belongsToMany(TypeCatalog::class, 'claim_rule_type_responsibility', 'claim_rule_id', 'type_responsibility_id')->withTimestamps();
     }
 
+    public function insuranceCompanies(): BelongsToMany
+    {
+        return $this->belongsToMany(InsuranceCompany::class, 'claim_rule_insurance_company', 'claim_rule_id')->withTimestamps();
+    }
+
     public function insurancePlans(): BelongsToMany
     {
         return $this->BelongsToMany(
@@ -112,7 +118,8 @@ final class Rules extends Model implements Auditable
             'description' => $this->description,
             'billing_company_id' => $this->billing_company_id,
             'billing_company' => $this->billingCompany?->only(['code', 'name', 'abbreviation']),
-            'insurance_plans' => $this->insurancePlan?->only(['code', 'name', 'eff_date']),
+            'insurance_companies' => $this->insurancePlan?->only(['id', 'code', 'name']),
+            'insurance_plans' => $this->insurancePlan?->only(['id', 'code', 'name', 'eff_date']),
         ];
     }
 }
