@@ -41,7 +41,7 @@ use Illuminate\Http\Request;
 final class ReportReSource extends Controller
 {
     public function index(GetAllRequest $request, GetReportAction $get): JsonResponse
-    {
+    {   
         return response()->json(
             $get->all($request->casted()),
         );
