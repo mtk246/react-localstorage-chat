@@ -17,4 +17,5 @@ final class TypeReportAllRecords extends Enum
     public const BAD_DEBT_COST = 'bad_debt_cost';
     public const CHANGE_BY_MODULE = 'change_by_module';
     public const DAYLY_INSURANCE_AGAING = 'daily_insurance_responsibility_aging';
+    public const POSTED_PAYMENT_TRANSACTION_AUDIT = 'posted_payment_transaction_audit';
 }
