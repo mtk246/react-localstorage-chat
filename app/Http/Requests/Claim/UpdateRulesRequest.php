@@ -22,6 +22,17 @@ final class UpdateRulesRequest extends FormRequest
     public function rules()
     {
         return [
+            'company_ids' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
+                'array',
+            ],
+            'company_ids.*' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'required',
+                'integer',
+                'exists:companies,id',
+            ],
             'insurance_company_ids' => [
                 Rule::excludeIf(fn () => filled($this->input('active', ''))),
                 'nullable',
