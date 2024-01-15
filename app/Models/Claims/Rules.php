@@ -6,6 +6,7 @@ namespace App\Models\Claims;
 
 use App\Enums\Claim\RuleFormatType;
 use App\Models\BillingCompany;
+use App\Models\Company;
 use App\Models\InsuranceCompany;
 use App\Models\InsurancePlan;
 use App\Models\TypeCatalog;
@@ -36,6 +37,10 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property BillingCompany|null $billingCompany
+ * @property Collection<int, Company> $companies
+ * @property int|null $companies_count
+ * @property Collection<int, InsuranceCompany> $insuranceCompanies
+ * @property int|null $insurance_companies_count
  * @property Collection<int, InsurancePlan> $insurancePlans
  * @property int|null $insurance_plans_count
  * @property Collection<int, TypeCatalog> $typesOfResponsibilities
@@ -96,6 +101,11 @@ final class Rules extends Model implements Auditable
         return $this->belongsToMany(TypeCatalog::class, 'claim_rule_type_responsibility', 'claim_rule_id', 'type_responsibility_id')->withTimestamps();
     }
 
+    public function companies(): BelongsToMany
+    {
+        return $this->belongsToMany(Company::class, 'claim_rule_company', 'claim_rule_id')->withTimestamps();
+    }
+
     public function insuranceCompanies(): BelongsToMany
     {
         return $this->belongsToMany(InsuranceCompany::class, 'claim_rule_insurance_company', 'claim_rule_id')->withTimestamps();
@@ -118,8 +128,9 @@ final class Rules extends Model implements Auditable
             'description' => $this->description,
             'billing_company_id' => $this->billing_company_id,
             'billing_company' => $this->billingCompany?->only(['code', 'name', 'abbreviation']),
-            'insurance_companies' => $this->insurancePlan?->only(['id', 'code', 'name']),
-            'insurance_plans' => $this->insurancePlan?->only(['id', 'code', 'name', 'eff_date']),
+            'companies' => $this->companies?->only(['id', 'code', 'name']),
+            'insurance_companies' => $this->insuranceCompanies?->only(['id', 'code', 'name']),
+            'insurance_plans' => $this->insurancePlans?->only(['id', 'code', 'name', 'eff_date']),
         ];
     }
 }
