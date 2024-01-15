@@ -28,7 +28,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $logo
  * @property string|null $abbreviation
  * @property string|null $tax_id
- * @property string|null $disabled_at
+ * @property \Illuminate\Support\Carbon|null $disabled_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property int|null $addresses_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
@@ -147,7 +147,7 @@ class BillingCompany extends Model implements Auditable
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class)->withPivot('status')->withTimestamps();
+        return $this->belongsToMany(User::class)->withPivot('status', 'id', 'disabled_at')->withTimestamps();
     }
 
     public function presets(): HasMany

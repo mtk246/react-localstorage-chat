@@ -50,6 +50,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string|null $last_activity
  * @property int|null $billing_company_id
  * @property UserType $type
+ * @property string|null $disabled_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
@@ -91,6 +92,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDisabledAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
@@ -234,7 +236,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     {
         return $this->belongsToMany(BillingCompany::class)
             ->using(Membership::class)
-            ->withPivot('status', 'id')
+            ->withPivot('status', 'id', 'disabled_at')
             ->withTimestamps()
             ->as('membership');
     }
