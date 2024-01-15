@@ -22,6 +22,7 @@ use App\Models\Marital;
 use App\Models\MaritalStatus;
 use App\Models\Patient;
 use App\Models\Patient\Membership;
+use App\Models\PatientPrivate;
 use App\Models\PrivateNote;
 use App\Models\Profile;
 use App\Models\PublicNote;
@@ -148,6 +149,13 @@ class PatientRepository
                     'marital_status_id' => $data['marital_status_id'] ?? null,
                     'profile_id' => $profile->id,
                 ]);
+            }
+
+            /** Create PatienPrivate */
+            if (isset($data['patient_private'])) {
+                $data["patient_private"]["patient_id"] = $patient->id;
+                $data["patient_private"]["billing_company_id"] = $billingCompany;
+                $patient_private = PatientPrivate::create($data["patient_private"]);
             }
 
             /* Create Address */
@@ -1098,6 +1106,12 @@ class PatientRepository
                         'patient_id' => $patient->id,
                     ]);
                 }
+            }
+
+            /** Update PatienPrivate */
+            if (isset($data['patient_private'])) {
+                $patient_private = $patient->patientPrivate;
+                $patient_private->update($data["patient_private"]);
             }
 
             /**if (isset($data['injuries'])) {
