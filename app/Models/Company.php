@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Claims\Rules;
 use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -140,6 +141,11 @@ final class Company extends Model implements Auditable
     public function healthProfessionals(): BelongsToMany
     {
         return $this->belongsToMany(HealthProfessional::class)->withTimestamps();
+    }
+
+    public function claimRules(): BelongsToMany
+    {
+        return $this->belongsToMany(Rules::class, 'claim_rule_company', 'claim_rule_id')->withTimestamps();
     }
 
     /**

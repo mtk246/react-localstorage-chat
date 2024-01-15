@@ -28,6 +28,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $logo
  * @property string|null $abbreviation
  * @property string|null $tax_id
+ * @property string|null $disabled_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property int|null $addresses_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
@@ -68,6 +69,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static Builder|BillingCompany whereAbbreviation($value)
  * @method static Builder|BillingCompany whereCode($value)
  * @method static Builder|BillingCompany whereCreatedAt($value)
+ * @method static Builder|BillingCompany whereDisabledAt($value)
  * @method static Builder|BillingCompany whereId($value)
  * @method static Builder|BillingCompany whereLogo($value)
  * @method static Builder|BillingCompany whereName($value)
