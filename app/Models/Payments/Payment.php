@@ -45,6 +45,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \App\Models\Payments\Eob|null $eobs
  * @property array<key, string> $last_modified
  * @property InsurancePlan|null $insurancePlan
+ * @property \App\Models\Payments\Batch $paymentBatch
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Payment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Payment newQuery()
