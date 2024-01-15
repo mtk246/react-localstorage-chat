@@ -26,6 +26,7 @@ final class UpdateClaimRuleAction
             $rules->typesOfResponsibilities()->sync($rulesWrapper->getResponsibilities()->toArray());
         }
 
+        $rules->companies()->sync($rulesWrapper->getCompanies());
         $rules->insuranceCompanies()->sync($rulesWrapper->getInsuranceCompanies());
         $rules->insurancePlans()->sync($rulesWrapper->getInsurancePlans());
 

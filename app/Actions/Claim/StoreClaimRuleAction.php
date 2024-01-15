@@ -22,6 +22,7 @@ final class StoreClaimRuleAction
                 });
             }
 
+            $rule->companies()->attach($rulesWrapper->getCompanies());
             $rule->insuranceCompanies()->attach($rulesWrapper->getInsuranceCompanies());
             $rule->insurancePlans()->attach($rulesWrapper->getInsurancePlans());
 
