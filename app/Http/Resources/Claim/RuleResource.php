@@ -6,6 +6,7 @@ namespace App\Http\Resources\Claim;
 
 use App\Enums\Claim\RuleFormatType;
 use App\Models\Claims\Rules;
+use App\Models\Company;
 use App\Models\InsuranceCompany;
 use App\Models\InsurancePlan;
 use App\Models\TypeCatalog;
@@ -27,6 +28,11 @@ final class RuleResource extends JsonResource
             'name' => $this->resource->name,
             'description' => $this->resource->description,
             'billing_company' => $this->resource->billingCompany->only(['id', 'name', 'code', 'logo', 'abbreviation']),
+            'companies' => $this->resource->companies->map(fn (Company $company) => [
+                'id' => $company->id,
+                'code' => $company->code,
+                'name' => $company->name,
+            ]),
             'insurance_companies' => $this->resource->insuranceCompanies->map(fn (InsuranceCompany $insuranceCompany) => [
                 'id' => $insuranceCompany->id,
                 'code' => $insuranceCompany->code,
