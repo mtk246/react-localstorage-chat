@@ -132,7 +132,7 @@ Route::prefix('v1')/* ->middleware('audit') */
             Route::post('create', [BillingCompanyController::class, 'createCompany']);
             Route::post('/upload-image', [BillingCompanyController::class, 'uploadImage']);
             Route::get('/get-list', [BillingCompanyController::class, 'getList']);
-            Route::patch('/change-status/{billing_company_id}', [BillingCompanyController::class, 'changeStatus']);
+            Route::patch('/change-status/{billing_company}', [BillingCompanyController::class, 'changeStatus']);
             Route::get('get-by-name/{name}', [BillingCompanyController::class, 'getByName']);
             Route::get('/{company_binding}', [BillingCompanyController::class, 'getBillingCompany']);
 
