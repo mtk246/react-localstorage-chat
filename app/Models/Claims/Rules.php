@@ -128,9 +128,13 @@ final class Rules extends Model implements Auditable
             'description' => $this->description,
             'billing_company_id' => $this->billing_company_id,
             'billing_company' => $this->billingCompany?->only(['code', 'name', 'abbreviation']),
-            'companies' => $this->companies?->only(['id', 'code', 'name']),
-            'insurance_companies' => $this->insuranceCompanies?->only(['id', 'code', 'name']),
-            'insurance_plans' => $this->insurancePlans?->only(['id', 'code', 'name', 'eff_date']),
+            'companies' => $this->companies?->map(fn (Company $company) => $company->only(['id', 'code', 'name'])),
+            'insurance_companies' => $this->insuranceCompanies?->map(
+                fn (InsuranceCompany $insuranceCompany) => $insuranceCompany->only(['id', 'code', 'name'])
+            ),
+            'insurance_plans' => $this->insurancePlans?->map(
+                fn (InsurancePlan $insurancePlan) => $insurancePlan->only(['id', 'code', 'name', 'eff_date'])
+            ),
         ];
     }
 }
