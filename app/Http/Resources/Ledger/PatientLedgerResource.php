@@ -20,7 +20,7 @@ final class PatientLedgerResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'profile' => ProfileResource::make($this->resource->profile),
-            'medical_number' => $this->resource->companies->pluck('med_num')->distinct('med_num') ?? null,
+            'medical_number' => $this->resource->companies->pluck('pivot.med_num') ?? null,
             'patient_number' => $this->resource->code ?? null,
             'companies' => $this->getCompanies(),
         ];

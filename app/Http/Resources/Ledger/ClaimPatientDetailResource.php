@@ -19,28 +19,16 @@ final class ClaimPatientDetailResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'medical_number' => $this->resource->companies->pluck('med_num')->distinct('med_num') ?? null,
+            'medical_number' => $this->resource->companies->pluck('pivot.med_num') ?? null,
             'patient_number' => $this->resource->code ?? null,
             'profile' => ProfileResource::make($this->resource->profile),
             'claims' => $this->getClaimsData()
         ];
     }
 
-    private function getProfileData(): array|null
-    {
-        return isset($this->resource->profile)
-            ? [
-                'first_name' => $this->resource->profile->first_name,
-                'last_name' => $this->resource->profile->last_name,
-                'dob' => $this->resource->profile->date_of_birth,
-                'ssn' => $this->resource->profile->ssn,
-            ]
-            : null;
-    }
-
     private function getClaimsData()
     {
-        $claimsDemographics = $this->resource->claimDemographics;
+        $claimsDemographics = $this->resource->claimDemographics()->orderBy('created_at', 'desc')->get();
 
         if (request()->has('status')) {
             $claimsDemographics = $this->resource->claimDemographics->filter(function ($claimDemographic) {

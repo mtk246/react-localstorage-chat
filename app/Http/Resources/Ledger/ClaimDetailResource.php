@@ -37,17 +37,17 @@ final class ClaimDetailResource extends JsonResource
         ];
     }
 
-    private function getPolicyHolderData(): array|null
+    private function getPolicyHolderData()
     {
-        $policy = $this->resource->insurancePolicies()->where([
+        $policy = $this->resource->claim->insurancePolicies()->where([
             'order' => 1,
         ])->first();
 
         return [
-            'policy_holder' => $policy->policy_holder,
+            'policy_holder' => $policy->own,
             'policy_number' => $policy->policy_number,
-            'effective_date' => $policy->effective_date,
-            'expiration_date' => $policy->expiration_date,
+            'effective_date' => $policy->eff_date,
+            'expiration_date' => $policy->end_date,
         ] ?? null;
     }
 }
