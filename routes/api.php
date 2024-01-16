@@ -174,11 +174,11 @@ Route::prefix('v1')/* ->middleware('audit') */
     });
 
     Route::prefix('facility')->group(function () {
-        Route::get('/get-all-server', [\App\Http\Controllers\FacilityController::class, 'getServerAll'])->middleware(['auth:api']);
+        Route::get('/get-all-server', [\App\Http\Controllers\FacilityController::class, 'getServerAll'])->name('facility.get.all.server')->middleware(['auth:api']);
         Route::get('/get-list-billing-companies', [\App\Http\Controllers\FacilityController::class, 'getListBillingCompanies'])->middleware(['auth:api']);
         Route::post('/', [\App\Http\Controllers\FacilityController::class, 'create'])->middleware([
             'auth:api',
-        ]);
+        ])->name('facility.create');
         Route::get('/', [\App\Http\Controllers\FacilityController::class, 'getAllFacilities'])->middleware([
             'auth:api',
         ]);
@@ -194,10 +194,10 @@ Route::prefix('v1')/* ->middleware('audit') */
         ]);
         Route::put('/{id}', [\App\Http\Controllers\FacilityController::class, 'updateFacility'])->middleware([
             'auth:api',
-        ]);
+        ])->name('facility.update');
         Route::patch('/{id}/change-status', [\App\Http\Controllers\FacilityController::class, 'changeStatus'])->middleware([
             'auth:api',
-        ]);
+        ])->name('facility.change-status');
         Route::get('/{id}/get-by-name', [\App\Http\Controllers\FacilityController::class, 'getByName'])->middleware([
             'auth:api',
         ]);
@@ -436,7 +436,7 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         // 'role:superuser|biller|billingmanager',
     ])->group(function () {
-        Route::post('/', [\App\Http\Controllers\ProcedureController::class, 'createProcedure']);
+        Route::post('/', [\App\Http\Controllers\ProcedureController::class, 'createProcedure'])->name('procedure.create-procedure');
         Route::get('/', [\App\Http\Controllers\ProcedureController::class, 'getAllProcedures']);
         Route::get('/get-all-server', [\App\Http\Controllers\ProcedureController::class, 'getServerAll']);
         Route::get('/get-by-code/{code}', [\App\Http\Controllers\ProcedureController::class, 'getByCode']);
@@ -610,8 +610,9 @@ Route::prefix('v1')/* ->middleware('audit') */
         Route::get('/sources', [BatchResource::class, 'getSources'])->name('payments.sources');
         Route::get('/methods', [BatchResource::class, 'getMethods'])->name('payments.methods');
         Route::get('/codes', [BatchResource::class, 'getCodes'])->name('payments.codes');
-        Route::get('/eob/{eob_file}', [BatchResource::class, 'showEob'])->name('payments.eob.show');
+        Route::get('/eobs/{eob_file}', [BatchResource::class, 'showEob'])->name('payments.eobs.show');
         Route::get('/batch/{batch}/close', [BatchResource::class, 'close'])->name('batch.close');
+        Route::get('/batch/{batch}/eobs', [BatchResource::class, 'getEobs'])->name('batch.eobs');
         Route::post('/batch/{batch}/claims', [BatchResource::class, 'storeClaims'])->name('batch.claims');
         Route::post('/batch/{batch}/services', [BatchResource::class, 'storeServices'])->name('batch.services');
         Route::resource('batch', BatchResource::class)->only(['index', 'store', 'show', 'update', 'destroy'])->name('batch', 'payments.batch');

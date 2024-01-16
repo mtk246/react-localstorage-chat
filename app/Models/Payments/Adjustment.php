@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Payments;
 
+use Cknow\Money\Casts\MoneyDecimalCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $payment_service_id
  * @property string $currency
- * @property string $amount
+ * @property \Cknow\Money\Money|null $amount
  * @property string $adj_reason
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -44,6 +45,10 @@ final class Adjustment extends Model
         'currency',
         'amount',
         'adj_reason',
+    ];
+
+    protected $casts = [
+        'amount' => MoneyDecimalCast::class.':currency',
     ];
 
     public function paymentService(): BelongsTo

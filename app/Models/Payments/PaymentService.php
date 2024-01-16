@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Payments;
 
+use Cknow\Money\Casts\MoneyDecimalCast;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Collection;
@@ -11,6 +12,7 @@ use Illuminate\Support\Collection;
 /**
  * App\Models\Payments\PaymentService.
  *
+ * @property \Cknow\Money\Money|null $payment
  * @property Collection $adjustments
  * @property int|null $adjustments_count
  *
@@ -39,6 +41,10 @@ final class PaymentService extends Pivot
         'reason',
         'denial_reason',
         'note',
+    ];
+
+    protected $casts = [
+        'payment' => MoneyDecimalCast::class.':currency',
     ];
 
     protected $appends = ['adjustments'];

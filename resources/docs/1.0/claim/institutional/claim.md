@@ -15,6 +15,7 @@
 
 - [Get list condition codes](#get-list-condition-codes)
 - [Get list revenue codes](#get-list-revenue-codes)
+- [Get list procedures](#get-list-procedures)
 - [Get list admission types](#get-list-admission-types)
 - [Get list admission sources](#get-list-admission-sources)
 - [Get list patient statuses](#get-list-patient-statuses)
@@ -62,6 +63,7 @@
 | 4 | GET | `Get list patients` | `/patient/get-list` | yes | Get list all patients |
 | 5 | GET | `Get list health professionals` | `/health-professional/get-list` | yes | Get list health professionals |
 | 6 | GET | `Get list diagnoses` | `/procedure/get-list-diagnoses/{code?}` | yes | Get list diagnoses |
+| 7 |GET     | `Get list procedure` | `/procedure/get-list/{company_id?}?search={search}&revenue_code_id={revenueCode}` | yes            | Get list procedure|
 
 
 <a name="create-claim"></a>
@@ -1354,6 +1356,57 @@
     {
         "id": 4,
         "name": "Halvorson, Deckow and Bode"
+    }
+]
+```
+
+<a name="get-list-procedures"></a>
+## Get list procedures
+
+
+### Param in header
+
+```json
+{
+    "Authorization": bearer <token>
+}
+```
+
+## Param in path
+
+```json
+{
+    "company_id": <integer> optional
+}
+```
+
+## Example path
+
+>{primary} ?search=code & revenue_code_id=code & except_ids[]=1 & except_ids[]=2
+
+## Response
+
+> {success} 200 Procedures found
+
+#
+
+```json
+[
+    {
+        "id": 11,
+        "name": "Code procedure2",
+        "description": "Description procedure2",
+        "price": 231 //Only if the company_id field is specified and there is a price for the procedure
+    },
+    {
+        "id": 12,
+        "name": "Code procedure1",
+        "description": "Description procedure1"
+    },
+    {
+        "id": 13,
+        "name": "Code procedure3",
+        "description": "Description procedure3"
     }
 ]
 ```

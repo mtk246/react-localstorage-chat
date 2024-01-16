@@ -11,6 +11,7 @@ use App\Models\Permissions\Permission;
 use App\Models\Reports\Preset;
 use App\Models\User\Role;
 use App\Roles\Traits\HasRoleAndPermission;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,7 +26,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -50,6 +50,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string|null $last_activity
  * @property int|null $billing_company_id
  * @property UserType $type
+ * @property string|null $disabled_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\BillingCompany> $billingCompanies
@@ -91,6 +92,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User search($search)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereBillingCompanyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDisabledAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)

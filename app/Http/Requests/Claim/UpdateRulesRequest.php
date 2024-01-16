@@ -22,9 +22,31 @@ final class UpdateRulesRequest extends FormRequest
     public function rules()
     {
         return [
-            'insurance_plan_ids' => [
+            'company_ids' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
+                'array',
+            ],
+            'company_ids.*' => [
                 Rule::excludeIf(fn () => filled($this->input('active', ''))),
                 'required',
+                'integer',
+                'exists:companies,id',
+            ],
+            'insurance_company_ids' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
+                'array',
+            ],
+            'insurance_company_ids.*' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'required',
+                'integer',
+                'exists:insurance_companies,id',
+            ],
+            'insurance_plan_ids' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
                 'array',
             ],
             'insurance_plan_ids.*' => [
@@ -56,12 +78,22 @@ final class UpdateRulesRequest extends FormRequest
             ],
             'rules.file' => [
                 Rule::excludeIf(fn () => filled($this->input('active', ''))),
-                'required',
+                'nullable',
                 'array',
             ],
             'rules.file.*' => [
                 Rule::excludeIf(fn () => filled($this->input('active', ''))),
-                'required',
+                'nullable',
+                new RuleFormatRule($this->get('format', '')),
+            ],
+            'rules.json' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
+                'array',
+            ],
+            'rules.json.*' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
                 new RuleFormatRule($this->get('format', '')),
             ],
             'rules.digital.*' => [

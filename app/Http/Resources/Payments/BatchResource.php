@@ -22,6 +22,7 @@ final class BatchResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
+            'code' => $this->code,
             'name' => $this->resource->name,
             'posting_date' => $this->resource->posting_date,
             'currency' => $this->resource->currency,
@@ -30,6 +31,7 @@ final class BatchResource extends JsonResource
             'payments' => PaymentResource::collection($this->resource->payments->sortBy(['order', 'desc'])),
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
+            'close_at' => $this->resource->close_date,
             'company' => new CompanyResource($this->resource->company),
             'billing_company' => $this->resource->billingCompany,
         ];

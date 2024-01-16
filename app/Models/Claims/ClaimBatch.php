@@ -6,10 +6,10 @@ namespace App\Models\Claims;
 
 use App\Models\BillingCompany;
 use App\Models\Company;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**

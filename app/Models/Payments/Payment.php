@@ -8,12 +8,15 @@ use App\Enums\Payments\MethodType;
 use App\Enums\Payments\SourceType;
 use App\Models\Claims\Claim;
 use App\Models\InsurancePlan;
+use App\Models\User;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Cknow\Money\Casts\MoneyDecimalCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\Payments\Payment.
@@ -33,12 +36,16 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int|null $insurance_plan_id
  * @property int|null $order
  * @property MethodType $method
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  * @property \App\Models\Payments\Batch $batch
  * @property \App\Models\Payments\Card|null $card
  * @property \Illuminate\Database\Eloquent\Collection<int, Claim> $claims
  * @property int|null $claims_count
  * @property \App\Models\Payments\Eob|null $eobs
+ * @property array<key, string> $last_modified
  * @property InsurancePlan|null $insurancePlan
+ * @property \App\Models\Payments\Batch $paymentBatch
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Payment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Payment newQuery()
@@ -60,9 +67,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  *
  * @mixin \Eloquent
  */
-final class Payment extends Model
+final class Payment extends Model implements Auditable
 {
     use HasFactory;
+    use AuditableTrait;
 
     /** @var string[] */
     protected $fillable = [
@@ -114,6 +122,31 @@ final class Payment extends Model
             ->using(ClaimPayment::class)
             ->withPivot(['id'])
             ->withTimestamps()
-            ->as('payments');
+            ->as('payment');
+    }
+
+    /** @return array<key, string> */
+    public function getLastModifiedAttribute(): array
+    {
+        $lastModified = $this->audits()->latest()->first();
+
+        if (isset($lastModified->user_id)) {
+            $user = User::find($lastModified->user_id);
+
+            return [
+                'user' => $user->profile->first_name.' '.$user->profile->last_name,
+                'roles' => $user->roles()?->get(['name'])->pluck('name'),
+            ];
+        }
+
+        return [
+            'user' => 'Console',
+            'roles' => [],
+        ];
+    }
+
+    public function paymentBatch(): BelongsTo
+    {
+        return $this->belongsTo(Batch::class, 'payment_batch_id', 'id');
     }
 }
