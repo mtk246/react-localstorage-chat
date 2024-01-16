@@ -45,9 +45,9 @@ final class BillingCompanyController extends Controller
         return $rs ? response()->json($rs, 201) : response()->json(__('Error creating billing company'), 400);
     }
 
-    public function changeStatus(Request $request, int $id): JsonResponse
+    public function changeStatus(Request $request, BillingCompany $billingCompany): JsonResponse
     {
-        $rs = $this->billingCompanyRepository->changeStatus($request->input('status'), $id);
+        $rs = $this->billingCompanyRepository->changeStatus($request->input('status'), $billingCompany);
 
         return $rs ? response()->json([], 204) : response()->json(__('Error updating status'), 400);
     }

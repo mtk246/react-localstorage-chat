@@ -203,17 +203,26 @@ final class BillingCompanyRepository
     /**
      * @return bool|int|null
      */
-    public function changeStatus(bool $status, int $id)
+    public function changeStatus(bool $status, BillingCompany $billingCompany)
     {
-        $billingCompany = BillingCompany::find($id);
+        if($status) {
+            $billingCompany->users()
+                ->where('billing_company_user.disabled_at', $billingCompany->disable_at)
+                ->update(['billing_company_user.status' => $status]);
 
-        if (is_null($billingCompany)) {
-            return null;
+            return $billingCompany->update(['disabled_at' => null, 'status' => $status]);
         }
 
-        $billingCompany->users()->update(['billing_company_user.status' => $status]);
+        $date = now();
 
-        return $billingCompany->update(['status' => $status]);
+        $billingCompany->users()
+            ->whereNull('billing_company_user.disabled_at')
+            ->update([
+                'disabled_at' => $date,
+                'status' => $status
+            ]);
+
+        return $billingCompany->update(['disabled_at' => $date,'status' => $status]);
     }
 
     /**

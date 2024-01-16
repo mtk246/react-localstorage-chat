@@ -236,7 +236,7 @@ final class User extends Authenticatable implements JWTSubject, Auditable
     {
         return $this->belongsToMany(BillingCompany::class)
             ->using(Membership::class)
-            ->withPivot('status', 'id')
+            ->withPivot('status', 'id', 'disabled_at')
             ->withTimestamps()
             ->as('membership');
     }

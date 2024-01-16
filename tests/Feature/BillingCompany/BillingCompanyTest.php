@@ -60,6 +60,7 @@ class BillingCompanyTest extends TestCase
             'users' => [],
             'addresses' => [],
             'contacts' => [],
+            'disabled_at' => null,
         ];
 
         $this->assertEquals([$expectedData], $responseData);
