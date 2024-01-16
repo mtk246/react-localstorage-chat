@@ -130,11 +130,11 @@ class Claim extends Model implements Auditable
     {
         return Attribute::make(
             get: function (string $value) {
-                $abbreviationCompany = $this->demographicInformation->company?->abbreviations()
+                $abbreviationCompany = $this->demographicInformation?->company?->abbreviations()
                     ->where('billing_company_id', $this->billing_company_id)
                     ->first()
                     ?->abbreviation ?? '';
-                $patientProfile = $this->demographicInformation->patient?->profile;
+                $patientProfile = $this->demographicInformation?->patient?->profile;
 
                 return (!empty($abbreviationCompany)
                     ? $abbreviationCompany.'-'

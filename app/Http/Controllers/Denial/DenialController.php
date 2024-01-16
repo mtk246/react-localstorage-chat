@@ -47,7 +47,7 @@ final class DenialController extends Controller
 
     public function createDenialRefile(StoreRefileRequest $request, StoreRefileAction $store)
     {
-        return  response()->json($store->invoke($request->casted()));
+        return response()->json($store->invoke($request->casted()));
     }
 
     public function updateDenialRefile(StoreRefileRequest $request, UpdateRefileAction $update)

@@ -561,17 +561,17 @@ Route::prefix('v1')/* ->middleware('audit') */
         'auth:api',
         // 'role:superuser|biller|billingmanager',
     ])->group(function () {
-        Route::get('/get-all-server', [DenialController::class, 'getServerAll']);
+        Route::get('/get-all-server', [DenialController::class, 'getServerAll'])->name('denial.get-all-server');
         Route::get('/{denial}', [DenialController::class, 'getOneDenial']);
-        Route::post('/', [DenialController::class, 'createDenialTracking']);
-        Route::put('/', [DenialController::class, 'updateDenialTracking']);
+        Route::post('/', [DenialController::class, 'createDenialTracking'])->name('denial.create-denial-tracking');
+        Route::put('/', [DenialController::class, 'updateDenialTracking'])->name('denial.update-denial-tracking');
 
         Route::prefix('/refile')->middleware([
             'auth:api',
             // 'role:superuser|biller|billingmanager',
         ])->group(function () {
-            Route::post('/', [DenialController::class, 'createDenialRefile']);
-            Route::put('/', [DenialController::class, 'updateDenialRefile']);
+            Route::post('/', [DenialController::class, 'createDenialRefile'])->name('denial.create-denial-refile');
+            Route::put('/', [DenialController::class, 'updateDenialRefile'])->name('denial.update-denial-refile');
         });
     });
 

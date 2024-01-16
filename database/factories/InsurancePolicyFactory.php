@@ -4,35 +4,45 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\BillingCompany;
 use App\Models\InsurancePlan;
+use App\Models\InsurancePolicy;
+use App\Models\Patient;
+use App\Models\PayerResponsibility;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\InsurancePolicy>
- */
-final class InsurancePolicyFactory extends Factory
+class InsurancePolicyFactory extends Factory
 {
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = InsurancePolicy::class;
+
     /**
      * Define the model's default state.
      *
-     * @return array<string, mixed>
+     * @return array
      */
     public function definition()
     {
         return [
-            'policy_number' => $this->faker->uuid,
-            'release_info' => $this->faker->randomElement([true, false]),
-            'assign_benefits' => $this->faker->randomElement([true, false]),
-            'status' => $this->faker->randomElement([true, false]),
-            'own' => $this->faker->randomElement([true, false]),
-            'dual_plan' => $this->faker->randomElement([true, false]),
-        ];
-    }
-
-    private function withInsurancePlan(): self
-    {
-        return $this->state(fn (array $attributes) => [
+            'own' => boolval(rand(0, 1)),
+            'status' => boolval(rand(0, 1)),
+            'eff_date' => $this->faker->dateTime(),
+            'end_date' => $this->faker->dateTime(),
+            'release_info' => boolval(rand(0, 1)),
+            'assign_benefits' => boolval(rand(0, 1)),
+            'policy_number' => $this->faker->unique()->randomNumber(9),
+            'group_number' => $this->faker->unique()->randomNumber(9),
             'insurance_plan_id' => InsurancePlan::factory(),
-        ]);
+            'payer_responsibility_id' => PayerResponsibility::factory(),
+            'payment_responsibility_level_code' => null,
+            'patient_id' => Patient::factory(),
+            'billing_company_id' => BillingCompany::factory(),
+            'complementary_policy_id' => null,
+            'dual_plan' => boolval(rand(0, 1)),
+        ];
     }
 }
