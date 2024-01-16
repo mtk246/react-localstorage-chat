@@ -29,9 +29,9 @@ final class DenialControllerTest extends TestCase
         $user = User::factory()->withProfile()->create();
         $this->actingAs($user);
 
-            $response = $this->actingAs($user)->getJson('/api/v1/denial/get-all-server');
+        $response = $this->actingAs($user)->getJson('/api/v1/denial/get-all-server');
 
-            $response->assertStatus(200);
+        $response->assertStatus(200);
     }
 
     public function testGetOneServer()
@@ -40,9 +40,9 @@ final class DenialControllerTest extends TestCase
         $user = User::factory()->withProfile()->create();
         $this->actingAs($user);
 
-            $response = $this->actingAs($user)->getJson('/api/v1/denial/1');
+        $response = $this->actingAs($user)->getJson('/api/v1/denial/1');
 
-            $response->assertStatus(200);
+        $response->assertStatus(200);
     }
 
     public function testCreateDenialTracking()
