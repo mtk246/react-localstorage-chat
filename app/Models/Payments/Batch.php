@@ -8,6 +8,7 @@ use App\Enums\Payments\BatchStateType;
 use App\Models\BillingCompany;
 use App\Models\Company;
 use App\Models\User;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Cknow\Money\Casts\MoneyDecimalCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +17,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Date;
 use Laravel\Scout\Searchable;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**

@@ -78,6 +78,9 @@ final class StoreRequestWrapper extends CastsRequest
         return $this->getCollect('insurance_policies')
             ->mapWithKeys(function (array $policy) {
                 return [$policy['insurance_policy_id'] => ['order' => $policy['order']]];
+            })
+            ->filter(function ($policy, $index) {
+                return $index > 0;
             });
     }
 

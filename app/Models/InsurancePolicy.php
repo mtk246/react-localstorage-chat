@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
@@ -22,7 +22,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $end_date
  * @property bool $release_info
  * @property bool $assign_benefits
- * @property int $insurance_plan_id
+ * @property int|null $insurance_plan_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $payer_responsibility_id
@@ -48,7 +48,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property mixed $insurance_company_name
  * @property mixed $payer_id
  * @property mixed $subscriber
- * @property \App\Models\InsurancePlan $insurancePlan
+ * @property \App\Models\InsurancePlan|null $insurancePlan
  * @property \App\Models\TypeCatalog|null $insurancePolicyType
  * @property \App\Models\Patient|null $patient
  * @property \App\Models\PayerResponsibility|null $payerResponsibility
@@ -226,17 +226,17 @@ class InsurancePolicy extends Model implements Auditable
 
     public function getInsuranceCompanyNameAttribute()
     {
-        return $this->insurancePlan['insuranceCompany']['name'];
+        return $this->insurancePlan['insuranceCompany']['name'] ?? '';
     }
 
     public function getInsuranceCompanyIdAttribute()
     {
-        return $this->insurancePlan['insurance_company_id'];
+        return $this->insurancePlan['insurance_company_id'] ?? '';
     }
 
     public function getPayerIdAttribute()
     {
-        return $this->insurancePlan['insuranceCompany']['payer_id'];
+        return $this->insurancePlan['insuranceCompany']['payer_id'] ?? '';
     }
 
     public function getSubscriberAttribute()

@@ -5,34 +5,34 @@ declare(strict_types=1);
 namespace Database\Factories\Claims;
 
 use App\Models\BillingCompany;
-use App\Models\Claims\Claim;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ClaimFactory extends Factory
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Claims\Claim>
+ */
+final class ClaimFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = Claim::class;
-
     /**
      * Define the model's default state.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function definition()
     {
         return [
-            'code' => $this->faker->unique()->randomNumber(9),
-            'type' => 2,
+            'code' => '12345tre',
+            'type' => $this->faker->randomElement([1, 2]),
             'submitter_name' => $this->faker->name,
-            'submitter_contact' => $this->faker->phoneNumber,
-            'billing_company_id' => BillingCompany::factory(),
-            'aditional_information' => json_encode([]),
-            'created_at' => $this->faker->dateTime(),
-            'updated_at' => $this->faker->dateTime(),
+            'submitter_contact' => $this->faker->name,
+            'submitter_phone' => $this->faker->phoneNumber,
+            'aditional_information' => json_encode($this->faker->text),
         ];
+    }
+
+    private function withBillingCompany(): self
+    {
+        return $this->state(fn (array $attributes) => [
+            'billing_company_id' => BillingCompany::factory(),
+        ]);
     }
 }

@@ -1,6 +1,6 @@
 [
     {
-        "id": "01HDPRCFVYQYJ7JPSZ4QDBFJNS",
+        "id": "01HM29M3X9AW8GPXT6KVF9PC86",
         "name": "User Productivity by Claims Submitted and Charges",
         "description": "This report will help you measure the performance of any user processing claims. You can see the number of claims processed and the charges for each claim according to the time you performed the task per specific day.",
         "type": 1,
@@ -12,7 +12,7 @@
         "tableu": true
     },
     {
-        "id": "01HDPRCFVYQYJ7JPSZ4QDBFJNT",
+        "id": "01HM29MN3EN0XPSZQ9EDAKY9HK",
         "name": "Auditing of Changes by User Report",
         "description": "Use this report to audit your team's activity in different time ranges. Monitoring your team's performance could help you obtain accurate results from your operations.",
         "type": 1,
@@ -24,7 +24,7 @@
         "tableu": true
     },
     {
-        "id": "01HDPRCFVYQYJ7JPSZ4QDBFJNV",
+        "id": "01HM29MN3GWDP5XRA13QBN47T9",
         "name": "Health Professional Productivity by Patients, Claims, and Charges",
         "description": "Use this report to draw valuable conclusions regarding the productivity of Health Professionals.\nThe efficiency of this report consists of verifying how productive the services were in terms of billing amounts.\nThis report will be helpful for clients who have health professionals in their healthcare company or independent health professionals",
         "type": 1,
@@ -36,7 +36,7 @@
         "tableu": true
     },
     {
-        "id": "01HDPRCFVYQYJ7JPSZ4QDBFJNW",
+        "id": "01HM29MN3GWDP5XRA13QBN47TA",
         "name": "Number of Claims by Company and Current Status",
         "description": "Use this report to consult the number of claims by company and filtered by statuses. This report will help to you to make decisions in your current claim processing flow. ",
         "type": 1,
@@ -48,7 +48,7 @@
         "tableu": true
     },
     {
-        "id": "01HENMN75ETTNDRVZ9YNC3B9NK",
+        "id": "01HM29MN3H7D3AS508B4ZCHKJ5",
         "name": "Company Records",
         "description": "Use this report to visualize relevant information about the companies registered in the system.",
         "type": 1,
@@ -60,7 +60,7 @@
         "tableu": true
     },
     {
-        "id": "01HENMNVHTE0BCCN9KGDR67V3Q",
+        "id": "01HM29MN3H7D3AS508B4ZCHKJ6",
         "name": "Health Professional Records",
         "description": "Use this report to visualize relevant information about the health professionals registered in the system.",
         "type": 1,
@@ -72,7 +72,7 @@
         "tableu": true
     },
     {
-        "id": "01HENMNWJ61VB8AP471CWT7SZ6",
+        "id": "01HM29MN3JJV6FB2CANDSFZ3R2",
         "name": "User Records",
         "description": "Use this report to visualize relevant information about the users registered in the system.",
         "type": 1,
@@ -84,7 +84,7 @@
         "tableu": true
     },
     {
-        "id": "01HENMNXBGA26F78BG4MS4PXE5",
+        "id": "01HM29MN3JJV6FB2CANDSFZ3R3",
         "name": "Patient Records",
         "description": "Use this report to visualize relevant information about the patients registered in the system.",
         "type": 1,
@@ -96,7 +96,7 @@
         "tableu": true
     },
     {
-        "id": "01229C09819911EEB9620242AC",
+        "id": "01HDPRCFVYQYJ7JPSZ4QDBFJNS",
         "name": "Detailed patient Report",
         "description": "Use this report to display relevant information about the patients registered in the system.",
         "type": 1,
@@ -108,7 +108,7 @@
         "tableu": false
     },
     {
-        "id": "01229C478819911EB9620242AC",
+        "id": "01HDPRCFVYQYJ7JPSZ4QDBFJNT",
         "name": "General patient Report",
         "description": "Use this report to view all information about patient registered in the system.",
         "type": 1,
@@ -120,7 +120,7 @@
         "tableu": false
     },
     {
-        "id": "0129C5EA819911EEB9620242AC",
+        "id": "01HDPRCFVYQYJ7JPSZ4QDBFJNV",
         "name": "General Facility Report",
         "description": "Use this report to view all information about facility professionals registered in the system.",
         "type": 1,
@@ -132,7 +132,7 @@
         "tableu": false
     },
     {
-        "id": "01229C734819911EEB20242ACS",
+        "id": "01HDPRCFVYQYJ7JPSZ4QDBFJNW",
         "name": "General Healthcare Professional Report",
         "description": "Use this report to view all information about healthcare professionals registered in the system.",
         "type": 1,
@@ -144,7 +144,7 @@
         "tableu": false
     },
     {
-        "id": "01229C734819911EEB20243ACS",
+        "id": "01HM29MN3JJV6FB2CANDSFZ3R4",
         "name": "Payer mix by Company",
         "description": "Use this report to view all information about Payer mix registered in the system.",
         "type": 1,
@@ -156,11 +156,71 @@
         "tableu": false
     },
     {
-        "id": "01229C734819911EEB20223ACS",
+        "id": "01HM29MN3K38HH2BSBCXV7QVD4",
         "name": "Professional Productivity",
         "description": "Use this report to view all information about Professional Productivity registered in the system.",
         "type": 1,
         "url": "TPEMOBKSKL",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false,
+        "tableu": false
+    },
+    {
+        "id": "01HM29MN3K38HH2BSBCXV7QVD5",
+        "name": "Bad Debt Cost Report",
+        "description": "Report reflecting the accounts that a company will be unable to collect.",
+        "type": 1,
+        "url": "WSTRTDBWPZ",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false,
+        "tableu": false
+    },
+    {
+        "id": "01HM29MN3K38HH2BSBCXV7QVD6",
+        "name": "Change by module",
+        "description": "Report that reflects the actions executed by users.",
+        "type": 1,
+        "url": "ZHJZLMVKWP",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false,
+        "tableu": false
+    },
+    {
+        "id": "01HM29TYCWD26QDJ8NDCF3GHMS",
+        "name": "Daily insurance responsibility aging",
+        "description": "Report that reflects the actions executed by users.",
+        "type": 1,
+        "url": "GTGFOJQBHQ",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false,
+        "tableu": false
+    },
+    {
+        "id": "01HM29TYCYBAYR04NYJDQSPRH0",
+        "name": "Posted Payment Transaction Audit",
+        "description": "Report that reflects the actions executed by users.",
+        "type": 1,
+        "url": "PDZEFFROWW",
+        "clasification": 6,
+        "range": "30",
+        "configuration": [],
+        "favorite": false,
+        "tableu": false
+    },
+    {
+        "id": "01HM29TYCYBAYR04NYJDQSPRH1",
+        "name": "SOBG and DPR",
+        "description": "Report that reflects the actions executed by users.",
+        "type": 1,
+        "url": "YVKZRZDISB",
         "clasification": 6,
         "range": "30",
         "configuration": [],

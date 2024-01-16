@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\MaritalStatus;
 use App\Models\Profile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,11 +20,17 @@ final class PatientFactory extends Factory
     public function definition()
     {
         return [
-            'code' => $this->faker->unique()->randomNumber(9),
-            'driver_license' => null,
-            'marital_status_id' => MaritalStatus::factory(),
-            'profile_id' => Profile::factory(),
-            'main_address_id' => $this->faker->randomNumber(3),
+            'driver_license' => $this->faker->text,
+            'created_at' => $this->faker->dateTime,
+            'updated_at' => $this->faker->dateTime,
+            'code' => $this->faker->uuid(),
         ];
+    }
+
+    public function withProfile(): self
+    {
+        return $this->state(fn (array $attributes) => [
+            'profile_id' => Profile::factory(),
+        ]);
     }
 }

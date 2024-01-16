@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\MultipleRecordsFoundException;
 use Illuminate\Support\Collection;
 use Laravel\Scout\Searchable;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
@@ -50,6 +50,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Taxonomy> $taxonomies
  * @property int|null $taxonomies_count
  *
+ * @method static \Database\Factories\HealthProfessionalFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|HealthProfessional query()

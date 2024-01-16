@@ -7,12 +7,12 @@ namespace App\Models;
 use App\Casts\Enum\ColorTypeCast;
 use App\Casts\Procedure\ClasificationsCast;
 use App\Enums\Procedure\ProcedureType;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Scout\Searchable;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
@@ -52,6 +52,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $procedure_fees_count
  * @property \App\Models\PublicNote|null $publicNote
  *
+ * @method static \Database\Factories\ProcedureFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure query()
@@ -254,7 +255,9 @@ class Procedure extends Model implements Auditable
             'short_description' => $this->short_description,
             'description' => $this->description,
             'type' => $this->type->value,
-            'clasifications' => $this->clasifications,
+            'clasification.general' => $this->clasifications['general']?->resource->getName(),
+            'clasification.specific' => $this->clasifications['specific']?->resource->getName(),
+            'clasification.sub_specific' => $this->clasifications['sub_specific']?->resource->getName(),
         ];
     }
 }

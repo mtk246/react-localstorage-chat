@@ -29,6 +29,8 @@ use Illuminate\Support\Collection;
  * @property \Illuminate\Support\Collection|null $claims
  * @property string|null $file_url
  * @property \App\Models\Payments\Payment $payment
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Payments\Batch> $paymentBatch
+ * @property int|null $payment_batch_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Eob newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Eob newQuery()
@@ -92,5 +94,17 @@ final class Eob extends Model
     public function claimsThrough(): HasManyThrough
     {
         return $this->hasManyThrough(Claim::class, Payment::class);
+    }
+
+    public function paymentBatch(): HasManyThrough
+    {
+        return $this->HasManyThrough(
+            Batch::class,
+            Payment::class,
+            'id',
+            'id',
+            'payment_id',
+            'payment_batch_id',
+        );
     }
 }

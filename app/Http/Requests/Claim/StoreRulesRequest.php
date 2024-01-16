@@ -21,7 +21,11 @@ final class StoreRulesRequest extends FormRequest
     public function rules()
     {
         return [
-            'insurance_plan_ids' => 'required|array',
+            'company_ids' => 'nullable|array',
+            'company_ids.*' => 'required|integer|exists:companies,id',
+            'insurance_company_ids' => 'nullable|array',
+            'insurance_company_ids.*' => 'required|integer|exists:insurance_companies,id',
+            'insurance_plan_ids' => 'nullable|array',
             'insurance_plan_ids.*' => 'required|integer|exists:insurance_plans,id',
             'name' => 'required|string',
             'format' => [

@@ -173,13 +173,16 @@ abstract class Dictionary implements DictionaryInterface
         $rules = config("claim.formats.{$this->claim->type->value}.{$this->format}");
 
         $customRules = Rules::query()
+            ->where('format', $this->claim->format)
+            ->where('billing_company_id', $this->claim->billing_company_id)
             ->when(
                 $this->rule,
                 fn (Builder $query) => $query->where('id', $this->rule),
-                fn (Builder $query) => $query->where('billing_company_id', $this->claim->billing_company_id)
-                    ->where('format', $this->claim->format)
-                    ->whereHas('insurancePlans', fn (Builder $query) => $query->where('insurance_plans.id', $insurancePlan?->id ?? $this->insurancePlan?->id))
-                    ->whereHas('typesOfResponsibilities', fn (Builder $query) => $query->whereIn('code', $this->insurancePlan
+                fn (Builder $query) => $query
+                    ->orWhereHas('company', fn (Builder $query) => $query->where('company.id', $this->company?->id ?? 0))
+                    ->orWhereHas('insuranceCompany', fn (Builder $query) => $query->where('insurance_company.id', $insurancePlan?->insurance_company_id ?? $this->insurancePlan?->insurance_company_id))
+                    ->orWhereHas('insurancePlans', fn (Builder $query) => $query->where('insurance_plans.id', $insurancePlan?->id ?? $this->insurancePlan?->id))
+                    ->orWhereHas('typesOfResponsibilities', fn (Builder $query) => $query->whereIn('code', $this->insurancePlan
                         ?->insurancePolicies
                         ->where('billing_company_id', $this->claim->billing_company_id)
                         ->map(fn (InsurancePolicy $policy) => $policy
