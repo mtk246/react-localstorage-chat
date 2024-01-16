@@ -33,7 +33,7 @@ final class ClaimDetailResource extends JsonResource
             'charge' => $this->resource->claim->billed_amount, // charge field in claim_demographic_information model
             'services' => ClaimServiceResource::collection($this->resource->claim->service->services),
             'health_professional' => $this->resource->healthProfessionals->first(),
-            'insurance_policies' => $this->getPolicyHolderData()
+            'insurance_policies' => $this->getPolicyHolderData(),
         ];
     }
 

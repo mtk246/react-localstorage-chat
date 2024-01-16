@@ -79,7 +79,7 @@ final class SearchAction
                 );
         }
 
-        if(isset($filters['patient_number'])) {
+        if (isset($filters['patient_number'])) {
             $query = $query->where('code', $filters['patient_number']);
         }
 

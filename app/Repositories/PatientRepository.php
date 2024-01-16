@@ -151,13 +151,6 @@ class PatientRepository
                 ]);
             }
 
-            /** Create PatienPrivate */
-            if (isset($data['patient_private'])) {
-                $data["patient_private"]["patient_id"] = $patient->id;
-                $data["patient_private"]["billing_company_id"] = $billingCompany;
-                $patient_private = PatientPrivate::create($data["patient_private"]);
-            }
-
             /* Create Address */
             if (isset($data['addresses'])) {
                 foreach ($data['addresses'] as $addressData) {
@@ -1106,12 +1099,6 @@ class PatientRepository
                         'patient_id' => $patient->id,
                     ]);
                 }
-            }
-
-            /** Update PatienPrivate */
-            if (isset($data['patient_private'])) {
-                $patient_private = $patient->patientPrivate;
-                $patient_private->update($data["patient_private"]);
             }
 
             /**if (isset($data['injuries'])) {

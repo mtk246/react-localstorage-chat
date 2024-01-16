@@ -35,11 +35,6 @@ class CreateRequest extends FormRequest
             'driver_license' => ['nullable', 'string'],
             'create_user' => ['required', 'boolean'],
 
-            'patient_private'                   => ['required', 'array'],
-            'patient_private.reference_num'     => ['required', 'string'],
-            'patient_private.med_num'           => ['required', 'string'],
-            'patient_private.patient_num'       => ['required', 'string'],
-
             'profile' => ['required', 'array'],
             'profile.ssn' => [Rule::unique('profiles', 'ssn')->ignore($patient->profile_id ?? null), 'nullable', 'string'],
             'profile.first_name' => ['required', 'string', 'max:20'],

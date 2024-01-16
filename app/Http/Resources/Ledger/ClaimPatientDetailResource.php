@@ -22,7 +22,7 @@ final class ClaimPatientDetailResource extends JsonResource
             'medical_number' => $this->resource->companies->pluck('pivot.med_num') ?? null,
             'patient_number' => $this->resource->code ?? null,
             'profile' => ProfileResource::make($this->resource->profile),
-            'claims' => $this->getClaimsData()
+            'claims' => $this->getClaimsData(),
         ];
     }
 
