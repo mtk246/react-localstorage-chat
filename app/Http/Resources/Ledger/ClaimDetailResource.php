@@ -33,7 +33,21 @@ final class ClaimDetailResource extends JsonResource
             'charge' => $this->resource->claim->billed_amount, // charge field in claim_demographic_information model
             'services' => ClaimServiceResource::collection($this->resource->claim->service->services),
             'health_professional' => $this->resource->healthProfessionals->first(),
-            'insurance_policies' => $this->resource->claim->insurancePolicies->first()->insurancePlan,
+            'insurance_policies' => $this->getPolicyHolderData()
         ];
+    }
+
+    private function getPolicyHolderData(): array|null
+    {
+        $policy = $this->resource->insurancePolicies()->where([
+            'order' => 1,
+        ])->first();
+
+        return [
+            'policy_holder' => $policy->policy_holder,
+            'policy_number' => $policy->policy_number,
+            'effective_date' => $policy->effective_date,
+            'expiration_date' => $policy->expiration_date,
+        ] ?? null;
     }
 }

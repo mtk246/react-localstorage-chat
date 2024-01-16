@@ -19,11 +19,10 @@ final class ClaimPatientDetailResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'medical_number' => $this->resource->patientPrivate->med_num ?? null,
-            'patient_number' => $this->resource->patientPrivate->patient_num ?? null,
+            'medical_number' => $this->resource->companies->pluck('med_num')->distinct('med_num') ?? null,
+            'patient_number' => $this->resource->code ?? null,
             'profile' => ProfileResource::make($this->resource->profile),
-            'claims' => $this->getClaimsData(),
-            'policy_information' => $this->getPolicyHolderData(),
+            'claims' => $this->getClaimsData()
         ];
     }
 
@@ -50,19 +49,5 @@ final class ClaimPatientDetailResource extends JsonResource
         }
 
         return ClaimDetailResource::collection($claimsDemographics);
-    }
-
-    private function getPolicyHolderData(): array|null
-    {
-        $policy = $this->resource->claimDemographics->first()->claim->insurancePolicies()->where([
-            'order' => 1,
-        ])->first();
-
-        return [
-            'policy_holder' => $policy->policy_holder,
-            'policy_number' => $policy->policy_number,
-            'effective_date' => $policy->effective_date,
-            'expiration_date' => $policy->expiration_date,
-        ] ?? null;
     }
 }

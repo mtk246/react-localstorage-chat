@@ -53,17 +53,13 @@ final class SearchAction
                 });
         }
 
-        if (isset($filters['medical_number']) || isset($filters['patient_number'])) {
-            $query->with('PatientPrivate')
-                ->whereHas('PatientPrivate', function ($q) use ($filters): void {
+        if (isset($filters['medical_number'])) {
+            $query->with('companies')
+                ->whereHas('companies', function ($q) use ($filters): void {
                     $q->when(
                         isset($filters['medical_number']),
                         fn ($query) => $query->where('med_num', $filters['medical_number'])
-                    )
-                        ->when(
-                            isset($filters['patient_number']),
-                            fn ($query) => $query->where('patient_num', $filters['patient_number'])
-                        );
+                    );
                 });
         }
 
@@ -81,6 +77,10 @@ final class SearchAction
                     'claimDemographics.claim.insurancePolicies.insurancePlan',
                     fn ($q) => $q->whereIn('id', $filters['insurance_plans_ids'])
                 );
+        }
+
+        if(isset($filters['patient_number'])) {
+            $query = $query->where('code', $filters['patient_number']);
         }
 
         $patients = $query->get();

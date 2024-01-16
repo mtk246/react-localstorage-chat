@@ -13,7 +13,7 @@ final class GetClaimsPatientAction
     {
         $data = $patient->load([
             'profile',
-            'patientPrivate',
+            'companies',
             'claimDemographics.claim.claimStatusClaims' => function ($query) {
                 $query->orderBy('created_at', 'desc');
             },
