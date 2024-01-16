@@ -52,6 +52,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $procedure_fees_count
  * @property \App\Models\PublicNote|null $publicNote
  *
+ * @method static \Database\Factories\ProcedureFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Procedure query()
