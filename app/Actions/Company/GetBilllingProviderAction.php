@@ -70,7 +70,9 @@ final class GetBilllingProviderAction
                 ];
             })
             ->toArray();
+
         $company = Company::query()->find($companyId);
+
         $taxIdOptions = [];
         if (!empty($company->ein)) {
             $taxIdOptions[] = [
