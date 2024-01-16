@@ -19,29 +19,16 @@ final class ClaimPatientDetailResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'medical_number' => $this->resource->patientPrivate->med_num ?? null,
-            'patient_number' => $this->resource->patientPrivate->patient_num ?? null,
+            'medical_number' => $this->resource->companies->pluck('pivot.med_num') ?? null,
+            'patient_number' => $this->resource->code ?? null,
             'profile' => ProfileResource::make($this->resource->profile),
             'claims' => $this->getClaimsData(),
-            'policy_information' => $this->getPolicyHolderData(),
         ];
-    }
-
-    private function getProfileData(): array|null
-    {
-        return isset($this->resource->profile)
-            ? [
-                'first_name' => $this->resource->profile->first_name,
-                'last_name' => $this->resource->profile->last_name,
-                'dob' => $this->resource->profile->date_of_birth,
-                'ssn' => $this->resource->profile->ssn,
-            ]
-            : null;
     }
 
     private function getClaimsData()
     {
-        $claimsDemographics = $this->resource->claimDemographics;
+        $claimsDemographics = $this->resource->claimDemographics()->orderBy('created_at', 'desc')->get();
 
         if (request()->has('status')) {
             $claimsDemographics = $this->resource->claimDemographics->filter(function ($claimDemographic) {
@@ -50,19 +37,5 @@ final class ClaimPatientDetailResource extends JsonResource
         }
 
         return ClaimDetailResource::collection($claimsDemographics);
-    }
-
-    private function getPolicyHolderData(): array|null
-    {
-        $policy = $this->resource->claimDemographics->first()->claim->insurancePolicies()->where([
-            'order' => 1,
-        ])->first();
-
-        return [
-            'policy_holder' => $policy->policy_holder,
-            'policy_number' => $policy->policy_number,
-            'effective_date' => $policy->effective_date,
-            'expiration_date' => $policy->expiration_date,
-        ] ?? null;
     }
 }

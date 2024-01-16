@@ -22,6 +22,7 @@ use App\Models\Marital;
 use App\Models\MaritalStatus;
 use App\Models\Patient;
 use App\Models\Patient\Membership;
+use App\Models\PatientPrivate;
 use App\Models\PrivateNote;
 use App\Models\Profile;
 use App\Models\PublicNote;
