@@ -9,6 +9,7 @@ use App\Enums\Reports\ColumnsAdminPayerMixType;
 use App\Enums\Reports\ColumnsAdminProfessionalProductivityType;
 use App\Enums\Reports\ColumnsAdminViewBaddebtCost;
 use App\Enums\Reports\ColumnsAdminViewPostedPaymentTransactionAudit;
+use App\Enums\Reports\ColumnsAdminViewSobgDpr;
 use App\Enums\Reports\ColumnsBillingDetailPatinetType;
 use App\Enums\Reports\ColumnsBillingGeneralFacilityType;
 use App\Enums\Reports\ColumnsBillingGeneralHealthcareProfessionalType;
@@ -22,6 +23,7 @@ use App\Enums\Reports\ColumnsviewBaddebtCost;
 use App\Enums\Reports\ColumnsViewChangeModule;
 use App\Enums\Reports\ColumnsViewDailyInsuranceResponsibilityAging;
 use App\Enums\Reports\ColumnsViewPostedPaymentTransactionAudit;
+use App\Enums\Reports\ColumnsViewSobgDpr;
 use App\Enums\Reports\TypeReportAllRecords;
 use App\Http\Resources\Enums\EnumResource;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -87,7 +89,11 @@ final class ColumnsReportResource extends JsonResource
 
             TypeReportAllRecords::POSTED_PAYMENT_TRANSACTION_AUDIT => Gate::check('is-admin')
                 ? new EnumResource(collect(ColumnsAdminViewPostedPaymentTransactionAudit::cases()), ColumnsAdminDetailPatinetResource::class)
-                : new EnumResource(collect(ColumnsViewPostedPaymentTransactionAudit::cases()), ColumnsAdminDetailPatinetResource::class)
+                : new EnumResource(collect(ColumnsViewPostedPaymentTransactionAudit::cases()), ColumnsAdminDetailPatinetResource::class),
+
+            TypeReportAllRecords::SOBG_DPR => Gate::check('is-admin')
+                ? new EnumResource(collect(ColumnsAdminViewSobgDpr::cases()), ColumnsAdminDetailPatinetResource::class)
+                : new EnumResource(collect(ColumnsViewSobgDpr::cases()), ColumnsAdminDetailPatinetResource::class)
         };
     }
 }

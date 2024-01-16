@@ -12,6 +12,7 @@ use App\Enums\Reports\ColumnsAdminPayerMixType;
 use App\Enums\Reports\ColumnsAdminProfessionalProductivityType;
 use App\Enums\Reports\ColumnsAdminViewBaddebtCost;
 use App\Enums\Reports\ColumnsAdminViewPostedPaymentTransactionAudit;
+use App\Enums\Reports\ColumnsAdminViewSobgDpr;
 use App\Enums\Reports\ColumnsBillingDetailPatinetType;
 use App\Enums\Reports\ColumnsBillingGeneralFacilityType;
 use App\Enums\Reports\ColumnsBillingGeneralHealthcareProfessionalType;
@@ -25,6 +26,7 @@ use App\Enums\Reports\ColumnsviewBaddebtCost;
 use App\Enums\Reports\ColumnsViewChangeModule;
 use App\Enums\Reports\ColumnsViewDailyInsuranceResponsibilityAging;
 use App\Enums\Reports\ColumnsViewPostedPaymentTransactionAudit;
+use App\Enums\Reports\ColumnsViewSobgDpr;
 use App\Enums\Reports\ReportType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reports\GetAllRequest;
@@ -121,6 +123,7 @@ final class ReportReSource extends Controller
                 'ZHJZLMVKWP' => new EnumResource(collect(ColumnsViewChangeModule::cases()), ColumnsAdminDetailPatinetResource::class),
                 'GTGFOJQBHQ' => new EnumResource(collect(ColumnsViewDailyInsuranceResponsibilityAging::cases()), ColumnsAdminDetailPatinetResource::class),
                 'PDZEFFROWW' => new EnumResource(collect(ColumnsAdminViewPostedPaymentTransactionAudit::cases()), ColumnsAdminDetailPatinetResource::class),
+                'YVKZRZDISB' => new EnumResource(collect(ColumnsAdminViewSobgDpr::cases()), ColumnsAdminDetailPatinetResource::class),
             ]
             : [
                 'PGFOODVKOC' => new EnumResource(collect(ColumnsBillingDetailPatinetType::cases()), ColumnsAdminDetailPatinetResource::class),
@@ -133,6 +136,7 @@ final class ReportReSource extends Controller
                 'ZHJZLMVKWP' => new EnumResource(collect(ColumnsViewChangeModule::cases()), ColumnsAdminDetailPatinetResource::class),
                 'GTGFOJQBHQ' => new EnumResource(collect(ColumnsViewDailyInsuranceResponsibilityAging::cases()), ColumnsAdminDetailPatinetResource::class),
                 'PDZEFFROWW' => new EnumResource(collect(ColumnsViewPostedPaymentTransactionAudit::cases()), ColumnsAdminDetailPatinetResource::class),
+                'YVKZRZDISB' => new EnumResource(collect(ColumnsViewSobgDpr::cases()), ColumnsAdminDetailPatinetResource::class),
             ];
 
         if (!$rs) return response()->json(__('Columns list not available'), 400);

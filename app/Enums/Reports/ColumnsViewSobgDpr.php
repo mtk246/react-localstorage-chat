@@ -14,7 +14,7 @@ use App\Enums\Traits\EnumToArray;
 use App\Enums\Traits\HasAttributes;
 use App\Enums\Traits\HasColumnsAttributes;
 
-enum ColumnsViewPostedPaymentTransactionAudit: string implements TypeInterface
+enum ColumnsViewSobgDpr: string implements TypeInterface
 {
     use EnumToArray;
     use HasAttributes;
@@ -22,10 +22,10 @@ enum ColumnsViewPostedPaymentTransactionAudit: string implements TypeInterface
 
     #[TypeAttribute('string')]
     #[AlignAttribute('left')]
-    #[TextAttribute('Companies')]
+    #[TextAttribute('Provider')]
     #[WidthAttribute('370px')]
     #[PublicAttribute(true)]
-    case COMPANIES = 'companies';
+    case PROVIDER = 'provider';
 
     #[TypeAttribute('string')]
     #[AlignAttribute('left')]
@@ -36,29 +36,43 @@ enum ColumnsViewPostedPaymentTransactionAudit: string implements TypeInterface
 
     #[TypeAttribute('string')]
     #[AlignAttribute('left')]
-    #[TextAttribute('Facilities')]
+    #[TextAttribute('Account #')]
     #[WidthAttribute('370px')]
     #[PublicAttribute(true)]
-    case FACILITIES = 'fascilities';
+    case ACOUNT = 'account';
 
     #[TypeAttribute('string')]
-    #[TextAttribute('Deposit date')]
+    #[TextAttribute('Aging')]
     #[AlignAttribute('center')]
     #[WidthAttribute('170px')]
     #[PublicAttribute(true)]
-    case DEPOSIT_DATE = 'deposit_date';
+    case AGING = 'aging';
 
     #[TypeAttribute('string')]
-    #[TextAttribute('Trans count')]
+    #[TextAttribute('DOS')]
     #[AlignAttribute('center')]
     #[WidthAttribute('270px')]
     #[PublicAttribute(true)]
-    case TRANS_COUNT = 'trans_count';
+    case DOS = 'dos';
 
     #[TypeAttribute('string')]
-    #[AlignAttribute('center')]
-    #[TextAttribute('Amount')]
+    #[AlignAttribute('left')]
+    #[TextAttribute('ACTION TYPE')]
     #[WidthAttribute('110px')]
     #[PublicAttribute(true)]
-    case AMOUNT = 'amount';
+    case ACTION_TYPE = 'action_type';
+
+    #[TypeAttribute('number')]
+    #[AlignAttribute('center')]
+    #[TextAttribute('Unpaid amount')]
+    #[WidthAttribute('210px')]
+    #[PublicAttribute(true)]
+    case UNPAID_AMOUNT = 'unpaid_amount';
+
+    #[TypeAttribute('string')]
+    #[AlignAttribute('left')]
+    #[TextAttribute('Status')]
+    #[WidthAttribute('310px')]
+    #[PublicAttribute(true)]
+    case STATUS = 'status';
 }

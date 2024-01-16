@@ -63,4 +63,9 @@ enum TypeReportAll: string implements TypeInterface
     #[NameAttribute('posted_payment_transaction_audit')]
     #[PublicAttribute(true)]
     case PDZEFFROWW = 'PDZEFFROWW';
+
+    #[TextAttribute('view_sobg_dpr')]
+    #[NameAttribute('sobg_dpr')]
+    #[PublicAttribute(true)]
+    case YVKZRZDISB = 'YVKZRZDISB';
 }
