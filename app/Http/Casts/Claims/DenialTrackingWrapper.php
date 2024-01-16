@@ -29,6 +29,7 @@ final class DenialTrackingWrapper extends CastsRequest
             'department_responsible' => $this->get('department_responsible'),
             'policy_responsible' => $this->get('policy_responsible'),
             'response_details' => $this->get('response_details'),
+            'policy_id' => $this->get('policy_id'),
         ];
 
         return [

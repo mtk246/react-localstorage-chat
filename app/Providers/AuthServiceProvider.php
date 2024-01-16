@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Payments\Batch;
 use App\Models\Reports\Report;
 use App\Policies\Reports\ReportPolicy;
 use Detection\MobileDetect;
@@ -20,6 +21,7 @@ final class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Report::class => ReportPolicy::class,
+        Batch::class => \App\Policies\Payments\BatchPolicy::class,
     ];
 
     public function register(): void

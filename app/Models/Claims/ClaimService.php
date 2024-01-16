@@ -6,10 +6,12 @@ namespace App\Models\Claims;
 
 use App\Models\Diagnosis;
 use App\Models\TypeCatalog;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\Claims\ClaimService.
@@ -22,6 +24,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $from
  * @property string|null $to
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  * @property \App\Models\Claims\Claim $claim
  * @property \Illuminate\Database\Eloquent\Collection<int, Diagnosis> $diagnoses
  * @property int|null $diagnoses_count
@@ -29,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\Services> $services
  * @property int|null $services_count
  *
+ * @method static \Database\Factories\Claims\ClaimServiceFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimService query()
@@ -43,9 +48,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin \Eloquent
  */
-final class ClaimService extends Model
+final class ClaimService extends Model implements Auditable
 {
     use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
         'claim_id',

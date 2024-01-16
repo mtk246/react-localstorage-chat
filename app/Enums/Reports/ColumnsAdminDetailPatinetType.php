@@ -84,7 +84,7 @@ enum ColumnsAdminDetailPatinetType: string implements TypeInterface
     case SEX = 'sex';
 
     #[TypeAttribute('string')]
-    #[TextAttribute('ssn')]
+    #[TextAttribute('SSN')]
     #[AlignAttribute('center')]
     #[WidthAttribute('70px')]
     #[PublicAttribute(true)]
@@ -152,6 +152,13 @@ enum ColumnsAdminDetailPatinetType: string implements TypeInterface
     #[WidthAttribute('270px')]
     #[PublicAttribute(true)]
     case TYPE_ADDRESS = 'type_address';
+
+    #[TypeAttribute('string')]
+    #[TextAttribute('Address')]
+    #[AlignAttribute('left')]
+    #[WidthAttribute('270px')]
+    #[PublicAttribute(true)]
+    case ADDRESS = 'address';
 
     #[TypeAttribute('string')]
     #[AlignAttribute('left')]

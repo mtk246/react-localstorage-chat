@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\FacilityType> $facilityTypes
  * @property int|null $facility_types_count
  *
+ * @method static \Database\Factories\BillClassificationFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|BillClassification newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|BillClassification newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|BillClassification query()

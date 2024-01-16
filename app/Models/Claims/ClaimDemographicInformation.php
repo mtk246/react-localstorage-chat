@@ -9,8 +9,10 @@ use App\Models\Company;
 use App\Models\Facility;
 use App\Models\HealthProfessional;
 use App\Models\Patient;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\Claims\ClaimDemographicInformation.
@@ -37,6 +39,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $bill_classification
  * @property SplitCompanyClaimType|null $split_company_type
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  * @property \App\Models\Claims\Claim $claim
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimStatusClaim> $claimStatusClaims
  * @property int|null $claim_status_claims_count
@@ -48,6 +52,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $health_professionals_count
  * @property Patient|null $patient
  *
+ * @method static \Database\Factories\Claims\ClaimDemographicInformationFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimDemographicInformation query()
@@ -76,9 +81,10 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin \Eloquent
  */
-final class ClaimDemographicInformation extends Model
+final class ClaimDemographicInformation extends Model implements Auditable
 {
     use HasFactory;
+    use AuditableTrait;
 
     protected $table = 'claim_demographic';
 

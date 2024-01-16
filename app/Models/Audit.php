@@ -14,7 +14,7 @@ use OwenIt\Auditing\Models\Audit as BaseAudit;
  * @property int|null $user_id
  * @property string $event
  * @property string $auditable_type
- * @property int $auditable_id
+ * @property string $auditable_id
  * @property array|null $old_values
  * @property array|null $new_values
  * @property string|null $url

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models\Claims;
 
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * App\Models\Claims\ClaimTransmissionStatus.
@@ -19,6 +21,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Claims\ClaimTransmissionResponse> $ClaimTransmissionResponses
  * @property int|null $claim_transmission_responses_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
+ * @property int|null $audits_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimTransmissionStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClaimTransmissionStatus newQuery()
@@ -32,9 +36,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @mixin \Eloquent
  */
-final class ClaimTransmissionStatus extends Model
+final class ClaimTransmissionStatus extends Model implements Auditable
 {
     use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
         'status', 'background_color', 'font_color',

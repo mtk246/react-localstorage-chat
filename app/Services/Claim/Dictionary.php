@@ -26,6 +26,7 @@ abstract class Dictionary implements DictionaryInterface
         protected readonly ?Company $company,
         protected readonly ?InsurancePlan $insurancePlan,
         protected readonly ?ClaimBatch $batch = null,
+        protected readonly ?string $rule = null,
     ) {
         $this->setConfigFor();
     }
@@ -39,11 +40,11 @@ abstract class Dictionary implements DictionaryInterface
         $config = (object) $this->config[$key];
 
         return match ($config->type) {
-            RuleType::DATE->value => $this->getDateFormat($config->value),
-            RuleType::BOOLEAN->value => $this->getBooleanFormat($config->value),
-            RuleType::SINGLE->value => $this->getSingleFormat($config->value),
-            RuleType::SINGLE_ARRAY->value => $this->getSingleArrayFormat($config->value),
-            RuleType::MULTIPLE->value => $this->getMultipleFormat($config->value, $config->glue ?? ''),
+            RuleType::DATE->value => $this->getDateFormat((object) $config->value),
+            RuleType::BOOLEAN->value => $this->getBooleanFormat((object) $config->value),
+            RuleType::SINGLE->value => $this->getSingleFormat((object) $config->value),
+            RuleType::SINGLE_ARRAY->value => $this->getSingleArrayFormat((object) $config->value),
+            RuleType::MULTIPLE->value => $this->getMultipleFormat($config->value, $config->glue ?? '', $key),
             RuleType::MULTIPLE_ARRAY->value => $this->getMultipleArrayFormat($config->value, $config->glue ?? ''),
             RuleType::NONE->value => '',
             default => throw new \InvalidArgumentException('Invalid format type'),
@@ -63,8 +64,8 @@ abstract class Dictionary implements DictionaryInterface
     protected function getMultipleArrayFormat(array $values, string $glue): array
     {
         return Collect($values)
-            ->reduce(function (?Collection $carry, string $value) use ($glue) {
-                $items = $this->getSingleFormat($value);
+            ->reduce(function (?Collection $carry, array $value) use ($glue) {
+                $items = $this->getSingleFormat((object) $value);
                 $items = $items instanceof Collection ? $items : Collect([$items]);
 
                 if (is_null($carry)) {
@@ -80,23 +81,23 @@ abstract class Dictionary implements DictionaryInterface
             ->toArray();
     }
 
-    protected function getMultipleFormat(array $values, string $glue): string
+    protected function getMultipleFormat(array $values, string $glue, string $key): string|array
     {
         return Collect($values)
-            ->map(fn (string $value) => (string) $this->getSingleFormat($value))
+            ->map(fn ($value) => (string) $this->getSingleFormat((object) $value))
             ->filter(fn (string $value) => !empty($value))
             ->implode($glue);
     }
 
-    protected function getSingleArrayFormat(string $value): array
+    protected function getSingleArrayFormat(object $value): array
     {
         return $this->getSingleFormat($value)
             ->toArray();
     }
 
-    protected function getSingleFormat(string $value): string|Collection
+    protected function getSingleFormat(object $value): string|bool|array|Collection
     {
-        list($key, $default) = Str::of($value)->explode('|')->pad(2, null)->toArray();
+        list($key, $default) = Str::of($value->id)->explode('|')->pad(2, null)->toArray();
 
         list($accesorKey, $property) = Str::of($key)->explode(':')->pad(2, null)->toArray();
         $accesor = 'get'.Str::ucfirst(Str::camel($accesorKey)).'Attribute';
@@ -106,9 +107,9 @@ abstract class Dictionary implements DictionaryInterface
             : $this->getClaimData($key, $default);
     }
 
-    protected function getDateFormat(string $value): string
+    protected function getDateFormat(object $value): string
     {
-        list($key, $format, $rawFormat, $default) = Str::of($value)->explode('|')->pad(4, null)->toArray();
+        list($key, $format, $rawFormat, $default) = Str::of($value->id)->explode('|')->pad(4, null)->toArray();
 
         $accesor = 'get'.Str::ucfirst(Str::camel($key)).'Attribute';
 
@@ -125,9 +126,9 @@ abstract class Dictionary implements DictionaryInterface
             : '';
     }
 
-    protected function getBooleanFormat(string $value): bool
+    protected function getBooleanFormat(object $value): bool
     {
-        list($key, $default) = Str::of($value)->explode('|')->pad(2, null)->toArray();
+        list($key, $default) = Str::of($value->id)->explode('|')->pad(2, null)->toArray();
 
         list($accesorKey, $property) = Str::of($key)->explode(':')->pad(2, null)->toArray();
         $accesor = 'get'.Str::ucfirst(Str::camel($accesorKey)).'Attribute';
@@ -172,20 +173,27 @@ abstract class Dictionary implements DictionaryInterface
         $rules = config("claim.formats.{$this->claim->type->value}.{$this->format}");
 
         $customRules = Rules::query()
-            ->where('insurance_plan_id', $insurancePlan?->id ?? $this->insurancePlan->id)
-            ->where('billing_company_id', $this->claim->billing_company_id)
             ->where('format', $this->claim->format)
-            ->whereHas('typesOfResponsibilities', fn (Builder $query) => $query->whereIn('code', $this->insurancePlan
-                ->insurancePolicies
-                ->where('billing_company_id', $this->claim->billing_company_id)
-                ->map(fn (InsurancePolicy $policy) => $policy
-                    ->typeResponsibility
-                    ?->code
-                )
-                ->unique()
-                ->filter()
-            ))
-            ->orDoesntHave('typesOfResponsibilities')
+            ->where('billing_company_id', $this->claim->billing_company_id)
+            ->when(
+                $this->rule,
+                fn (Builder $query) => $query->where('id', $this->rule),
+                fn (Builder $query) => $query
+                    ->orWhereHas('company', fn (Builder $query) => $query->where('company.id', $this->company?->id ?? 0))
+                    ->orWhereHas('insuranceCompany', fn (Builder $query) => $query->where('insurance_company.id', $insurancePlan?->insurance_company_id ?? $this->insurancePlan?->insurance_company_id))
+                    ->orWhereHas('insurancePlans', fn (Builder $query) => $query->where('insurance_plans.id', $insurancePlan?->id ?? $this->insurancePlan?->id))
+                    ->orWhereHas('typesOfResponsibilities', fn (Builder $query) => $query->whereIn('code', $this->insurancePlan
+                        ?->insurancePolicies
+                        ->where('billing_company_id', $this->claim->billing_company_id)
+                        ->map(fn (InsurancePolicy $policy) => $policy
+                            ->typeResponsibility
+                            ?->code
+                        )
+                        ->unique()
+                        ->filter() ?? []
+                    ))
+                    ->orDoesntHave('typesOfResponsibilities')
+            )
             ->first()
             ?->rules;
 

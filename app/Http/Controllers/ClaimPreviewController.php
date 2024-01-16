@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Claim\GetClaimPreviewAction;
 use App\Actions\Claim\GetClaimTransmissionReportAction;
+use App\Enums\Claim\ClaimType;
 use App\Models\Claims\Claim;
 use App\Models\Claims\ClaimBatch;
 use App\Services\Claim\ClaimPreviewService;
@@ -19,7 +20,10 @@ final class ClaimPreviewController extends Controller
     public function show(Request $request, ClaimPreviewService $preview, GetClaimPreviewAction $claimPreview)
     {
         $id = $request->id ?? null;
-        $claim = Claim::query()->with(['insurancePolicies'])->find($id);
+        $claim = $request->get('default', false)
+            ? Claim::query()->with(['insurancePolicies'])->where('type', $request->get('type', ClaimType::INSTITUTIONAL->value))->first()
+            : Claim::query()->with(['insurancePolicies'])->find($id);
+    
         $preview->setConfig([
             'urlVerify' => 'www.nucc.org',
             'print' => (bool) ($request->print ?? false),
@@ -69,6 +73,11 @@ final class ClaimPreviewController extends Controller
     public function showBatchReport(Request $request, ClaimPreviewService $preview, GetClaimTransmissionReportAction $claimReport, int $id)
     {
         $batch = ClaimBatch::query()->find($id);
+        $abbreviationCompany = $batch->company->abbreviations()
+            ->where('billing_company_id', $batch->billing_company_id)
+            ->first()
+            ?->abbreviation ?? '';
+
         $preview->setConfig([
             'urlVerify' => 'www.nucc.org',
             'isTransmissionResponse' => true,
@@ -76,8 +85,10 @@ final class ClaimPreviewController extends Controller
         ]);
 
         $preview->setHeader(
-            'Claims processed on',
-            'Processed claims for period ending on'
+            'CLAIMS TRANSMISSION REPORT',
+            (empty($abbreviationCompany)
+                ? upperCaseWords($batch->company->name)
+                : Str::upper($abbreviationCompany) . ' - ' . upperCaseWords($batch->company->name)) . ' / N° Claims: ' . $batch->total_claims
         );
 
         $preview->setFooter($batch->last_modified['user'] ?? '');
@@ -89,7 +100,6 @@ final class ClaimPreviewController extends Controller
                 true,
                 [
                     'pdf' => $preview,
-                    'shipping_date' => Carbon::createFromFormat('Y-m-d', $batch->shipping_date)->format('m/d/Y'),
                     'claimsByPlan' => $claimReport->invoke($batch),
                 ],
                 'E',

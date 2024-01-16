@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use OwenIt\Auditing\Auditable as AuditableTrait;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
@@ -27,6 +28,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $health_professional_tax_id
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
  * @property int|null $audits_count
+ * @property Model|\Eloquent $billingProvider
  * @property \App\Models\Taxonomy|null $billingProviderTaxonomy
  * @property \App\Models\ContractFee $contractFee
  * @property \App\Models\HealthProfessional|null $healthProfessional
@@ -98,5 +100,13 @@ final class ContractFeeSpecification extends Model implements Auditable
     public function healthProfessionalTaxonomy(): BelongsTo
     {
         return $this->belongsTo(Taxonomy::class);
+    }
+
+    /**
+     * Get the billingProvider that owns the ContractFeeSpecification.
+     */
+    public function billingProvider(): MorphTo
+    {
+        return $this->morphTo();
     }
 }

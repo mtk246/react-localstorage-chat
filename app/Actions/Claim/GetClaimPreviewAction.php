@@ -31,13 +31,14 @@ final class GetClaimPreviewAction
                 ->firstOrFail();
 
             return $this->claimService->create(
-                FormatType::FILE,
-                $claim,
-                $claim->demographicInformation->company ?? null,
-                $claim->insurancePolicies()
+                formatType: FormatType::FILE,
+                claim: $claim,
+                company: $claim->demographicInformation->company ?? null,
+                insurancePlan: $claim->insurancePolicies()
                     ->wherePivot('order', 1)
                     ?->first()
                     ?->insurancePlan ?? null,
+                rule: $data['rule_id'] ?? null,
             )->toArray();
         });
     }

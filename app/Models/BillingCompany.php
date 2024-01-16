@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Reports\Preset;
+use App\Traits\Auditing\CustomAuditable as AuditableTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Laravel\Scout\Searchable;
-use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 
 /**
@@ -28,6 +28,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property string|null $logo
  * @property string|null $abbreviation
  * @property string|null $tax_id
+ * @property string|null $disabled_at
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address> $addresses
  * @property int|null $addresses_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Audit> $audits
@@ -55,6 +56,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property int|null $ip_restrictions_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Patient> $patients
  * @property int|null $patients_count
+ * @property \Illuminate\Database\Eloquent\Collection<int, Preset> $presets
+ * @property int|null $presets_count
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property int|null $users_count
  *
@@ -66,6 +69,7 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static Builder|BillingCompany whereAbbreviation($value)
  * @method static Builder|BillingCompany whereCode($value)
  * @method static Builder|BillingCompany whereCreatedAt($value)
+ * @method static Builder|BillingCompany whereDisabledAt($value)
  * @method static Builder|BillingCompany whereId($value)
  * @method static Builder|BillingCompany whereLogo($value)
  * @method static Builder|BillingCompany whereName($value)
@@ -264,6 +268,9 @@ class BillingCompany extends Model implements Auditable
             'icon' => $this->logo,
             'abbreviation' => $this->abbreviation,
             'contact.email' => $this->contact?->email ?? null,
+            'contacts.email' => $this->contacts->pluck('email')->toArray(),
+            'active' => $this->status,
+            'created_at' => $this->created_at,
         ];
     }
 

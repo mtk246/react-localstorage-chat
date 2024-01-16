@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Payments\Eob;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +51,18 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
+        });
+        Route::bind('eob_file', function ($eob_file) {
+            return Eob::query()
+                ->where('file_name', $eob_file)
+                ->when(Gate::denies('is-admin'), function ($query) {
+                    $query->whereHas('payment', function ($query) {
+                        $query->whereHas('batch', function ($query) {
+                            $query->where('billing_company_id', Auth::user()->billing_company_id);
+                        });
+                    });
+                })
+                ->firstOrFail();
         });
     }
 
