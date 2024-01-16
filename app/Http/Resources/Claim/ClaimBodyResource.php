@@ -451,7 +451,9 @@ final class ClaimBodyResource extends JsonResource
             'insurance_company' => $policyPrimary?->insurancePlan?->insuranceCompany?->name ?? '',
             'insurance_plan_id' => $policyPrimary?->insurancePlan?->id ?? '',
             'insurance_plan' => $policyPrimary?->insurancePlan?->name ?? '',
-            'type_responsibility' => $policyPrimary?->typeResponsibility?->code ?? '',
+            'type_responsibility' => ('Self Pay' === $policyPrimary?->policy_number)
+                ? 'SP'
+                : $policyPrimary?->typeResponsibility?->code ?? '',
             'batch' => $policyPrimary?->batch ?? '',
             'eff_date' => $policyPrimary?->eff_date ?? '',
             'end_date' => $policyPrimary?->end_date ?? '',

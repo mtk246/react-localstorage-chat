@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Ledger;
 
+use App\Models\Claims\ClaimStatus;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 final class ClaimDetailResource extends JsonResource
@@ -22,7 +23,7 @@ final class ClaimDetailResource extends JsonResource
             'code' => $this->resource->claim->code,
             'submiter_name' => $this->resource->claim->submiter_name,
             'created_at' => $this->resource->claim->created_at,
-            'status' => $this->resource->claim->claimStatusClaims->first()->claimStatus,
+            'status' => $this->resource->claim->claimStatusClaims->where('claim_status_type', ClaimStatus::class)->first()?->claimStatus,
             'privateNote' => $this->resource->claim->private_note,
             'billed_amount' => $this->resource->claim->billed_amount,
             'amount_paid' => $this->resource->claim->amount_paid,

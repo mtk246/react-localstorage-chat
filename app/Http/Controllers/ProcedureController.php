@@ -179,12 +179,13 @@ class ProcedureController extends Controller
     public function getList(Request $request, $company_id = null): JsonResponse
     {
         $search = $request->search ?? '';
+        $revenueCodeId = $request->revenue_code_id ?? '';
         $companyId = str_contains($company_id ?? '', '-')
             ? explode('-', $company_id ?? '')[0]
             : $company_id ?? null;
 
         return response()->json(
-            $this->procedureRepository->getList($companyId, $search)
+            $this->procedureRepository->getList($companyId, $revenueCodeId, $search)
         );
     }
 
