@@ -254,6 +254,8 @@ return [
                     'description',
                     'billing_company_id',
                     'billing_company',
+                    'companies',
+                    'insurance_companies',
                     'insurance_plans',
                 ],
                 'sortableAttributes' => [
@@ -263,6 +265,8 @@ return [
                     'description',
                     'billing_company_id',
                     'billing_company',
+                    'companies',
+                    'insurance_companies',
                     'insurance_plans',
                 ],
                 'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness'],

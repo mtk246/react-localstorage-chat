@@ -22,9 +22,31 @@ final class UpdateRulesRequest extends FormRequest
     public function rules()
     {
         return [
-            'insurance_plan_ids' => [
+            'company_ids' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
+                'array',
+            ],
+            'company_ids.*' => [
                 Rule::excludeIf(fn () => filled($this->input('active', ''))),
                 'required',
+                'integer',
+                'exists:companies,id',
+            ],
+            'insurance_company_ids' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
+                'array',
+            ],
+            'insurance_company_ids.*' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'required',
+                'integer',
+                'exists:insurance_companies,id',
+            ],
+            'insurance_plan_ids' => [
+                Rule::excludeIf(fn () => filled($this->input('active', ''))),
+                'nullable',
                 'array',
             ],
             'insurance_plan_ids.*' => [
