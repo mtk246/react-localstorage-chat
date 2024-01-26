@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
@@ -85,3 +86,14 @@ some of the most common syntax errors can be self-fixed by running the command
 make syntax_fix_php
 ´´´
 However, some errors must be solved by hand since they do not have a simple solution.
+=======
+## install
+
+Require node 18.18.2
+```
+npm i or yarn install
+```
+```
+npm run start or yarn start
+```
+>>>>>>> 03e1958d ([tsx, json] add actions, reducers, store)

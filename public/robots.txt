@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 User-agent: *
 Disallow:
+=======
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+>>>>>>> 03e1958d ([tsx, json] add actions, reducers, store)
