@@ -1,4 +1,5 @@
 import React from 'react';
+import LoginForm from 'components/SignUp';
 import ChatPage from 'components/Chat';
 import { useSelector } from 'react-redux';
 
@@ -9,6 +10,7 @@ const App: React.FC = () => {
 
     return (
         <React.Fragment>
+            {isLogged ? (<ChatPage />) : (<LoginForm />)}
             <ChatPage />
         </React.Fragment>
     );
